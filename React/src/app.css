@@ -1,0 +1,233 @@
+* {
+    box-sizing: border-box;
+}
+.app{
+  font-family: Arial, Helvetica, sans-serif;
+}
+.home--hr {
+  margin-top: -60px;
+  margin-bottom: 50px;
+  width:400px;
+  position: absolute;
+  left: 0;
+  border: 5px solid rgb(17, 94, 9);
+}
+.homenav--container{
+  display: flex;
+  align-items: top;
+  justify-content: center;
+  font-family: Geneva, Verdana, sans-serif;
+  height: 40px;
+}
+.homenav--logo {
+  text-decoration: none;
+  display: flex;
+  height: 33px;
+  width: 80px;
+  align-items: center;
+  padding: 0 0 0 10px;
+  color: antiquewhite;
+  background-color: rgb(11, 83, 138);
+  border-radius: 20%;
+  font-size: 25px;
+}
+  
+.trending--section{
+  position: relative;
+  overflow: hidden;
+}
+
+.leftbutton,.rightbutton {
+  width: 100px;
+  height: 100px;
+  background-color: transparent;
+  position: absolute;
+  top: 40%;
+  font-size: 50px;
+  cursor: pointer;
+  color: rgb(159, 179, 181);
+}
+.leftbutton:active,.rightbutton:active {
+  background-color: rgb(235, 225, 225);
+}
+.rightbutton{
+  left:1400px;
+}
+.trending--books{
+  overflow: hidden;
+  scroll-behavior: smooth;
+  display: grid;
+  grid-template-columns: repeat(8,1500px);
+  grid-gap: 40px;
+  height: 600px;
+}
+.trending--book{
+  height: 600px;
+  color: rgb(245, 242, 242);
+  background-repeat: no-repeat;
+  background-size:100% 100%;
+  padding: 400px 0 0 80px;
+}
+.displaydots--container {
+  display: flex;
+  margin-left: 600px;
+  margin-right: 600px;
+  height: 50px;
+  justify-content: space-between;
+}
+.dots{
+  height: 15px;
+  width: 15px;
+  border-radius: 50%;
+  border: 1px solid rgb(124, 56, 56);
+  background-color: transparent;
+  transition: width 0.9s ease;
+}
+.homepage--heading{
+  margin-left: 80px;
+  position: relative;
+}
+.homepage--heading>h1 {
+  margin-bottom: 70px;
+}
+
+.booktile{
+  margin-right: 40px;
+  display: flex;
+  flex-wrap: wrap;
+  width:190px;
+  height: 410px;
+  text-decoration: none;
+  color: black;
+  transition: transform 0.5s ease;
+}
+.booktile:hover{
+  border: 1px solid rgb(221, 201, 201);
+  box-shadow: 0 0 4px 0px;
+  transform: scale(1.05);
+  border-radius: 10% 10%  0 0;
+}
+.booktile--img{
+  height:300px;
+  width:190px;
+  border-radius: 10% 10%  0 0;
+}
+.booktile--img:hover{
+  filter: brightness(70%);
+  cursor: pointer;
+}
+
+.booktile--rate>img{
+  width:25px;
+}
+.booktile--rate{
+  display: grid;
+  grid-template-columns: 50px 1px 140px;
+  justify-items: center;
+  align-items: center;
+  height:30px;
+}
+.booktile--name{
+  padding: 0 0 0 5px;
+  cursor: pointer;
+}
+.slider{
+  overflow: hidden;
+  padding:20px 0px 0 10px;
+  display: flex;
+  flex-wrap: wrap;
+  height: 450px;
+  flex-direction: column;
+  scroll-behavior: smooth ;
+}
+.slider--greater,.slider--lesser{
+  position: absolute;
+  display: flex;
+  align-items: center;
+  right: 90px;
+  top: 50px;
+  width: 40px;
+  height: 40px;
+  background-color: transparent;
+  background-blend-mode: lighten;
+  cursor: pointer;
+  font-size: 40px;
+  border: none;
+  border-radius: 50%;
+}
+.slider--lesser{
+  right: 130px;
+}
+.slider--greater:hover,.slider--lesser:hover{
+  background-color: rgb(219, 204, 204);
+}
+.slider--greater:active,.slider--lesser:active{
+  color: yellowgreen;
+}
+.homesearch{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  width:60%;
+  height:400px;
+  margin-left: 300px;
+
+}
+.homesearch--genre{
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 78%;
+  line-height: 33px;
+  flex-wrap: wrap;
+}
+.homesearch--genre>li{
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+.homesearch--genre>li:hover{
+  transform: scale(1.1);
+  color: rgb(137, 60, 152);
+  text-decoration: underline;
+}
+
+
+.login{
+  margin-left: 550px;
+  width: 350px;
+}  
+.login input,button {
+  height: 35px;
+  width: 350px;
+  border-radius: 20px;
+}
+.sign--in,.create--acc{
+  background-color: black;
+  color: white;
+  font-size: 18px;
+}
+.sign--up{
+  font-size: 18px;
+  background-color: white;
+}
+.login--hr{
+  border: none;
+  border-top: 2px solid black;
+  margin-bottom: 30px;
+  margin-top: 30px;
+}
+.login--newto {
+  position: absolute;
+  bottom:41%;
+  left:44%;
+  background-color: white;
+  padding: 0 10px;
+}
+.login h1{
+  justify-content: center;
+}
+.input--name{
+  padding: 0 10px 0 10px ;
+  color: rgb(177, 145, 145);
+}
