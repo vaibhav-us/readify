@@ -1,6 +1,12 @@
 * {
     box-sizing: border-box;
 }
+button{
+  cursor: pointer;
+}
+input {
+  padding: 0 10px 0 10px ;
+}
 .app{
   font-family: Arial, Helvetica, sans-serif;
 }
@@ -194,14 +200,15 @@
 
 
 .login{
-  margin-left: 550px;
+  margin-left: 600px;
   width: 350px;
 }  
-.login input,button {
+.login input,.login button {
   height: 35px;
   width: 350px;
   border-radius: 20px;
 }
+
 .sign--in,.create--acc{
   background-color: black;
   color: white;
@@ -219,15 +226,8 @@
 }
 .login--newto {
   position: absolute;
-  bottom:41%;
+  bottom:38.5%;
   left:44%;
   background-color: white;
   padding: 0 10px;
-}
-.login h1{
-  justify-content: center;
-}
-.input--name{
-  padding: 0 10px 0 10px ;
-  color: rgb(177, 145, 145);
 }
