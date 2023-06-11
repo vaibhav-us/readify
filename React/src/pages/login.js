@@ -7,7 +7,7 @@ export async function action({request}) {
         email : formData.get("email"),
         password : formData.get("password")
     }
-    const res = await fetch("api/login", 
+    const res = await fetch("/api/login", 
         {method : "post", body: JSON.stringify(creds)}
     )
     const data = await res.json()
