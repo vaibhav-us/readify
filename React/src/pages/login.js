@@ -8,7 +8,7 @@ export async function action({request}) {
         password : formData.get("password")
     }
     const res = await fetch("http:/localhost:5000/api/login", 
-        {method : "post", body: JSON.stringify(creds)}
+        {method : "POST", body: JSON.stringify(creds)}
     )
     const data = await res.json()
     if (!res.ok) {

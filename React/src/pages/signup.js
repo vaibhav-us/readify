@@ -9,7 +9,7 @@ export async function action({request}) {
         name : formData.get("name")
     }
     const res = await fetch("http:/localhost:5000/api/signup", 
-        {method : "post", body: JSON.stringify(creds)}
+        {method : "POST", body: JSON.stringify(creds)}
     )
     return null;
 }
