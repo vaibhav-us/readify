@@ -8,6 +8,9 @@ export default function Homenav () {
                 <Link to='/' className="homenav--logo">
                     <h4>BRR</h4>
                 </Link>
+                <Link to='/login' className="homenav--login">
+                    <h2>login</h2>
+                </Link>
             </div>
             <Outlet />
         </div>

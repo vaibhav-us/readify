@@ -19,8 +19,9 @@ input {
   border: 5px solid rgb(17, 94, 9);
 }
 .homenav--container{
+  position: relative;
   display: flex;
-  align-items: top;
+  align-items: center;
   justify-content: center;
   font-family: Geneva, Verdana, sans-serif;
   height: 40px;
@@ -37,7 +38,13 @@ input {
   border-radius: 20%;
   font-size: 25px;
 }
-  
+.homenav--login{
+  text-decoration: none;
+  position: absolute;
+  right: 30px;
+  color: rgb(33, 40, 118);
+}
+
 .trending--section{
   position: relative;
   overflow: hidden;
@@ -57,13 +64,13 @@ input {
   background-color: rgb(235, 225, 225);
 }
 .rightbutton{
-  left:1400px;
+  right:0;
 }
 .trending--books{
   overflow: hidden;
   scroll-behavior: smooth;
   display: grid;
-  grid-template-columns: repeat(8,1500px);
+  grid-template-columns: repeat(8,100%);
   grid-gap: 40px;
   height: 600px;
 }
@@ -200,12 +207,12 @@ input {
 
 
 .login{
-  margin-left: 600px;
-  width: 350px;
+  margin-left: 35%;
+  width: 30%;
 }  
 .login input,.login button {
   height: 35px;
-  width: 350px;
+  width: 100%;
   border-radius: 20px;
 }
 
@@ -218,6 +225,9 @@ input {
   font-size: 18px;
   background-color: white;
 }
+.line--dec{
+  position: relative;
+}
 .login--hr{
   border: none;
   border-top: 2px solid black;
@@ -226,8 +236,8 @@ input {
 }
 .login--newto {
   position: absolute;
-  bottom:38.5%;
-  left:44%;
+  top: -5px;
+  left: 38%;
   background-color: white;
   padding: 0 10px;
 }
