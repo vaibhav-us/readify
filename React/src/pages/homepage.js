@@ -22,13 +22,17 @@ export default function Homepage () {
         <div className="homepage--heading">
             <h1>New Releases</h1>
             <hr className="home--hr"/>
-            <Slider data={newRelease} />
+            <div style={{position: 'relative'}} >
+                <Slider data={newRelease} />
+            </div>
         </div>
         <br /><br /><br />
         <div className="homepage--heading">
             <h1>Upcoming Releases</h1>
             <hr className="home--hr"/>
-            <Slider data={newRelease} />
+            <div style={{position: 'relative'}} >
+                <Slider data={newRelease} />
+            </div>
         </div>
         <br /><br /><br /><br />
         <HomeSearch />

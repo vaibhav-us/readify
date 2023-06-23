@@ -7,13 +7,15 @@ export default function Slider (props) {
 
     function handleclick(direction) {
         containerRef.current.scrollLeft = direction==="left"?
-            containerRef.current.scrollLeft-400 : containerRef.current.scrollLeft+400
+            containerRef.current.scrollLeft-containerRef.current.clientWidth 
+            : 
+            containerRef.current.scrollLeft+containerRef.current.clientWidth
     }
 
     return(
-        <div style={{overflow:"hidden",width:"97%"}}>
-            <button className="slider--greater" onClick={()=>handleclick("right") } >&gt;</button>
-            <button className="slider--lesser" onClick={()=>handleclick("left")} >&lt;</button>
+        <div style={{overflow:"hidden"}}>
+            <button className="slider--greater nobutton" onClick={()=>handleclick("right") } >&gt;</button>
+            <button className="slider--lesser nobutton" onClick={()=>handleclick("left")} >&lt;</button>
             <div className="slider" ref={containerRef}>
                 {booktiles}
             </div>

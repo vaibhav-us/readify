@@ -7,7 +7,7 @@ export async function action({request}) {
         email : formData.get("email"),
         password : formData.get("password")
     }
-    const res = await fetch("http:/localhost:5000/api/login", 
+    const res = await fetch("api/login", 
         {method : "POST", body: JSON.stringify(creds)}
     )
     const data = await res.json()
@@ -18,6 +18,7 @@ export async function action({request}) {
             status : res.status
         }
     }
+    
     return null;
 }
 

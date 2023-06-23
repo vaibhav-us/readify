@@ -8,38 +8,38 @@ export default function Trending(props) {
         return(
             <p 
                 className="dots"
-                style={props.truth ?{backgroundColor: "brown"} : {}}
+                style={props.truth ?{backgroundColor: "rgb(209, 149, 224)"} : {}}
                 onClick={()=>props.handleclickdots(props.id)}
             ></p>
         )
     }
     
     function handleclick(direction) {
-        if (direction==="left" && dotHighlight[0].scroll!==0) {
-        
+        if (direction==="left" && !dotHighlight[1].truth) {
+    
             setDotHighlight(prev => prev.map(obj=> {
                 if (!obj.id) {
-                    obj.scroll = prev[0].scroll-1540
+                    obj.scroll = prev[0].scroll-containerRef.current.clientWidth
                     containerRef.current.scrollLeft=obj.scroll
                 }
                 if (obj.truth)
                     obj.truth=0
-                if (obj.id === (prev[0].scroll/1540)+1){
+                if (obj.id === (prev[0].scroll/containerRef.current.clientWidth)+1){
                     obj.truth=1
                 }
                 return( {...obj})
             }))
         }
-        else if (direction==="right" && dotHighlight[0].scroll<=10770) {
-            
+        else if (direction==="right" && !dotHighlight[8].truth) {
+        console.log(dotHighlight[0].scroll);
             setDotHighlight(prev => prev.map(obj=> {
                 if (!obj.id) { 
-                    obj.scroll = prev[0].scroll+1540
+                    obj.scroll = prev[0].scroll+containerRef.current.clientWidth
                     containerRef.current.scrollLeft=obj.scroll
                 }
                 if (obj.truth)
                     obj.truth=0
-                if (obj.id === (prev[0].scroll/1540)+1){
+                if (obj.id === (prev[0].scroll/containerRef.current.clientWidth)+1){
                     obj.truth=1
                 }
                 return( {...obj})
@@ -51,7 +51,7 @@ export default function Trending(props) {
         setDotHighlight(prev => prev.map(obj=> {
                 
             if (!obj.id) {
-                obj.scroll = (theId-1)* (1540)
+                obj.scroll = (theId-1)* (containerRef.current.clientWidth)
                 containerRef.current.scrollLeft=obj.scroll
             }
             if (obj.truth)

@@ -3,12 +3,21 @@
 }
 button{
   cursor: pointer;
+  border-radius: 20px;
 }
 input {
   padding: 0 10px 0 10px ;
+  border-radius: 20px;
 }
 .app{
   font-family: Arial, Helvetica, sans-serif;
+}
+.gray{
+  color: rgb(121, 111, 111);
+}
+.nobutton{
+  background-color: transparent;
+  border: 1px solid transparent;
 }
 .home--hr {
   margin-top: -60px;
@@ -25,6 +34,7 @@ input {
   justify-content: center;
   font-family: Geneva, Verdana, sans-serif;
   height: 40px;
+  background-color: rgb(214, 222, 227);
 }
 .homenav--logo {
   text-decoration: none;
@@ -71,7 +81,6 @@ input {
   scroll-behavior: smooth;
   display: grid;
   grid-template-columns: repeat(8,100%);
-  grid-gap: 40px;
   height: 600px;
 }
 .trending--book{
@@ -83,22 +92,23 @@ input {
 }
 .displaydots--container {
   display: flex;
-  margin-left: 600px;
-  margin-right: 600px;
+  justify-content: center;
   height: 50px;
-  justify-content: space-between;
 }
 .dots{
   height: 15px;
   width: 15px;
   border-radius: 50%;
-  border: 1px solid rgb(124, 56, 56);
+  margin-right: 1%;
+  border: 1px solid rgb(0, 0, 0);
+  cursor: pointer;
   background-color: transparent;
   transition: width 0.9s ease;
 }
 .homepage--heading{
   margin-left: 80px;
   position: relative;
+  width: 90%;
 }
 .homepage--heading>h1 {
   margin-bottom: 70px;
@@ -130,8 +140,9 @@ input {
   cursor: pointer;
 }
 
-.booktile--rate>img{
+.booktile--rate--img{
   width:25px;
+  cursor: pointer;
 }
 .booktile--rate{
   display: grid;
@@ -157,19 +168,17 @@ input {
   position: absolute;
   display: flex;
   align-items: center;
-  right: 90px;
-  top: 50px;
+  right: 0px;
+  top: -30px;
   width: 40px;
   height: 40px;
-  background-color: transparent;
   background-blend-mode: lighten;
   cursor: pointer;
   font-size: 40px;
-  border: none;
   border-radius: 50%;
 }
 .slider--lesser{
-  right: 130px;
+  right: 35px;
 }
 .slider--greater:hover,.slider--lesser:hover{
   background-color: rgb(219, 204, 204);
@@ -213,7 +222,6 @@ input {
 .login input,.login button {
   height: 35px;
   width: 100%;
-  border-radius: 20px;
 }
 
 .sign--in,.create--acc{
@@ -241,3 +249,4 @@ input {
   background-color: white;
   padding: 0 10px;
 }
+
