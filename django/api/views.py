@@ -29,9 +29,9 @@ def signIn(request):
     return Response({"message":"error"})
 
 @api_view(['GET'])
-def book(request,id):
+def book(request,book_id):
     with conn.cursor() as cur:
-            cur.execute("SELECT * FROM book WHERE book_id = %s ;",(id,))
+            cur.execute("SELECT * FROM book WHERE book_id = %s ;",(book_id,))
             book = cur.fetchone()
     data={
          "book":book,
@@ -39,20 +39,20 @@ def book(request,id):
     return Response(data)
 
 @api_view(['GET'])
-def review(request,id):
+def review(request,book_id):
       with conn.cursor() as cur:
             cur.execute('''
                 SELECT user_name,review,rating FROM review JOIN user ON user.user_id = review.user_id WHERE book_id = %s ;
-            ''',(id,))
+            ''',(book_id,))
             review = cur.fetchall()
       return Response({"review":review})
 
 @api_view(['GET'])
-def comment(request,id,rid):
+def comment(request,book_id,rid):
       with conn.cursor() as cur:
             cur.execute('''
                 SELECT user_name,comment,like FROM feedback JOIN user ON user.user_id = feedback.user_id WHERE feedback.book_id = %s AND feedback.review_id = %s ;
-            ''',(id,rid,))
+            ''',(book_id,rid,))
             comment = cur.fetchall()
       return Response({"comment":comment})  
 
@@ -66,10 +66,17 @@ def bookCard(request):
             
     return Response({"data":data}) 
 
+@api_view(['POST'])
+def addReview(request,user_id,book_id):
+     review = request.data.get("review")
+     rating = request.data.get("rating")
+     with conn.cursor() as cur:
+        cur.execute('''
+          INSERT INTO review(user_id,book_id,review,rating) VALUES (%s,%s,%s, %s);
+        ''',(user_id,book_id,review,rating))
 
 
-
-
+     return Response({"message":"added"})
 
 
 

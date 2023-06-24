@@ -2,12 +2,13 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('signup/',views.signUp),
-    path('signin/',views.signIn),
+    path('user/signup/',views.signUp),
+    path('user/signin/',views.signIn),
     path('bookcard/',views.bookCard),
     path('newrelease/',views.newRelease),
-    path('sbg/<str:id>/',views.searchByGenre), 
-    path('book/<str:id>/',views.book),
-    path('book/<str:id>/review',views.review), 
-    path('book/<str:id>/review/<str:rid>',views.comment),  
+    path('genre/<str:id>/',views.searchByGenre), 
+    path('book/<str:book_id>/',views.book),
+    path('<str:user_id>/book/<str:book_id>/addreview/',views.addReview),
+    path('book/<str:book_id>/review',views.review), 
+    path('book/<str:book_id>/review/<str:rid>',views.comment),  
 ]
