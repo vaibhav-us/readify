@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.db import connection as conn
 
 @api_view(['GET'])
-def book(request,book_id):
+def get_book(request,book_id):
     with conn.cursor() as cur:
             cur.execute("SELECT * FROM book WHERE book_id = %s ;",(book_id,))
             book = cur.fetchone()
@@ -22,27 +22,36 @@ def book(request,book_id):
     return Response({"data":data})
 
 @api_view(['POST','GET'])
-def searchBook(request):
+def get_books(request):
     if request.method=='POST':
+        genre = request.data.get('genre')
         key = request.data.get('keyword')
         page_no= request.data.get('pageno')
         items_per_page = 10
+        query = "SELECT * FROM book"
+        if genre and key is None:
+            pass
+        if  key:
+             query += f" WHERE book_title LIKE '%{key}%' OR author LIKE '%{key}%' "
+        if genre:
+             query += f" WHERE genre = '{genre}' "
         with conn.cursor() as cur:
-            cur.execute('''
-                SELECT book_title,author,cover_pic,avg_rating FROM book
-                WHERE book_title LIKE %s OR author LIKE %s;
-            ''',('%' + key + '%', '%' + key + '%'))
+            cur.execute(query)
+                
             row = cur.fetchall()
         paginator=Paginator(row,items_per_page)
         page=paginator.get_page(page_no)
         results = []
-        for i in page:
+        for book in page:
             result = {
-              "book_title":i[0],
-              "author":i[1],
-              "cover_pic":i[2],
-              "avg_rating":i[3]
-            }
+                "genre":book[2],
+                "book_title":book[3],
+                "author":book[4],
+                "cover_pic":book[5],
+                "description":book[6],
+                "published_on":book[7],
+                "avg_rating":book[8]
+                }
             results.append(result) 
         return Response({"data":results})
     return Response({"message":"error"})
@@ -82,35 +91,11 @@ def comment(request,book_id,rid):
             comment = cur.fetchall()
       return Response({"comment":comment})  
 
-@api_view(['POST'])
-def bookCard(request):
-    if request.method == 'POST':
-        page_no = request.data.get('pageno')
-        with conn.cursor() as cur:
-            cur.execute('''
-                SELECT * FROM book;
-            ''')
-            row = cur.fetchall()
-        results=[]
-        paginator=Paginator(row,10)
-        page=paginator.get_page(page_no)
-        for book in page:
-            result = {
-                "genre":book[2],
-                "book_title":book[3],
-                "author":book[4],
-                "cover_pic":book[5],
-                "description":book[6],
-                "published_on":book[7],
-                "avg_rating":book[8]
-                }
-            results.append(result)       
-        return Response({"data":results})
-    return Response({"message":"error"}) 
+
 
 @login_required
 @api_view(['POST'])
-def addReview(request,user_id,book_id):
+def add_review(request,user_id,book_id):
      review = request.data.get("review")
      rating = request.data.get("rating")
      with conn.cursor() as cur:
@@ -122,27 +107,3 @@ def addReview(request,user_id,book_id):
      return Response({"message":"added"})
 
 
-
-
-
-
-
-
-
-
-
-
-
-@api_view(['GET'])
-def newRelease(request):
-    with conn.cursor() as cur:
-            cur.execute("SELECT * FROM book;")
-            data = cur.fetchall()
-    return Response({"data":data})
-
-@api_view(['GET'])
-def searchByGenre(request,id):
-    with conn.cursor() as cur:
-            cur.execute("SELECT * FROM book WHERE genre = %s ;",(id,))
-            data = cur.fetchall()
-    return Response({"data":data})

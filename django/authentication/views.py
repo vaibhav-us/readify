@@ -30,14 +30,18 @@ def signIn(request):
         password = request.data.get('password')
         user = auth(email,password)
         if user is not None:
-            session = SessionStore()
-            session['email']=email
+            request.session['email']=email
             
-            token = {'message':session}
+            token = {'message':request.session['email']}
             return Response(token)
     return Response({"message":"error"})
 
 @api_view(['GET'])
+def logout(request):
+    request.session.clear()
+    return Response({"meassage":"logged out"})
+
+@api_view(['GET'])
 def home(request):
-     session=SessionStore()
-     return Response(session)
+     sess=request.session
+     return Response(sess)
