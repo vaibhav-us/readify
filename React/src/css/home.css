@@ -9,6 +9,10 @@ input {
   padding: 0 10px 0 10px ;
   border-radius: 20px;
 }
+.noLink{
+  text-decoration: none;
+  color: inherit;
+}
 .app{
   font-family: Arial, Helvetica, sans-serif;
 }
@@ -29,9 +33,10 @@ input {
 }
 .homenav--container{
   position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: 50% 30% 20%;
+  align-items: center ;
+  justify-items: end;
   font-family: Geneva, Verdana, sans-serif;
   height: 40px;
   background-color: rgb(214, 222, 227);
@@ -42,14 +47,26 @@ input {
   height: 33px;
   width: 80px;
   align-items: center;
-  padding: 0 0 0 10px;
+  padding-left:10px;
   color: antiquewhite;
   background-color: rgb(11, 83, 138);
   border-radius: 20%;
   font-size: 25px;
 }
+.searchbar{
+  display: flex;
+  height: 60%;
+  background-color: rgb(230, 235, 236);
+  border-radius: 10px;
+}
+.searchbar input{
+  border: none;
+  background-color: transparent;
+}
+.searchbar input:focus{
+  outline: none;
+}
 .homenav--login{
-  text-decoration: none;
   position: absolute;
   right: 30px;
   color: rgb(33, 40, 118);
@@ -193,7 +210,7 @@ input {
   justify-content: center;
   width:60%;
   height:400px;
-  margin-left: 300px;
+  margin-left: 20%;
 
 }
 .homesearch--genre{
@@ -207,6 +224,7 @@ input {
 .homesearch--genre>li{
   cursor: pointer;
   transition: transform 0.2s ease;
+  margin-right: 5%;
 }
 .homesearch--genre>li:hover{
   transform: scale(1.1);

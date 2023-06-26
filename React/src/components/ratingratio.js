@@ -6,16 +6,15 @@ export default function RatingRatio(props) {
         starArray.push(<img 
             className="ratingratio--star" 
             key={i} 
-            src={process.env.PUBLIC_URL+"images/emptystar.png"}
+            src={process.env.PUBLIC_URL+"/images/emptystar.png"}
             alt=''
         />)    
     }
 
-    const newWidth = (props.rating/5)*100+"%"
-    console.log(newWidth);
     return(
         <div className="ratingratio" >
             {starArray}
+            <b >{props.rating}</b>
         </div>
     )
 }

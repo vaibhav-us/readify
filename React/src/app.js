@@ -10,14 +10,16 @@ import Homenav from "./pages/homenav";
 import BookPage from "./pages/bookpage";
 import Login,{action as loginAction} from "./pages/login";
 import Signup,{action as signupAction} from "./pages/signup";
+import SearchPage,{loader as searchLoader} from "./pages/searchpage";
 
 export default function App () {
     const router = createBrowserRouter(createRoutesFromElements(
         <Route path="/" element={<Homenav />}>
             <Route index element={<Homepage />}/>
-            <Route path=":bookId" element={<BookPage />}/>
+            <Route path="book/:bookId" element={<BookPage />}/>
             <Route path="login" element={<Login />} action={loginAction}/>
             <Route path="signup" element={<Signup />} action={signupAction}/>
+            <Route path="search" element={<SearchPage />} loader={searchLoader}/>
         </Route>
     ))
     return(

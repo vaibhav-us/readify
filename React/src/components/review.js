@@ -1,32 +1,29 @@
 import React from "react";
 import CollapseContainer from "./collapsecontainer";
 import { Form } from "react-router-dom";
+import { fullDate } from "../utility";
 
-export default function Review(props) {
-    const[year,month,day] = props.date.split("/")
-    const date = new Date(year,month-1,day)
-    const options = {year:"numeric",month:"long",day:"numeric"}
-    const expandedDate = date.toLocaleDateString('en-US',options)
-
+const Review = (props) => {
     const [like,setLike] = React.useState(false)
     const [showMore,setShowMore] = React.useState(false)
     function toggleShowMore() {
         setShowMore(!showMore)
     }
-    const displayPoints = props.points.slice(0,3).map(point => <b className="review--point">{point}</b>)
+    const displayPoints = props.points.slice(0,3).map(point => <b key={point} className="review--point">{point}</b>)
     displayPoints.push(
         props.points[3] ? 
             showMore ?
-            props.points.slice(3).map(point => <b className="review--point">{point}</b>) 
+            props.points.slice(3).map(point => <b key={point} className="review--point">{point}</b>) 
             :
-            <b className="review--point--more" onClick={toggleShowMore}>...more</b>
+            <b key='more' className="review--point--more" onClick={toggleShowMore}>...more</b>
         :
             null
     )
 
     const toggleLike = () => setLike(!like)
-    const likeImage = like? 'images/liked.webp' : "images/like.png"
+    const likeImage = like? '/images/liked.jpg' : "/images/like.png"
 
+    const expandedDate = fullDate(props.date)
     return(
         <div className="review--container">
             <div>
@@ -38,7 +35,7 @@ export default function Review(props) {
                 <div className="review--starrate">
                     <p>{props.rating}</p>
                     <img 
-                        src={process.env.PUBLIC_URL+"images/star.jpeg"}
+                        src={process.env.PUBLIC_URL+"/images/star.jpeg"}
                         alt="brh"
                         width={"25px"}
                     />
@@ -59,7 +56,7 @@ export default function Review(props) {
                         <b>  {like? "Liked":"Like"} </b>
                     </button>
                     <button className="nobutton">
-                        <img src={process.env.PUBLIC_URL+"images/comment.png"} alt="" width={"20px"}  />
+                        <img src={process.env.PUBLIC_URL+"/images/comment.png"} alt="" width={"20px"} />
                         <b>  Comment</b>
                     </button>
                 </Form>
@@ -69,3 +66,5 @@ export default function Review(props) {
         </div>
     )
 }
+
+export default Review;

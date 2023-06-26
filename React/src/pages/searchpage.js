@@ -1,0 +1,38 @@
+import React from "react";
+import { useLoaderData} from "react-router-dom";
+import Paginate from "../components/paginate";
+import SearchTile from "../components/searchtile";
+
+export function loader({request}) {
+    const url = new URL(request.url)
+    const book= url.searchParams.get('book')
+    const genre= url.searchParams.get('genre')
+    return book? book : genre
+}
+
+export default function SearchPage() {
+    const key = useLoaderData()
+    const data = [
+        {id:1,name:"The Name of the Wind",image:"https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1270352123i/186074.jpg",rating:5,author:"Patrick Rothfuss",date:"2022/10/02"},
+        {id:2,name:"The Way of Kings",image:"https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1659905828i/7235533.jpg",rating:5,author:"Brandon Sanderson",date:"2021/10/02"},
+        {id:3,name:"The Eye of the World",image:"https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1659905815i/228665.jpg",rating:5,author:"Robert Jordan",date:"2022/11/02"},
+        {id:4,name:"A Game of Thrones",image:"https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1562726234i/13496.jpg",rating:5,author:"George R R Martin",date:"2022/10/02"},
+        {id:5,name:"The Art of The Fellowship of the Ring",image:"https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1347803870i/119.jpg",rating:5,author:"Gary Russell",date:"2021/10/02"},
+        {id:6,name:"The Lord of the Rings: The Making of the Movie Trilogy",image:"https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1389501592i/7351.jpg",rating:5,author:"Brian Sibley",date:"2022/10/01"},
+        {id:7,name:"The Lord of the Rings: Weapons and Warfare",image:"https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1388290346i/36.jpg",rating:5,author:"christopher lee",date:"2012/10/12"}
+    ] 
+    const totalItems = 7
+    const searchResults = data.map(ele => <SearchTile key={ele.id} {...ele}/>)
+    return(
+        <div className="searchpage--container">
+            <div className="searchpage--results">
+                <h1>Showing Results For "{key}"</h1>
+                <Paginate data={searchResults} totalItems={totalItems} itemsPerPage={2}/>
+            </div>
+
+            <div className="searchpage--filter">
+                <h4>filter</h4>
+            </div>
+        </div>
+    )
+}

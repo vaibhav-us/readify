@@ -1,5 +1,6 @@
 import React from "react";
 import {nanoid} from "nanoid"
+import { Link } from "react-router-dom";
 
 export default function HomeSearch () {
     const genre=[
@@ -13,7 +14,15 @@ export default function HomeSearch () {
         <div className="homesearch">
             <h1>Search Books By Genre</h1>
             <ul className="homesearch--genre">
-                {genre.map(ele => (<li key={nanoid()}>{ele}</li>))}
+                {genre.map(ele => {
+                    return(
+                        <li key={nanoid()}>
+                            <Link className="noLink" to={'/search?genre='+ele}>
+                                {ele}
+                            </Link>
+                        </li>
+                    )
+                })}
             </ul>
         </div>
     )

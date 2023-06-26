@@ -8,35 +8,36 @@
   border-bottom: 0.2em solid rgb(155, 142, 142);
   padding-bottom: 0.2em;
 }
+.wanttoread{
+  height: 100%;
+  width: 100%;
+  font-size: initial;
+  background-color: rgb(81, 161, 81);
+  font-weight: 600;
+  color: white;
+}
+.wanttoread:hover{
+  background-color: rgb(104, 189, 104);
+}
 .bookpage--sticky{
   position: fixed;
   width: 30%;
   padding: 0 5% 10% 5%;
   display: grid;
-  grid-template-rows:400px 70px 70px ;
+  grid-template-rows:400px 40px 90px ;
   align-items: center;
   justify-items: center;
-}
-.bookpage--sticky button{
-  height: 40px;
-  width: 100%;
-  font-size: 16px;
-  background-color: rgb(81, 161, 81);
-  font-weight: 600;
-  color: white;
-}
-.bookpage--sticky button:hover{
-  background-color: rgb(104, 189, 104);
 }
 .starblink--container{
-  display: grid;
-  grid-template-rows: 30px 35px;
-  width: fit-content;
-  align-items: center;
-  justify-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 200px;
+  flex-direction: row;
+  justify-content: center;
 }
 .starblink--star{
-  width: 30px;
+  width: 15%;
+  max-width: 30px;
   height: fit-content;
   margin-right: 7px;
   cursor: pointer;
@@ -52,6 +53,7 @@
   width:fit-content;
   align-items: center;
   border-radius: 10px;
+  
   transition: background-color 0.3s ease;
 }
 .bookpage--initialRate:hover{
@@ -60,14 +62,21 @@
 }
 .ratingratio{
   margin-right: 15px;
-  overflow: hidden;
-  height: 100%;
+  height:inherit;
   display: flex;
+  align-items: center;
+  font-size:inherit;
+}
+.ratingratio img{
+  max-width: 60px ;
+  height: inherit; 
+  margin-right: 5px;
 }
 .rnr--container{
   display:grid;
   justify-items: center;
-  width: 100%;
+  margin-left: 10%;
+  width: 80%;
 }
 .rnr--links{
   display: grid;
@@ -78,6 +87,7 @@
 .rnr--links button{
   background-color: black;
   color: white;
+
   width: 70%;
   height: 70%;
   font-size: large;
