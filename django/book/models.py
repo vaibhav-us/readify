@@ -3,8 +3,6 @@ from django.db import models,connection
 
 def createTable():
     with connection.cursor() as cur:
-        cur.execute("CREATE TABLE IF NOT EXISTS user (user_id INTEGER PRIMARY KEY, user_email TEXT,user_name TEXT, password TEXT);")
-       
         cur.execute('''
             CREATE TABLE IF NOT EXISTS book 
                 (book_id INTEGER PRIMARY KEY,user_id INTEGER,genre TEXT, book_title TEXT, author TEXT,
@@ -26,33 +24,3 @@ def createTable():
             ''')
        
 createTable()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#cur.execute('DROP TABLE IF EXISTS user')
-#cur.execute('DROP TABLE IF EXISTS rating')
-#cur.execute('DROP TABLE IF EXISTS review')
-#cur.execute('DROP TABLE IF EXISTS feedback')
