@@ -1,7 +1,7 @@
 import React from "react";
 import Trending from "../components/trending";
 import Slider from "../components/slider";
-import HomeSearch from "../components/HomeSearch";
+import HomeSearch from "../components/homesearch";
 
 export default function Homepage () {
     const data = [{id:1,name:"Book 1"},{id:2,name:"Book 2"},{id:3,name:"Book 3"},{id:4,name:"Book 4"},{id:5,name:"Book 5"},{id:6,name:"Book 6"},{id:7,name:"Book 7"},{id:8,name:"Book 8"}]
