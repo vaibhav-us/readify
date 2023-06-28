@@ -37,8 +37,10 @@
     margin-top: 8px;
     border-radius: 10px;
 }
-.paginate--pageno--container{
-    margin:15px 0px 30px 30%;
+.paginate--container{
+    display: grid;
+    white-space: nowrap;
+    place-items: center center;
 }
 .paginate--pageno{
     margin-right: 1%;
@@ -57,7 +59,50 @@
     border-radius: 0%;
 }
 .paginate--more:hover{
-   
     border-bottom: 0.2em solid rgb(106, 108, 237);
     padding-bottom: 0.2em;
+}
+
+/* reviewpage css code */
+.reviewpage--container{
+    display: grid;
+    max-width: 750px;
+    width: 100%;
+    margin-left: 30%;
+    transform: translateX(-30%);
+}
+.reviewpage--container h1{
+    color: rgb(11, 90, 18);
+}
+.reviewpage--rating{
+   height: 80px;
+   width: 350px;
+   margin-left: 50%;
+   transform: translateX(-50%);
+}
+.review--area{
+    width:100%;
+    resize: vertical;
+    height: 170px;
+    padding: 10px 10px;
+}
+.reviewform--container button{
+    margin: 20px 0 ;
+    height: 40px;
+    font-size: medium;
+    padding: 0 25px;
+    background-color: blueviolet;
+    color: aliceblue;
+    font-weight: 600;
+    margin-left: 50%;
+    transform: translateX(-50%);
+    transition: all 0.2s ease;
+}
+.reviewform--container button:hover{
+    background-color: rgb(89, 14, 158);
+}
+.suchempty--container{
+    display: grid;
+    place-items: center center;
+    margin-bottom: 30px;
 }

@@ -2,6 +2,7 @@ import React from "react";
 import { useLoaderData} from "react-router-dom";
 import Paginate from "../components/paginate";
 import SearchTile from "../components/searchtile";
+import SuchEmpty from "../components/suchempty";
 
 export function loader({request}) {
     const url = new URL(request.url)
@@ -12,6 +13,7 @@ export function loader({request}) {
 
 export default function SearchPage() {
     const key = useLoaderData()
+    const containerRef = React.useRef(null)
     const data = [
         {id:1,name:"The Name of the Wind",image:"https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1270352123i/186074.jpg",rating:5,author:"Patrick Rothfuss",date:"2022/10/02"},
         {id:2,name:"The Way of Kings",image:"https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1659905828i/7235533.jpg",rating:5,author:"Brandon Sanderson",date:"2021/10/02"},
@@ -22,14 +24,24 @@ export default function SearchPage() {
         {id:7,name:"The Lord of the Rings: Weapons and Warfare",image:"https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1388290346i/36.jpg",rating:5,author:"christopher lee",date:"2012/10/12"}
     ] 
     const totalItems = 7
+    const msgForSuchEmpty = { __html: `Couldn't find the book you are looking for? Contribute to us`}
+    
     const searchResults = data.map(ele => <SearchTile key={ele.id} {...ele}/>)
     return(
-        <div className="searchpage--container">
+        <div ref={containerRef} className="searchpage--container">
             <div className="searchpage--results">
                 <h1>Showing Results For "{key}"</h1>
-                <Paginate data={searchResults} totalItems={totalItems} itemsPerPage={2}/>
+                {data && data.length!==0 ?
+                    <>
+                    {searchResults}
+                    <Paginate scrollRef={containerRef} totalItems={totalItems} itemsPerPage={2}/>
+                    </>
+                    :
+                    <SuchEmpty msg={msgForSuchEmpty}/>
+                }
+               
             </div>
-
+            
             <div className="searchpage--filter">
                 <h4>filter</h4>
             </div>

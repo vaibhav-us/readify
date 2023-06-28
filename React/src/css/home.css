@@ -1,5 +1,6 @@
 * {
     box-sizing: border-box;
+    transition: all 0.3s ease;
 }
 button{
   cursor: pointer;
@@ -9,12 +10,21 @@ input {
   padding: 0 10px 0 10px ;
   border-radius: 20px;
 }
+textarea {
+  border-radius: 15px; 
+  font-size: medium;
+  font-family:Georgia, 'Times New Roman', Times, serif;
+  border: 2px solid black;
+}
 .noLink{
   text-decoration: none;
   color: inherit;
 }
 .app{
   font-family: Arial, Helvetica, sans-serif;
+}
+.red{
+  color: red;
 }
 .gray{
   color: rgb(121, 111, 111);

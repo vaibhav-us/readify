@@ -18,6 +18,11 @@ export default function Trending(props) {
         if (direction==="left" && !dotHighlight[1].truth) {
     
             setDotHighlight(prev => prev.map(obj=> {
+    //            containerRef.current.scrollLeft -= containerRef.current.clientWidth
+    //             if (containerRef.current.clientWidth%containerRef.current.scrollLeft!==0) {
+    //                 const remainder=containerRef.current.clientWidth%containerRef.current.scrollLeft
+    //                 containerRef.current.scrollLeft -= remainder
+    //             }
                 if (!obj.id) {
                     obj.scroll = prev[0].scroll-containerRef.current.clientWidth
                     containerRef.current.scrollLeft=obj.scroll
@@ -33,6 +38,12 @@ export default function Trending(props) {
         else if (direction==="right" && !dotHighlight[8].truth) {
        
             setDotHighlight(prev => prev.map(obj=> {
+    //             containerRef.current.scrollLeft = containerRef.current.scrollLeft+containerRef.current.clientWidth
+    //             console.log(containerRef.current.scrollLeft,containerRef.current.clientWidth);
+    //             if (containerRef.current.clientWidth%containerRef.current.scrollLeft!==0) {
+    //                 const remainder=containerRef.current.clientWidth%containerRef.current.scrollLeft
+    //                 containerRef.current.scrollLeft -= remainder
+    //             }
                 if (!obj.id) { 
                     obj.scroll = prev[0].scroll+containerRef.current.clientWidth
                     containerRef.current.scrollLeft=obj.scroll
@@ -46,44 +57,7 @@ export default function Trending(props) {
             }))
         }
     }
-    // function handleclick(direction) {
-    //     if (direction==="left" && !dotHighlight[1].truth) {
     
-    //         setDotHighlight(prev => prev.map(obj=> {
-    //             containerRef.current.scrollLeft -= containerRef.current.clientWidth
-    //             if (containerRef.current.clientWidth%containerRef.current.scrollLeft!==0) {
-    //                 const remainder=containerRef.current.clientWidth%containerRef.current.scrollLeft
-    //                 containerRef.current.scrollLeft -= remainder
-    //             }
-              
-    //             if (obj.truth)
-    //                 obj.truth=0
-    //             if (obj.id === (prev[0].scroll/containerRef.current.clientWidth)+1){
-    //                 obj.truth=1
-    //             }
-    //             return( {...obj})
-    //         }))
-    //     }
-    //     else if (direction==="right" && !dotHighlight[8].truth) {
-       
-    //         setDotHighlight(prev => prev.map(obj=> {
-                
-    //             containerRef.current.scrollLeft = containerRef.current.scrollLeft+containerRef.current.clientWidth
-    //             console.log(containerRef.current.scrollLeft,containerRef.current.clientWidth);
-    //             if (containerRef.current.clientWidth%containerRef.current.scrollLeft!==0) {
-    //                 const remainder=containerRef.current.clientWidth%containerRef.current.scrollLeft
-    //                 containerRef.current.scrollLeft -= remainder
-    //             }
-    //             if (obj.truth)
-    //                 obj.truth=0
-    //             if (obj.id === (prev[0].scroll/containerRef.current.clientWidth)+1){
-    //                 obj.truth=1
-    //             }
-    //             return( {...obj})
-    //         }))
-    //     }
-    // }
-
     function handleclickdots(theId) {
         setDotHighlight(prev => prev.map(obj=> {
                 

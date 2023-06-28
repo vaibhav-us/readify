@@ -9,7 +9,7 @@ export default function Paginate(props) {
     const containerRef = React.useRef(null)
 
     const handleSearchParam = pageno => {
-        containerRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
+        props.scrollRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
         setSearchParam(prevParam => {
             prevParam.set('pageno',pageno)
             return prevParam
@@ -17,7 +17,7 @@ export default function Paginate(props) {
     }
 
     const handleSearchParamByOneUnit = direction => {
-        containerRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
+        props.scrollRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
         setSearchParam(prevParam => {
             const previousPage = parseInt(prevParam.get("pageno")) - 1
             const nextPage = parseInt(prevParam.get("pageno")||1) + 1
@@ -51,10 +51,8 @@ export default function Paginate(props) {
     }
 
     return(
-        <div ref={containerRef}>
-            <p>Displaying {firstItemIndex} - {lastItemIndex} out of {props.totalItems}</p>
-
-            {props.data}
+        <div ref={containerRef} className="paginate--container">
+            <pre>Displaying {firstItemIndex} - {lastItemIndex} out of {props.totalItems}</pre>
 
             <div className="paginate--pageno--container">
                 {startPageNo!==1 &&

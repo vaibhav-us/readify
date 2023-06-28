@@ -2,10 +2,12 @@ import React from "react";
 import CollapseContainer from "./collapsecontainer";
 import { Form } from "react-router-dom";
 import { fullDate } from "../utility";
+import RatingRatio from "./ratingratio";
 
 const Review = (props) => {
     const [like,setLike] = React.useState(false)
     const [showMore,setShowMore] = React.useState(false)
+    const [displaySpoiler,setDisplaySpoiler]=React.useState(props.spoiler || false)
     function toggleShowMore() {
         setShowMore(!showMore)
     }
@@ -24,6 +26,18 @@ const Review = (props) => {
     const likeImage = like? '/images/liked.jpg' : "/images/like.png"
 
     const expandedDate = fullDate(props.date)
+    const SpoilerTag = () => {
+        return(
+            <div className="review--spoiler red">
+                <h3 >Review Contains Spoilers!!!</h3>
+                <button 
+                    className="review--spoiler--button"
+                    onClick={()=>setDisplaySpoiler(false)}
+                >  &gt; </button>
+            </div>
+        )
+    } 
+
     return(
         <div className="review--container">
             <div>
@@ -33,15 +47,14 @@ const Review = (props) => {
 
             <div>
                 <div className="review--starrate">
-                    <p>{props.rating}</p>
-                    <img 
-                        src={process.env.PUBLIC_URL+"/images/star.jpeg"}
-                        alt="brh"
-                        width={"25px"}
-                    />
+                    <RatingRatio rating={props.rating} />
                 </div>
 
-                <CollapseContainer data={props.review}/>
+                {displaySpoiler?
+                    <SpoilerTag/>
+                    :
+                    <CollapseContainer data={props.review}/>
+                }
 
                 {displayPoints}
                 {displayPoints[0] && <><br/><br/></>}
@@ -52,7 +65,7 @@ const Review = (props) => {
 
                 <Form className="review--likeNcomment">
                     <button className="nobutton" onClick={toggleLike}>
-                        <img src={process.env.PUBLIC_URL+likeImage} alt="" width={"20px"} />
+                        <img  src={process.env.PUBLIC_URL+likeImage} alt="" width={"20px"} />
                         <b>  {like? "Liked":"Like"} </b>
                     </button>
                     <button className="nobutton">

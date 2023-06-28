@@ -8,7 +8,7 @@ export default function Booktile(props) {
             <img className="booktile--img" src={props.image} alt={props.name}/>
             
             <div className="booktile--rate">
-                <img className="booktile--rate--img" src={process.env.PUBLIC_URL+"/images/star.jpeg"} alt="ye"/>
+                <img className="booktile--rate--img" src={process.env.PUBLIC_URL+"/images/star.png"} alt="ye"/>
                 <p>{props.rating}</p>
                 <img className="booktile--rate--img" src={process.env.PUBLIC_URL+"/images/emptystar.png" } alt="mm"/>
             </div>
