@@ -8,18 +8,10 @@ export default function StarBlink() {
 
     const handleSubmit = e =>{
         e.preventDefault()
-        if (e.nativeEvent.submitter.id==="clear") {
-            setStarBlink(0)
-            setStatus("saving")
-            // give a post request here. Give hard coded data here as 0
-            console.log(starBlink,"0 is submitted");
-            setStatus("initial")
-            return
-        }
         setStatus("saving")
         //give a post request here 
         console.log(starBlink,"submitted");
-        setStatus("saved")
+        setStatus(e.nativeEvent.submitter.id==="clear"?"initial":"saved")
         setUserRating(starBlink)
     }
 
@@ -56,7 +48,7 @@ export default function StarBlink() {
             
             {status==="saved" || status==="hovering" ?
                 status==="hovering"?
-                    <button id="clear" type="submit" className="gray nobutton" ><big>Clear Rating</big></button> 
+                    <button id="clear" type="submit" className="gray nobutton" ><big onClick={()=>setStarBlink(0)}>Clear Rating</big></button> 
                     :
                     <big className="starblink--tick--container">
                         Rated

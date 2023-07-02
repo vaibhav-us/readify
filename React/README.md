@@ -1,8 +1,8 @@
-data for bookpage
+to implement html tags in the string for the "review section"
 ----------------------------------------------
-id , name, author, imageurl,average rating, genres (multivalued) , total rating count, total review count,publication date, reviews ( id , name, review , rating , date , likes , tags(multivalued,optional) ,spoiler(boolean-value) )
+const myString = "<b>Hello, World!</b>";
+const escapedHTML = { __html: myString };
 
-data for searchpage
------------------------------
-id , name, author, imageurl,average rating, publication date,
+<div dangerouslySetInnerHTML={escapedHTML}/>
+
 

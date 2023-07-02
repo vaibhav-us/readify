@@ -1,4 +1,5 @@
 import React from "react";
+import {Link} from 'react-router-dom'
 
 export default function Trending(props) {
     const containerRef = React.useRef(null)
@@ -85,10 +86,15 @@ export default function Trending(props) {
                 //input the actual data
                 
                 return(    
-                    <div key={obj.id} className="trending--book" style={{backgroundImage: 'url("https://cdn.mos.cms.futurecdn.net/c1b8bef92fb82ae5aba540b469b804ce-1200-80.jpg")'}}>
-                        <h1>Lord of The Rings</h1>
-                        <h2>J R R Tolkien</h2> 
-                    </div>
+                    <Link 
+                        key={obj.id} 
+                        to = {`/book/${obj.id}`}
+                        className="noLink trending--book" 
+                        style={{backgroundImage: `url(${obj.landscapeImage})`}}
+                    >
+                        <h1>{obj.name}</h1>
+                        <h2>{obj.author}</h2> 
+                    </Link>
                 )
             })}
             </div>

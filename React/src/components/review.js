@@ -1,31 +1,15 @@
 import React from "react";
 import CollapseContainer from "./collapsecontainer";
-import { Form } from "react-router-dom";
-import { fullDate } from "../utility";
+import { approximate, fullDate } from "../utility";
 import RatingRatio from "./ratingratio";
+import CommentSection from "./commentsection";
 
 const Review = (props) => {
     const [like,setLike] = React.useState(false)
     const [showMore,setShowMore] = React.useState(false)
     const [displaySpoiler,setDisplaySpoiler]=React.useState(props.spoiler || false)
-    function toggleShowMore() {
-        setShowMore(!showMore)
-    }
-    const displayPoints = props.points.slice(0,3).map(point => <b key={point} className="review--point">{point}</b>)
-    displayPoints.push(
-        props.points[3] ? 
-            showMore ?
-            props.points.slice(3).map(point => <b key={point} className="review--point">{point}</b>) 
-            :
-            <b key='more' className="review--point--more" onClick={toggleShowMore}>...more</b>
-        :
-            null
-    )
+    const [displayComment,setDisplayComment]=React.useState(false)
 
-    const toggleLike = () => setLike(!like)
-    const likeImage = like? '/images/liked.jpg' : "/images/like.png"
-
-    const expandedDate = fullDate(props.date)
     const SpoilerTag = () => {
         return(
             <div className="review--spoiler red">
@@ -36,13 +20,30 @@ const Review = (props) => {
                 >  &gt; </button>
             </div>
         )
-    } 
+    }         
+    
+    function toggleShowMore() {
+        setShowMore(!showMore)
+    }
+    const displayTags = props.tags?.slice(0,3).map(tag => <b key={tag} className="review--point">{tag}</b>) || []
+    displayTags.push(
+        props.tags && props.tags[3] ? 
+            showMore ?
+            props.tags.slice(3).map(tag => <b key={tag} className="review--point">{tag}</b>) 
+            :
+            <b key='more' className="review--point--more" onClick={toggleShowMore}>...more</b>
+        :
+            null
+    )
+
+    const toggleLike = () => setLike(!like)
+    const likeImage = like? '/images/liked.png' : "/images/like.png"
 
     return(
         <div className="review--container">
             <div>
                 <big><h3>{props.name}</h3></big>
-                <p>{expandedDate}</p>
+                <p>{ fullDate(props.date) }</p>
             </div>
 
             <div>
@@ -53,28 +54,33 @@ const Review = (props) => {
                 {displaySpoiler?
                     <SpoilerTag/>
                     :
-                    <CollapseContainer data={props.review}/>
+                    <CollapseContainer data={props.review} height={100}/>
                 }
 
-                {displayPoints}
-                {displayPoints[0] && <><br/><br/></>}
+                {displayTags[0] && 
+                <>{displayTags}<br/><br/></>
+                }
 
-                <span className="gray">{props.likes} likes & </span>
-                <span className="gray">{props.comments} comments</span>
-                <br/><br/>
+                <div className="review--likeNcomment">
+                    <div>
+                        <button type="submit" className="nobutton" onClick={toggleLike} name="like">
+                            <img  src={process.env.PUBLIC_URL+likeImage} alt="" width={"20px"} />
+                            <b>  {like? "Liked":"Like"} </b>
+                        </button>
+                        <small> {approximate(props.likes) }</small>    
+                    </div>
 
-                <Form className="review--likeNcomment">
-                    <button className="nobutton" onClick={toggleLike}>
-                        <img  src={process.env.PUBLIC_URL+likeImage} alt="" width={"20px"} />
-                        <b>  {like? "Liked":"Like"} </b>
-                    </button>
-                    <button className="nobutton">
-                        <img src={process.env.PUBLIC_URL+"/images/comment.png"} alt="" width={"20px"} />
-                        <b>  Comment</b>
-                    </button>
-                </Form>
+                    <div>
+                        <button className="nobutton" onClick={()=>setDisplayComment(true)}>
+                            <img src={process.env.PUBLIC_URL+"/images/comment.png"} alt="" width={"20px"} />
+                            <b>  Comment</b>
+                        </button>
+                        <small>  {approximate(props.comments)}</small>    
+                    </div>  
+                </div>
+                
+                {displayComment && <CommentSection id={props.id} />}
                 <br/><hr/>
-
             </div>
         </div>
     )
