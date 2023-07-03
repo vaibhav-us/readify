@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 import './css/home.css'
 import './css/bookpage.css'
 import "./css/searchpage.css"
+import './css/profile.css'
 import App from './app'
 
 

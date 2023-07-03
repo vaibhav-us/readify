@@ -68,6 +68,7 @@ textarea {
 }
 .searchbar{
   display: flex;
+  align-items: center;
   height: 60%;
   background-color: rgb(230, 235, 236);
   border-radius: 10px;
@@ -243,43 +244,5 @@ textarea {
   transform: scale(1.1);
   color: rgb(137, 60, 152);
   text-decoration: underline;
-}
-
-/* loginpage & signinpage css */
-.login{
-  margin-left: 35%;
-  width: 30%;
-}  
-.login input,.login button {
-  height: 35px;
-  width: 100%;
-}
-
-.sign--in,.create--acc{
-  background-color: black;
-  color: white;
-  font-size: 18px;
-}
-.sign--up{
-  font-size: 18px;
-  background-color: white;
-}
-.line--dec{
-  position: relative;
-}
-.login--hr{
-  border: none;
-  border-top: 2px solid black;
-  margin-bottom: 30px;
-  margin-top: 30px;
-}
-.login--newto {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%,-50%);
-  background-color: white;
-  padding: 5px 15px;
-  white-space: pre;
 }
 

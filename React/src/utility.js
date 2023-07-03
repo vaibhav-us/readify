@@ -1,3 +1,19 @@
+export async function postItems(object,api) {
+    const res = await fetch(api, 
+        {method : "POST", body: JSON.stringify(object),
+        headers:{"Content-Type": "application/json"}}
+    )
+
+if (!res.ok) {
+  throw {
+      message : data.message,
+      statusText : res.statusText,
+      status : res.status
+  }
+}
+const data = await res.json()
+return data
+}
 
 export function fullDate(date) {
     const[year,month,day] = date.split("/")

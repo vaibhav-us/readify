@@ -56,7 +56,7 @@ export default function ReviewPage(props) {
 
     return(
         <div className="reviewpage--container">
-            <h1>{data.name} &gt; Review</h1>
+            <h1 className="reviewpage--container--heading">{data.name} &gt; Review</h1>
 
             <div className="searchtile reviewpage--book">
                 <Link to={"/book/"+data.id}>
