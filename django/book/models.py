@@ -28,7 +28,7 @@ def createTable():
             FOREIGN KEY(user_id) REFERENCES user(user_id),FOREIGN KEY(feedback_id) REFERENCES feedback(feedback_id)) ;  
                     ''')
         
-       
+        
         
         
 createTable()
