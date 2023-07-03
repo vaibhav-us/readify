@@ -1,6 +1,6 @@
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from django.contrib.sessions.backends.db import SessionStore 
+from django.contrib.auth import login 
 from django.db import connection as conn
 from . import models
 
@@ -31,7 +31,6 @@ def signIn(request):
         user = auth(email,password)
         if user is not None:
             request.session['email']=email
-            
             token = {'message':request.session['email']}
             return Response(token)
     return Response({"message":"error"})
