@@ -1,5 +1,6 @@
 * {
     box-sizing: border-box;
+    scroll-behavior: smooth;
     transition: all 0.3s ease;
 }
 button{
@@ -11,10 +12,12 @@ input {
   border-radius: 20px;
 }
 textarea {
+  padding: 10px;
   border-radius: 15px; 
   font-size: medium;
   font-family:Georgia, 'Times New Roman', Times, serif;
   border: 2px solid black;
+  transition: none;
 }
 .noLink{
   text-decoration: none;
@@ -69,11 +72,11 @@ textarea {
   background-color: rgb(230, 235, 236);
   border-radius: 10px;
 }
-.searchbar input{
+.searchbar--input{
   border: none;
   background-color: transparent;
 }
-.searchbar input:focus{
+.searchbar--input:focus{
   outline: none;
 }
 .homenav--login{
@@ -242,7 +245,7 @@ textarea {
   text-decoration: underline;
 }
 
-
+/* loginpage & signinpage css */
 .login{
   margin-left: 35%;
   width: 30%;
@@ -272,9 +275,11 @@ textarea {
 }
 .login--newto {
   position: absolute;
-  top: -5px;
-  left: 38%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
   background-color: white;
-  padding: 0 10px;
+  padding: 5px 15px;
+  white-space: pre;
 }
 

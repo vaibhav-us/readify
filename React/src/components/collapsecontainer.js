@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function CollapseContainer({data}) {
+export default function CollapseContainer(props) {
     const containerRef = React.useRef(null);
     const [showFullContent, setShowFullContent] = React.useState(false);
     const [containerHeight, setContainerHeight] = React.useState(0);
@@ -24,13 +24,13 @@ export default function CollapseContainer({data}) {
             <div
                 ref={containerRef} 
                 className="bookdesc--container"
-                style={{ maxHeight: showFullContent ? 'none' : '100px', overflow: 'hidden' }}
+                style={{ maxHeight: showFullContent ? 'none' : (props.height ), overflow: 'hidden' }}
             >
-                {data}
+                {props.data}
             </div>
-            <br />
+        
 
-            {containerHeight>=100  && (
+            {(containerHeight>=props.height  ) && (
 
             <span className="showmore" onClick={toggleContent} >
                 {showFullContent ? 'show less' : 'show more'}

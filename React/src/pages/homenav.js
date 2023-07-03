@@ -1,5 +1,6 @@
 import React from "react";
 import { Outlet,Link } from "react-router-dom";
+import ScrollToTop from "../components/scrolltotop";
 
 export default function Homenav () {
     const [searchWord,setSearchWord] = React.useState('')
@@ -13,6 +14,7 @@ export default function Homenav () {
 
                 <div className="searchbar">
                     <input 
+                        className="searchbar--input"
                         placeholder="Search Books" 
                         onChange={(e)=>setSearchWord(e.target.value)}
                         value={searchWord}
@@ -26,6 +28,7 @@ export default function Homenav () {
                     <h2>login</h2>
                 </Link>
             </div>
+            <ScrollToTop/>
             <Outlet />
         </div>
         

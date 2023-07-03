@@ -12,12 +12,14 @@ import Login,{action as loginAction} from "./pages/login";
 import Signup,{action as signupAction} from "./pages/signup";
 import SearchPage,{loader as searchLoader} from "./pages/searchpage";
 import ReviewPage,{action as reviewAction} from "./pages/reviewpage";
+import ReviewSection,{action as reviewSectionAction} from "./pages/reviewsection";
 
 export default function App () {
     const router = createBrowserRouter(createRoutesFromElements(
         <Route path="/" element={<Homenav />}>
             <Route index element={<Homepage />}/>
             <Route path="book/:bookId" element={<BookPage />}/>
+            <Route path="book/:bookId/review/:reviewId" element={<ReviewSection />} action={reviewSectionAction}/>
             <Route path="login" element={<Login />} action={loginAction}/>
             <Route path="signup" element={<Signup />} action={signupAction}/>
             <Route path="search" element={<SearchPage />} loader={searchLoader}/>

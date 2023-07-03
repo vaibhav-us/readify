@@ -84,7 +84,10 @@
 }
 .ratingratio img{
   height: 80%; 
-  margin-right: 5px;
+  margin-right: 8px;
+}
+.bookdesc--container{
+  margin: 10px 0;
 }
 .rnr--container{
   display:grid;
@@ -150,17 +153,70 @@
 }
 .review--likeNcomment{
   display: flex;
+  white-space:pre;
 }
 .review--likeNcomment button{
   display: flex;
   align-items: center ;
-  width: fit-content;
-  white-space:pre;
   font-size:medium;
+  margin-right: 20px;
 }
 .review--likeNcomment button:hover {
   border: 1px solid black;
 }
 .review--likeNcomment button:active{
   background-color: rgb(229, 207, 200);
+}
+.comment--container{
+  display: grid;
+  grid-template-columns: 15% 90%;
+  position: relative;
+  margin-top: 20px;
+  justify-content: space-around;
+}
+.comment--link:hover{
+  border-radius: 20px;
+  background-color: rgb(224, 215, 215);
+  cursor: pointer;
+}
+.comment--date{
+  position: absolute;
+  right: 0;
+}
+.comment--input--container{
+  display: grid;
+  justify-items: right;
+}
+.comment--input{
+  padding: 10px 10px;  
+  resize: vertical;
+  min-height: 100px;
+  width: 100%;
+}
+.comment--post{
+  background-color: black;
+  color: white;
+  padding: 5px 10px;
+  margin-top: 10px;
+}
+.navigators{
+  position:fixed;
+  display: grid;
+  grid-gap: 20px;
+  place-items: center center;
+  right: 30px;
+  bottom: 70px;
+}
+.navigators--links{
+  width: fit-content;
+  height: 100%;
+  padding:10px 20px;
+  color: white;
+  font-size: medium;
+}
+.navigator--top{
+  background-color: rgb(179, 54, 54);  
+}
+.navigators--links:hover{
+  box-shadow: 0px 0px 10px 3px rgb(104, 91, 91);
 }
