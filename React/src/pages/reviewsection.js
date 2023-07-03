@@ -9,7 +9,6 @@ export async function action({request}) {
     const formData = await request.formData()
     console.log(formData.get("comment"));
     return {comment:"written"}
-    return null
 }
 export default function ReviewSection() {
     const navigate = useNavigate()

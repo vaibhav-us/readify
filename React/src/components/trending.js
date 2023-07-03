@@ -82,9 +82,6 @@ export default function Trending(props) {
 
             <div className="trending--books"  ref={containerRef}>
             {props.data.map(obj => {
-
-                //input the actual data
-                
                 return(    
                     <Link 
                         key={obj.id} 
