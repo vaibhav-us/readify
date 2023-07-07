@@ -5,14 +5,14 @@ def createTable():
     with connection.cursor() as cur:
         cur.execute('''
             CREATE TABLE IF NOT EXISTS book 
-                (book_id INTEGER PRIMARY KEY,user_id INTEGER,genre TEXT, book_title TEXT, author TEXT,
-                  cover_pic TEXT, description TEXT,published_on DATE DEFAULT(date('now')),avg_rating INTEGER DEFAULT 5 ,
+                (book_id INTEGER PRIMARY KEY,user_id INTEGER,book_title TEXT, author TEXT,
+                  cover_pic TEXT, description CLOB,published_on DATE ,avg_rating INTEGER DEFAULT NULL ,
                  FOREIGN KEY(user_id) REFERENCES user(user_id) );
             ''')
         cur.execute('''
             CREATE TABLE IF NOT EXISTS review 
-                (review_id INTEGER PRIMARY KEY,user_id INTEGER, book_id INTEGER, rating INTEGER, review TEXT,
-                 date DATE DEFAULT(date('now')),
+                (review_id INTEGER PRIMARY KEY,user_id INTEGER, book_id INTEGER, rating INTEGER, review CLOB,
+                 date DATE DEFAULT(date('now')) ,
                  FOREIGN KEY(user_id) REFERENCES user(user_id), FOREIGN KEY(book_id) REFERENCES book(book_id) );
             ''')
         cur.execute('''
@@ -28,7 +28,14 @@ def createTable():
             FOREIGN KEY(user_id) REFERENCES user(user_id),FOREIGN KEY(feedback_id) REFERENCES feedback(feedback_id)) ;  
                     ''')
         
+        cur.execute('''
+                CREATE TABLE IF NOT EXISTS genre  (genre_id INTEGER PRIMARY KEY,book_id INTEGER,genre TEXT,
+                FOREIGN KEY(book_id) REFERENCES book(book_id) ON DELETE CASCADE)
+            ''')
         
-        
-        
+        # cur.execute('DROP TABLE IF EXISTS likes')
+        # cur.execute('DROP TABLE IF EXISTS feedback')
+        # cur.execute('DROP TABLE IF EXISTS review')
+        # cur.execute('DROP TABLE IF EXISTS genre')
+        # cur.execute('DROP TABLE IF EXISTS book')
 createTable()
