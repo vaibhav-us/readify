@@ -8,15 +8,22 @@ def get_book(request,book_id):
     with conn.cursor() as cur:
             cur.execute("SELECT * FROM book WHERE book_id = %s ;",(book_id,))
             book = cur.fetchone()
+            cur.execute("SELECT * FROM genre WHERE book_id = %s ;",(book_id,))
+            genre = cur.fetchall()
+            genres=[]
+    for i in genre:
+        g = i[2]
+        genres.append(g)
     data={
          "book_id":book[0],
-         "genre":book[2],
-         "book_title":book[3],
-         "author":book[4],
-         "cover_pic":book[5],
-         "description":book[6],
-         "published_on":book[7],
-         "avg_rating":book[8]
+         
+         "book_title":book[2],
+         "author":book[3],
+         "cover_pic":book[4],
+         "description":book[5],
+         "published_on":book[6],
+         "avg_rating":book[7],
+         "genre":genres
         }
     return Response({"data":data})
 
@@ -27,13 +34,14 @@ def search_books(request):
         key = request.data.get('keyword')
         page_no= request.data.get('pageno')
         items_per_page = 10
-        query = "SELECT * FROM book"
+        query = "SELECT book.book_id,book.book_title,book.author,book.cover_pic,book.description,book.published_on,book.avg_rating,GROUP_CONCAT(genre.genre) FROM book JOIN genre ON book.book_id = genre.book_id "
         if genre and key is None:
             pass
         if  key:
-             query += f" WHERE book_title LIKE '%{key}%' OR author LIKE '%{key}%' "
+             query += f" WHERE book.book_title LIKE '%{key}%' OR book.author LIKE '%{key}%' "
         if genre:
-             query += f" WHERE genre = '{genre}' "
+             query += f" WHERE book.book_id IN (SELECT genre.book_id FROM genre WHERE genre.genre LIKE '%{genre}%') "
+        query += f" GROUP BY book.book_id,book.book_title,book.author,book.cover_pic,book.description,book.published_on,book.avg_rating "
         with conn.cursor() as cur:
             cur.execute(query)
             row = cur.fetchall()
@@ -44,13 +52,13 @@ def search_books(request):
         for book in page:
             result = {
                 "book_id":book[0],
-                "genre":book[2],
-                "book_title":book[3],
-                "author":book[4],
-                "cover_pic":book[5],
-                "description":book[6],
-                "published_on":book[7],
-                "avg_rating":book[8]
+                "book_title":book[1],
+                "author":book[2],
+                "cover_pic":book[3],
+                "description":book[4],
+                "published_on":book[5],
+                "avg_rating":book[6],
+                "genre":book[7]
                 }
             results.append(result) 
         return Response({"data":results})
@@ -68,9 +76,13 @@ def add_book(request,user_id):
 
          with conn.cursor() as cur:
               cur.execute('''
-                INSERT INTO book(user_id,genre,book_title,author,cover_pic,description) VALUES (%s,%s,%s,%s,%s,%s);
-                ''',(user_id,genre,book_title,author,cover_pic,description))
-              
+                INSERT INTO book(user_id,book_title,author,cover_pic,description) VALUES (%s,%s,%s,%s,%s);
+                ''',(user_id,book_title,author,cover_pic,description))
+              cur.execute("SELECT book_id FROM book WHERE book_title = %s",(book_title))
+              book_id = cur.fetchone()
+              cur.execute('''
+                    INSERT INTO genre(book_id,genre) VALUES(%s,%s)
+                    ''',(book_id,genre))
          return Response({"messsage":"added successfully"})
     return Response({"messsage":"enter details"})      
          
