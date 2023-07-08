@@ -1,19 +1,33 @@
 import React from "react";
-import {Link, useParams} from 'react-router-dom';
-import StarBlink from "../components/starblink";
+import { useLoaderData, useParams} from 'react-router-dom';
+import {ReviewButton, StarBlink, WantToRead} from "../components/ratingcomponents";
 import RatingRatio from "../components/ratingratio";
 import CollapseContainer from "../components/collapsecontainer";
 import Slider from "../components/slider"
 import Review from "../components/review"
 import Paginate from "../components/paginate";
 import SuchEmpty from "../components/suchempty";
+import { fullDate, getItems } from "../utility";
+
+export async function loader({params}) {
+    const reviews = [
+        {id:1,name:"Ian",review:"As an avid adult fantasy reader, out of all the books that I’ve been recommended, The Name of the Wind has always been recommended to me the most. Google, Goodreads, book reviewing sites, 9gag, even some people who don't read a lot of fantasy books, they",rating:"4",date:"2011/02/20",tags:["fantasy","masterpiece","recommended","likable","yes"],likes:1000,comments:500,spoiler:true},
+        {id:2,name:"Petrik",review:"This is why I love fantasy so much. After a recent string of okay fantasy novels, a couple of good ones but nothing to get really excited about, I've rediscovered my passion thanks to this book.\n\n I'm so impressed, and so in love, I can't begin to describe it. But I can try to give you a feel for the book, if I can figure out where to start and how to do justice to this masterpiece.Kvothe (pronounced like 'Quothe') is a world-renowned figure of mystery with a disreputable reputation - a hero or a demon depending on which stories you hear. The real man has hidden himself away at an inn in the middle of nowhere with his apprentice Bast - we know not why - and it's not until the Chronicler discovers him there that he shows any interest in reliving his past life. Insisting that his story will take three days to tell, and that the famous chronicler must write it down exactly as he tells it, he begins to share his story: a child genius growing up with his parents' troupe, performing plays and tricks across the land while being taught 'sympathy' (magic), history, chemistry etc. by a tinker, Abenthy, who had been to the University; to ending up homeless and penniless on the streets of Treban, a big port city. It's not until he's fifteen that he makes it to the University, and is accepted, though he's three years younger than is usual. Abenthy has taught him well, and combined with his impressive memory, natural talent, quick intelligence and training, he moves quickly up the ranks of the university.",rating:"5",date:"2022/04/10",tags:["masterpiece","fantasy","recommended"],likes:1000,comments:500},
+        {id:3,name:"stan",review:"It's a well known fact that I will read pretty much any book with a magical school but so is the fact that I don't like waiting for the next book in a series.",rating:"2",date:"2012/05/20",tags:["waste-of-money","sucks","fantasy"],likes:1000,comments:500,spoiler:true},
+        {id:4,name:"Link",review:" I thought the book sucked. My thinking the book sucked in no way impacts how much others enjoyed the book. And if you are uncomfortable that I point out the lack of strong female characters, the main character as essentially a male Mary Sue, or the fact that the entire book was pure male fantasy wish fulfillment,",rating:"1",date:"2002/09/1",likes:1000,comments:500},
+        {id:5,name:"Son",review:"In a small town is an innkeeper named Kote, living a quiet life, when one day a man enters his establishment looking for Kvothe, the man of myths and legends.",rating:"3",date:"2022/07/9",tags:["waste-of-money","fantasy"],likes:1000,comments:500,spoiler:true},
+        {id:6,name:"Ron",review:"I really, really wish I could give this negative stars.",rating:"2",date:"2021/05/10",tags:["waste-of-money","fantasy","sucks"],likes:1000,comments:500}
+    ]
+    const  data = await getItems(`http://127.0.0.1:8000/book/${params.bookId}`)
+    return {reviews,bookData:data.data}
+}
 
 export default function BookPage() {
-    const {bookId} = useParams()
     const reviewRef = React.useRef()
+    const {reviews,bookData} = useLoaderData()
+    console.log(bookData,bookData.description);
 
     //dummy data
-    const bookdesc = "Told in Kvothe's own voice, this is the tale of the magically gifted young man who grows to be the most notorious wizard his world has ever seen.\n The intimate narrative of his childhood in a troupe of traveling players, his years spent as a near-feral orphan in a crime-ridden city, his daringly brazen yet successful bid to enter a legendary school of magic, and his life as a fugitive after the murder of a king form a gripping coming-of-age story unrivaled in recent literature.\nA high-action story written with a poet's hand, The Name of the Wind is a masterpiece that will transport readers into the body and mind of a wizard."
     const sliderData = [
         {id:1,name:"The Name of the Wind",image:"https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1270352123i/186074.jpg",rating:5,author:"Patrick Rothfuss"},
         {id:2,name:"The Way of Kings",image:"https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1659905828i/7235533.jpg",rating:5,author:"Brandon Sanderson"},
@@ -23,48 +37,38 @@ export default function BookPage() {
         {id:6,name:"The Lord of the Rings: The Making of the Movie Trilogy",image:"https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1389501592i/7351.jpg",rating:5,author:"Brian Sibley"},
         {id:7,name:"The Lord of the Rings: Weapons and Warfare",image:"https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1388290346i/36.jpg",rating:5,author:"christopher lee"}
     ]
-    const reviews = [
-        {id:1,name:"Ian",review:"As an avid adult fantasy reader, out of all the books that I’ve been recommended, The Name of the Wind has always been recommended to me the most. Google, Goodreads, book reviewing sites, 9gag, even some people who don't read a lot of fantasy books, they",rating:"4",date:"2011/02/20",tags:["fantasy","masterpiece","recommended","likable","yes"],likes:1000,comments:500,spoiler:true},
-        {id:2,name:"Petrik",review:"This is why I love fantasy so much. After a recent string of okay fantasy novels, a couple of good ones but nothing to get really excited about, I've rediscovered my passion thanks to this book. I'm so impressed, and so in love, I can't begin to describe it. But I can try to give you a feel for the book, if I can figure out where to start and how to do justice to this masterpiece.Kvothe (pronounced like 'Quothe') is a world-renowned figure of mystery with a disreputable reputation - a hero or a demon depending on which stories you hear. The real man has hidden himself away at an inn in the middle of nowhere with his apprentice Bast - we know not why - and it's not until the Chronicler discovers him there that he shows any interest in reliving his past life. Insisting that his story will take three days to tell, and that the famous chronicler must write it down exactly as he tells it, he begins to share his story: a child genius growing up with his parents' troupe, performing plays and tricks across the land while being taught 'sympathy' (magic), history, chemistry etc. by a tinker, Abenthy, who had been to the University; to ending up homeless and penniless on the streets of Treban, a big port city. It's not until he's fifteen that he makes it to the University, and is accepted, though he's three years younger than is usual. Abenthy has taught him well, and combined with his impressive memory, natural talent, quick intelligence and training, he moves quickly up the ranks of the university.",rating:"5",date:"2022/04/10",tags:["masterpiece","fantasy","recommended"],likes:1000,comments:500},
-        {id:3,name:"stan",review:"It's a well known fact that I will read pretty much any book with a magical school but so is the fact that I don't like waiting for the next book in a series.",rating:"2",date:"2012/05/20",tags:["waste-of-money","sucks","fantasy"],likes:1000,comments:500,spoiler:true},
-        {id:4,name:"Link",review:" I thought the book sucked. My thinking the book sucked in no way impacts how much others enjoyed the book. And if you are uncomfortable that I point out the lack of strong female characters, the main character as essentially a male Mary Sue, or the fact that the entire book was pure male fantasy wish fulfillment,",rating:"1",date:"2002/09/1",likes:1000,comments:500},
-        {id:5,name:"Son",review:"In a small town is an innkeeper named Kote, living a quiet life, when one day a man enters his establishment looking for Kvothe, the man of myths and legends.",rating:"3",date:"2022/07/9",tags:["waste-of-money","fantasy"],likes:1000,comments:500,spoiler:true},
-        {id:6,name:"Ron",review:"I really, really wish I could give this negative stars.",rating:"2",date:"2021/05/10",tags:["waste-of-money","fantasy","sucks"],likes:1000,comments:500}
-    ]
+    
     const reviewSection = reviews.map(review => <Review key={review.id} {...review} />)
     // dataForReviewPage must be an object containing bookId,title,author,imageurl,year(optional)
-    const dataForReviewPage = {bookId,redirectTo:`/book/${bookId}`}
     const msgForSuchEmpty = { __html: `Would you be so kind to be the first one to Review`}
-
+   
     return(
         <div className="bookpage--container">
 
             <div className="bookpage--sticky">
-                <h1>image of book id {bookId} goes here (400px)</h1>
-                <button className="wanttoread">Want to read</button>
-                <div style={{maxWidth:"230px"}}>
-                    <StarBlink linkState={dataForReviewPage}/>
+                <div className="bookpage--sticky--imgcontainer">
+                    <img src={bookData.image} alt={bookData.name} width={"90%"}/>
                 </div>
-                
+                <WantToRead bookId={bookData.id} />
+                <StarBlink bookId={bookData.id} style={{maxWidth:"230px"}}/>
             </div>
 
-
             <div className="bookpage--content">
-                <h1>Name Of The Book Of Id {bookId}</h1>
-                <h2><i className="gray" >#author</i></h2>
+                <h1>{bookData.name}</h1>
+                <h2><i className="gray" >{bookData.author}</i></h2>
 
                 <div className="bookpage--initialRate" onClick={()=>reviewRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
-                    <RatingRatio rating={3.24} />
-                    <small className="gray">-----reviews </small>
-                    <small className="gray"> ----ratings</small>
+                    <RatingRatio rating={bookData.rating} />
+                    <small className="gray">{bookData.reviewCount} reviews   </small>
+                    <small className="gray">{bookData.ratingCount} ratings</small>
                 </div>
-                <br />
 
-                <CollapseContainer data={bookdesc} />
+                <CollapseContainer data={bookData.description} height={175}/>
 
-                <p className="gray">Genres</p>
+                <span className="gray">Genres   </span>
+                {bookData.genre.map(ele => <b key={ele} className="review--point">{ele}</b>)}
 
-                <p className="gray">First published on Month day, year</p>
+                <p className="gray">First published on {fullDate(bookData.publication)}</p>
                 <hr/>
 
                 <div>
@@ -79,10 +83,8 @@ export default function BookPage() {
                 <div className="rnr--container">
                     <h1>What do <i>you</i> think ?</h1>
                     <div className="rnr--links">
-                        <StarBlink linkState={dataForReviewPage}/>
-                        <Link to="/review" state={dataForReviewPage} className="rnr--links--review">
-                            write a review
-                        </Link>
+                        <StarBlink bookId={bookData.id}/>
+                        <ReviewButton bookId={bookData.id}/>
                     </div>                       
                 </div> 
                 <br/><hr />

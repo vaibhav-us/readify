@@ -7,16 +7,144 @@
     justify-self: right;
     width: 70%;
 }
+.searchbar{
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    height: 60%;
+    background-color: rgb(222, 242, 246);
+    border-radius: 10px;
+    border: 2px solid black;
+  }
+  .searchbar--input{
+    border: none;
+    width: 100%;
+    background-color: transparent;
+  }
+  .searchbar--input:focus{
+    outline: none;
+  }
+  .sort--tag{
+    background-color: rgb(12, 58, 126);
+    color: white;
+    border-radius: 10px;
+    padding: 5px 10px;
+  }
+  .sort--container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .sort--button{
+    display: flex;
+    align-items: center;
+    padding: 02px 10px;
+    margin: 0 0 0 10px;
+    height: min-content;
+    border: 2px solid black;
+    background-color: rgb(232, 234, 236);
+    border-radius: 10px;
+  }
+  .sort--arrow{
+    font-size: 18px;
+  }
+  .sort--arrow:hover{
+    font-size: 25px;
+  }
+  .filter--container{
+    height: 100%;
+    position: relative;
+  }
+  .filter--button{
+    height: 100%;
+    border-radius: 10px;
+    background-color: rgb(185, 183, 183);
+  }
+  .filter--section{
+    position: absolute;
+    margin-top: 15px;
+    top: 100%;
+    right: -15px;
+    background-color: rgb(216, 241, 226);
+    border-radius: 20px;
+    padding: 30px 20px 20px 20px;
+    border: 2px solid black;
+  }
+  .filter--section::before{
+    content: " ";
+    position: absolute;
+    height: 10px;
+    width: 10px;
+    transform:rotate(45deg);
+    top: -8px;
+    right: 20px;
+    background-color: rgb(216, 241, 226);
+    border: 2px solid black;
+    border-width: 2px 0px 0px 2px;
+  }
+  .filter--close{
+    position: absolute;
+    right: 15px;
+    top: 7px;
+    font-size: larger;
+  }
+  .filter--close:hover{
+    background-color: rgb(185, 182, 180);
+  }
+  .filter--section fieldset{
+    border-radius: 10px;
+    margin-bottom: 30px;
+  }
+  .filter--section--rating div{
+    margin:0 0px 10px 0;
+    display: flex;
+    align-items:center;
+  }
+  .filter--section--publication{
+    display: flex;
+    flex-wrap: wrap;
+  }
+  .filter--section--publication div{
+    white-space: pre;
+    margin-top: 15px;
+  }
+  .filter--section--publication input{
+    background-color: rgb(221, 225, 225);
+    border-radius: 8px;
+  }
+  .filter--button--container{
+    display: flex;
+    justify-content: flex-end;
+  }
+  .filter--submitbutton{
+    margin-left: 20px;
+    background-color: rgb(245, 90, 90);
+  }
+
 .searchtile{
     display: grid;
     width: 100%;
     margin-top: 20px;
-    grid-template-columns: 50px 1fr;
+    grid-template-columns: 100px 1fr;
     grid-gap: 10px;
 }
 .searchtile--img{
-    height: 80px;
-    max-width: 50px;
+    max-width: 100%;
+    max-height: 100%;
+}
+.searchtile--imgcontainer{
+    display: flex;
+    height: 100%;
+    width: 100%;
+    justify-content: center;
+}
+.searchtile--firsthalf{
+    display: grid;
+    grid-template-rows: 50% 15% 25%;
+    place-items: center center;
+    align-content: center;
+    font-size: 12px;
 }
 .searchtile--content{
     height: fit-content;
@@ -32,10 +160,15 @@
 }
 .searchtile--want{
     height: 25px;
-    width: 130px;
+    width: 100%;
     font-size: small;
-    margin-top: 8px;
     border-radius: 10px;
+}
+.searchtile--review{
+    margin: 10px 0 30px 10px;
+    padding: 5px 10px;
+    width: fit-content;
+    background-color: rgb(161, 63, 63);
 }
 .paginate--container{
     display: grid;
@@ -59,134 +192,4 @@
 }
 .paginate--more:enabled{
     color: rgb(34, 18, 179);
-}
-
-/* reviewpage css code */
-.reviewpage--container{
-    display: grid;
-    max-width: 750px;
-    width: 100%;
-    margin-left: 30%;
-    transform: translateX(-30%);
-}
-.reviewpage--container--heading{
-    color: rgb(11, 90, 18);
-}
-.reviewpage--rating{
-   height: 80px;
-   width: 350px;
-   margin-left: 50%;
-   transform: translateX(-50%);
-}
-.review--area{
-    width:100%;
-    resize: vertical;
-    height: 170px;
-    padding: 10px 10px;
-    transition: none;
-}
-.reviewpage--sumbit{
-    margin: 20px 0 ;
-    height: 40px;
-    font-size: medium;
-    padding: 0 25px;
-    background-color: blueviolet;
-    color: aliceblue;
-    font-weight: 600;
-    margin-left: 50%;
-    transform: translateX(-50%);
-    white-space: nowrap;
-}
-.reviewpage--sumbit:hover{
-    background-color: rgb(89, 14, 158);
-}
-.reviewpage--tag--container{
-    margin-top:20px ;
-    display: flex;
-    align-items: center;
-    white-space: pre;
-    flex-wrap: wrap;
-    border-radius: 20px;
-}
-.reviewpage--tag{
-    background-color :rgb(9, 137, 6);
-    color: white;
-    border-radius: 20px;
-    padding: 2px 4px;
-    margin-bottom: 15px;
-    height: 20px;
-    font-size: 14px;
-}
-.reviewpage--inputtags{
-    display: inline-flex;
-    align-items: center;
-    color: black;
-    background-color: rgb(175, 237, 173);
-    margin:0px 0 15px 15px;
-    height: 35px;
-}
-.reviewpage--inputtags input{
-    width: 130px;
-}
-.reviewpage--inputtags span{
-    cursor: pointer;
-    border: 2px solid transparent;
-    border-radius: 35%;
-    padding: 2px;
-}
-.reviewpage--inputtags span:hover{
-    border-color: black;
-}
-.reviewpage--moretag{
-    border-radius: 10%;
-    font-size: 15px;
-    margin:0 0 15px 15px;
-    border: 2px solid black;
-    padding: 0 5px;
-    background-color: antiquewhite;
-    cursor: pointer;
-}
-.reviewpage--moretag:hover{
-    box-shadow: 2px 2px 10px 5px rgb(189, 149, 149);
-    background-color: rgb(193, 161, 123);
-}
-.formsubmitted--container{
-    display: grid;
-    place-items: center center;
-    border: 2px solid black;
-    border-radius: 20px;
-    background-color: antiquewhite;
-}
-
-
-/* reviewsection css */
-.reviewsection--container{
-    margin-left: 40%;
-    min-width: 700px;
-    transform: translateX(-40%) ;
-}
-.reviewsection--commentinput--container{
-    position: fixed;
-    display: grid;
-    grid-template-columns: 0.5fr 60px;
-    align-items: top ;
-    justify-content: center;
-    bottom: 30px;
-    width: 100%;
-}
-.reviewsection--commentinput{
-    width: 100%;
-    height: 200px;
-    resize: vertical;
-}
-.reviewsection--commentinput--post{
-    top: 30px;
-    width: fit-content;
-    height: fit-content;
-    right: 60%;
-}
-.suchempty--container{
-    display: grid;
-    place-items: center center;
-    margin-bottom: 30px;
 }

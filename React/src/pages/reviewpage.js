@@ -1,33 +1,37 @@
 import React from "react";
 import { 
-    useLocation,
     Link,
     Form ,
-    useActionData
+    useActionData,
+    useLoaderData
 } from "react-router-dom";
-import { fullDate, getCurrentDate } from "../utility";
-import StarBlink from "../components/starblink";
+import { fullDate, getItems, postItems } from "../utility";
+import {StarBlink} from "../components/ratingcomponents";
 import {nanoid} from "nanoid"
+
+export async function loader({params}) {
+    const  data = await getItems(`http://127.0.0.1:8000/book/${params.bookId}`)
+    return data.data
+}
 
 export async function action({request}) {
     const formData = await request.formData()
     if (!formData.get("review")) return {emptyReview:"true"}
 
-    const date = getCurrentDate()
-
     const reviewData = {
         id      : formData.get("id"),
         review  : formData.get("review"),
         spoiler : formData.get("spoiler"),
-        tags    : formData.getAll("tag"),
-        date    : date
+        tags    : formData.getAll("tag")
     }
     console.log(reviewData);
+    const res = await postItems(reviewData,`http://127.0.0.1:8000/1/book/${reviewData.id}/addreview/`)
+    
     return {submitted:true}
 }
 
 export default function ReviewPage(props) {
-    const [data,setData] = React.useState({...useLocation().state,id:1,name:"The Name of the Wind",image:"https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1270352123i/186074.jpg",rating:5,author:"Patrick Rothfuss",date:"2015/06/23"}) 
+    const data = useLoaderData()
     const actionData = useActionData()
     const submitted = actionData?.submitted || false
 
@@ -58,8 +62,8 @@ export default function ReviewPage(props) {
         <div className="reviewpage--container">
             <h1 className="reviewpage--container--heading">{data.name} &gt; Review</h1>
 
-            <div className="searchtile reviewpage--book">
-                <Link to={"/book/"+data.id}>
+            <div className="searchtile">
+                <Link to={"/book/"+data.id} className="reviewpage--img">
                     <img className="searchtile--img" src={data.image} alt=''/>
                 </Link>
             
@@ -69,14 +73,12 @@ export default function ReviewPage(props) {
                     </Link>
                     <br/>
                     <i className="gray">{data.author}</i>
-                    {data.date &&<p className="gray">Published on {fullDate(data.date)}</p>}
+                    {data.publication &&<p className="gray">Published on {fullDate(data.publication)}</p>}
                 </div>
             </div>
 
             <br/>
-            <div className="reviewpage--rating">
-                <StarBlink/>
-            </div>
+            <StarBlink className="reviewpage--rating"/>
             <br/><br/>
 
             {submitted ?

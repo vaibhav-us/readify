@@ -2,11 +2,15 @@
   color: rgb(155, 142, 142);
   font-weight: bolder;
   cursor: pointer;
+  width: fit-content;
+  margin-top: 10px;
+  padding-bottom: 0.2em;
   transition: border 0.2s ease;
+  border-bottom: 0.2em solid rgb(255, 255, 255);
 }
 .showmore:hover{
   border-bottom: 0.2em solid rgb(155, 142, 142);
-  padding-bottom: 0.2em;
+  
 }
 .wanttoread{
   height: 100%;
@@ -25,8 +29,15 @@
   padding: 0 5% 0 5%;
   display: grid;
   grid-template-rows:400px 40px 90px ;
-  align-items: center;
-  justify-items: center;
+  place-items: center;
+}
+.bookpage--sticky--imgcontainer{
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 20px 20px;
+  height: 100%;
+  width: 100%;
 }
 .starblink--container{
   display: grid;
@@ -43,7 +54,6 @@
 }
 .starblink--star--container{
   display:flex;
-  margin-bottom: 10px;
   justify-content:center;
 }
 .starblink--tick--container{
@@ -87,7 +97,8 @@
   margin-right: 8px;
 }
 .bookdesc--container{
-  margin: 10px 0;
+  margin: 20px 0 20px 0;
+  white-space: break-spaces;
 }
 .rnr--container{
   display:grid;
@@ -142,7 +153,7 @@
   background-color: rgb(214, 203, 203);
 }
 .review--point,.review--point--more{
-  margin: 0 10px 5px 0;
+  margin: 0 20px 10px 0;
   border-bottom: 0.2em solid rgba(60, 205, 96, 0.864);
   padding-bottom: 0.2em;
   display: inline-block;

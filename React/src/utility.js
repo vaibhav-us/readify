@@ -4,19 +4,34 @@ export async function postItems(object,api) {
         headers:{"Content-Type": "application/json"}}
     )
 
-if (!res.ok) {
-  throw {
-      message : data.message,
-      statusText : res.statusText,
-      status : res.status
-  }
+    const data = await res.json()
+    if (!res.ok) {
+        throw {
+            message : data.message,
+            statusText : res.statusText,
+            status : res.status
+        }
+    }
+    
+    return data
 }
-const data = await res.json()
-return data
+
+export async function getItems(api) {
+    const res = await fetch(api)
+
+    const data = await res.json()
+    if (!res.ok) {
+        throw {
+            message : data.message,
+            statusText : res.statusText,
+            status : res.status
+        }
+    }
+    return data
 }
 
 export function fullDate(date) {
-    const[year,month,day] = date.split("/")
+    const[year,month,day] = date.split("-")
     const dateObject = new Date(year,month-1,day)
     const options = {year:"numeric",month:"long",day:"numeric"}
     return dateObject.toLocaleDateString('en-US',options)
@@ -51,14 +66,6 @@ export function getRelativeTime(dateString) {
 
     else 
       return fullDate(dateString);  
-}
-
-export function getCurrentDate() {
-    const dateObject = new Date()
-    const dateArray = [dateObject.getFullYear(),dateObject.getMonth()+1,dateObject.getDate()] 
-    const date = dateArray.join('-')
-    console.log(date);
-    return date
 }
 
 export function approximate(value) {

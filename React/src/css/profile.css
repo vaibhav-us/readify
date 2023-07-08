@@ -11,7 +11,10 @@
   .login input,.login button {
     height: 35px;
     width: 100%;
+  }
+  .login--input--bottomlabel{
     margin-bottom: 15px;
+    margin-top: 67px;
   }
   
   .sign--in,.create--acc{
@@ -48,36 +51,142 @@
     border-radius: 20px;
     padding-right: 7px;
   }
-  .password--input{
-    margin-top: 15px;
+  .error--message{
+    display: flex;
+    align-items: center;
+    white-space: pre;
+    margin-bottom: 10px;
+  }
+  .error--message--Link:hover{
+    text-decoration: underline;
   }
 
   .profile--container{
     display: grid;
-    grid-template-columns: 20% 60%;
-    grid-gap: 5%;
-    place-content: center center; 
-    margin-top: 50px;
+    grid-template-rows:130px  1fr;
+    min-height: 800px;
+    background-color: rgb(233, 223, 195);
   }
   .profile--navbar{
-    min-width: fit-content;
-    border-radius: 10px;
-    font-size: 120%;
-    background-color: rgb(224, 234, 238);
+    display: flex;
+    justify-content: space-between;
+    border-radius: 15px;
+    margin: 50px 15% 30px 15%;
+    width: 70%;
   }
   .profile--navlink{
     display: grid;
     place-items: center center;
     text-decoration: none;
-    border-radius: 10px;
+    border: 2px solid gray;
+    border-radius: 25px;
     height: 50px;
-    width: 100%;
+    width: 176px;
     padding: 0 10px;
     color: black;
   }
   .profile--navlink--active{
-    background-color: rgb(66, 66, 195);
+    background-color: rgb(187, 148, 31);
     color: white;
   }
+  .personal--details{
+    display: grid;
+    grid-template-columns: minmax(100px,18%) 1fr;
+    grid-gap: 10px;
+    margin-bottom: 50px;
+  }
+  .profile--img{
+    display: flex;
+    align-items: center;
+    width: 80%;
+    aspect-ratio: calc(1);
+    border-radius: 50%;
+    overflow: hidden;
+  }
+  .profile--img img{
+    width: 100%;
+    object-fit: cover;
+  }
+  .personal--stats{
+    display: grid;
+    place-items: center center;
+    grid-gap: 5px;
+    color: rgb(75, 110, 108);
+  }
+  .vertical--table{
+    border-spacing: 10px;
+    white-space:break-spaces;
+  }
+  .vertical--table th{
+    padding-right: 60px;
+  }
+  .vertical--table th,.vertical--table td{
+    word-wrap:break-word;
+  }
+  .dashboard--bookshelf{
+    display: flex;
+    overflow: hidden;
+    margin-bottom: 70px;
+  }
+  .dashboard--bookshelf img{
+    margin-right: 40px;
+  }
+  .dashboard--activity--container{
+    margin: 30px 0 100px 0;
+  }
+  .dashboard--activity{
+    display: flex;
+    align-items: center;
+    height: 30px;
+    padding: 3px 0 3px 10px;
+    border: 2px solid black;
+    border-radius: 20px;
+    margin-bottom: 15px;
+    white-space: pre;
+    cursor: pointer;
+  }
+  .dashboard--activity:hover{
+    background-color: rgb(172, 169, 169);
+    height: 35px;
+  }
+  .dashboard--activity--bookname:hover{
+    text-decoration: underline ;  
+    font-weight: 600;
+    transition: font-weight 0s;  
+  }
+  .dashboard--activity--rhs{
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    width: 100%;
+  }
+  .dashboard--activity--rhs button:hover{
+    font-weight: 700;
+    color: black;
+  }
+
+  .bookshelf--searchbar{
+    height: 30px;
+    width: 30%;
+  }
+  .bookshelf--nav{
+    display: grid;
+    grid-template-rows: 30px 40px;
+    grid-gap: 20px;
+  }
+  .bookshelf--topnav{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+  }
+  .bookshelf--filter{
+    margin-left: 60px;
+  }
+  
+  
+  
+  
+  
   
   

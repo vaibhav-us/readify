@@ -1,0 +1,134 @@
+/* reviewpage css code */
+.reviewpage--container{
+    display: grid;
+    max-width: 750px;
+    width: 100%;
+    margin-left: 30%;
+    transform: translateX(-30%);
+}
+.reviewpage--img{
+    display: flex;
+    justify-content: center;
+  
+}
+.reviewpage--container--heading{
+    color: rgb(11, 90, 18);
+}
+.reviewpage--rating{
+   height: 80px;
+   width: 300px;
+   margin-left: 50%;
+   transform: translateX(-50%);
+}
+.review--area{
+    width:100%;
+    resize: vertical;
+    height: 170px;
+    padding: 10px 10px;
+    transition: none;
+}
+.reviewpage--sumbit{
+    margin: 20px 0 ;
+    height: 40px;
+    font-size: medium;
+    padding: 0 25px;
+    background-color: blueviolet;
+    color: aliceblue;
+    font-weight: 600;
+    margin-left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+}
+.reviewpage--sumbit:hover{
+    background-color: rgb(89, 14, 158);
+}
+.reviewpage--tag--container{
+    margin-top:20px ;
+    display: flex;
+    align-items: center;
+    white-space: pre;
+    flex-wrap: wrap;
+    border-radius: 20px;
+}
+.reviewpage--tag{
+    background-color :rgb(9, 137, 6);
+    color: white;
+    border-radius: 20px;
+    padding: 2px 4px;
+    margin-bottom: 15px;
+    height: 20px;
+    font-size: 14px;
+}
+.reviewpage--inputtags{
+    display: inline-flex;
+    align-items: center;
+    color: black;
+    background-color: rgb(175, 237, 173);
+    margin:0px 0 15px 15px;
+    height: 35px;
+}
+.reviewpage--inputtags input{
+    width: 130px;
+}
+.reviewpage--inputtags span{
+    cursor: pointer;
+    border: 2px solid transparent;
+    border-radius: 35%;
+    padding: 2px;
+}
+.reviewpage--inputtags span:hover{
+    border-color: black;
+}
+.reviewpage--moretag{
+    border-radius: 10%;
+    font-size: 15px;
+    margin:0 0 15px 15px;
+    border: 2px solid black;
+    padding: 0 5px;
+    background-color: antiquewhite;
+    cursor: pointer;
+}
+.reviewpage--moretag:hover{
+    box-shadow: 2px 2px 10px 5px rgb(189, 149, 149);
+    background-color: rgb(193, 161, 123);
+}
+.formsubmitted--container{
+    display: grid;
+    place-items: center center;
+    border: 2px solid black;
+    border-radius: 20px;
+    background-color: antiquewhite;
+}
+
+
+/* reviewsection css */
+.reviewsection--container{
+    margin-left: 40%;
+    min-width: 700px;
+    transform: translateX(-40%) ;
+}
+.reviewsection--commentinput--container{
+    position: fixed;
+    display: grid;
+    grid-template-columns: 0.5fr 60px;
+    align-items: top ;
+    justify-content: center;
+    bottom: 30px;
+    width: 100%;
+}
+.reviewsection--commentinput{
+    width: 100%;
+    height: 200px;
+    resize: vertical;
+}
+.reviewsection--commentinput--post{
+    top: 30px;
+    width: fit-content;
+    height: fit-content;
+    right: 60%;
+}
+.suchempty--container{
+    display: grid;
+    place-items: center center;
+    margin-bottom: 30px;
+}

@@ -58,7 +58,7 @@ const Review = (props) => {
                 }
 
                 {displayTags[0] && 
-                <>{displayTags}<br/><br/></>
+                <div>{displayTags}<br/><br/></div>
                 }
 
                 <div className="review--likeNcomment">

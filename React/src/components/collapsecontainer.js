@@ -20,10 +20,9 @@ export default function CollapseContainer(props) {
     };
 
     return (
-        <div >
+        <div className="bookdesc--container">
             <div
                 ref={containerRef} 
-                className="bookdesc--container"
                 style={{ maxHeight: showFullContent ? 'none' : (props.height ), overflow: 'hidden' }}
             >
                 {props.data}
@@ -32,10 +31,9 @@ export default function CollapseContainer(props) {
 
             {(containerHeight>=props.height  ) && (
 
-            <span className="showmore" onClick={toggleContent} >
+            <div className="showmore" onClick={toggleContent} >
                 {showFullContent ? 'show less' : 'show more'}
-                <br/><br/>
-            </span>
+            </div>
 
             )}
         </div>

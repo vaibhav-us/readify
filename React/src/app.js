@@ -5,35 +5,37 @@ import {
     createRoutesFromElements,
     Route
 } from "react-router-dom";
-import Homepage from "./pages/homepage";
-import Homenav from "./pages/homenav";
-import BookPage from "./pages/bookpage";
+import Homepage,{loader as homepageLoader} from "./pages/homepage";
+import Homenav,{action as searchAction} from "./pages/homenav";
+import BookPage,{loader as bookpageLoader} from "./pages/bookpage";
 import Login,{action as loginAction} from "./pages/login";
 import Signup,{action as signupAction} from "./pages/signup";
 import SearchPage,{loader as searchLoader} from "./pages/searchpage";
-import ReviewPage,{action as reviewAction} from "./pages/reviewpage";
+import ReviewPage,{loader as reviewLoader ,action as reviewAction} from "./pages/reviewpage";
 import ReviewSection,{action as reviewSectionAction} from "./pages/reviewsection";
 import ProfileNav from "./pages/profile/profilenav";
 import ProfileIndex from "./pages/profile";
 import Recent from "./pages/profile/recent";
 import Preference from "./pages/profile/preference";
 import Recommendations from "./pages/profile/recommendation";
+import Bookshelf from "./pages/profile/bookshelf";
 
 export default function App () {
     const router = createBrowserRouter(createRoutesFromElements(
-        <Route path="/" element={<Homenav />}>
-            <Route index element={<Homepage />}/>
-            <Route path="book/:bookId" element={<BookPage />}/>
+        <Route path="/" element={<Homenav />} action={searchAction}>
+            <Route index element={<Homepage />} loader={homepageLoader}/>
+            <Route path="book/:bookId" element={<BookPage />} loader={bookpageLoader}/>
             <Route path="book/:bookId/review/:reviewId" element={<ReviewSection />} action={reviewSectionAction}/>
             <Route path="login" element={<Login />} action={loginAction}/>
             <Route path="signup" element={<Signup />} action={signupAction}/>
             <Route path="search" element={<SearchPage />} loader={searchLoader}/>
-            <Route path="review" element={<ReviewPage />} action={reviewAction}/>
+            <Route path="book/:bookId/review" element={<ReviewPage />} loader={reviewLoader} action={reviewAction}/>
             <Route path="profile" element={<ProfileNav />} >
                 <Route index element={<ProfileIndex/>} /> 
                 <Route path="recent" element={<Recent/>} />
                 <Route path="preference" element={<Preference/>} />
                 <Route path="recommendations" element={<Recommendations/>} />
+                <Route path="bookshelf" element={<Bookshelf/>}/>
             </Route>
         </Route>
     ))

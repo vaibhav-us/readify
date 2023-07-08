@@ -1,11 +1,10 @@
 import React from "react";
 
 
-export default function RatingRatio({rating}) {
+export default function RatingRatio({rating,className,style}) {
     const starArray=[]
     const roundedOffRating = Math.round(rating*4)/4
     const fractionalImage = {0.75:"/images/quarterstar.png",0.5:"/images/halfstar.png",0.25:"/images/thirdquarterstar.png"}
-    
     for (let i = 1; i <= 5; i++) {
         if (i<=roundedOffRating) {
             starArray.push(<img 
@@ -33,10 +32,14 @@ export default function RatingRatio({rating}) {
         }         
     }
     return(
-        rating  &&
-        <div className="ratingratio" >
-            {starArray}
-            <b>{rating}</b>
-        </div>
+        rating  && rating!==0 
+        ?   <div 
+                className={"ratingratio"+(className?` ${className}`:"")}
+                style={style ?style : {}}
+            >
+                {starArray}
+                <b>{rating}</b>
+            </div>
+        :   <></>
     )
 }

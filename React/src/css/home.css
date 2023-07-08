@@ -66,24 +66,14 @@ textarea {
   border-radius: 20%;
   font-size: 25px;
 }
-.searchbar{
-  display: flex;
-  align-items: center;
-  height: 60%;
-  background-color: rgb(230, 235, 236);
-  border-radius: 10px;
-}
-.searchbar--input{
-  border: none;
-  background-color: transparent;
-}
-.searchbar--input:focus{
-  outline: none;
-}
 .homenav--login{
   position: absolute;
   right: 30px;
   color: rgb(33, 40, 118);
+}
+.homenav--profile{
+  height: 35px;
+  width: 35px;
 }
 
 .trending--section{
@@ -150,7 +140,7 @@ textarea {
   display: flex;
   flex-wrap: wrap;
   width:190px;
-  height: 410px;
+  height: 460px;
   text-decoration: none;
   color: black;
   transition: transform 0.5s ease;
@@ -160,6 +150,11 @@ textarea {
   box-shadow: 0 0 4px 0px;
   transform: scale(1.05);
   border-radius: 10% 10%  0 0;
+}
+.booktile--wanttoread{
+  max-height: 30px;
+  margin: 20px 0 0px 0;
+  border-radius: 10px;
 }
 .booktile--img{
   height:300px;
@@ -191,7 +186,7 @@ textarea {
   padding:20px 0px 0 10px;
   display: flex;
   flex-wrap: wrap;
-  height: 450px;
+  height: 500px;
   flex-direction: column;
   scroll-behavior: smooth ;
 }

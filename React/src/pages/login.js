@@ -29,11 +29,19 @@ export default function Login (){
             <h1>Login in</h1>
             {responseData?.message==="error" && 
             <p className="red">Credentials Doesn't Match !!</p>}
+            {/* {responseData?.error.map(err => {
+                return(
+                    <div className="error--message">
+                        <img src={process.env.PUBLIC_URL+"/images/caution.png"} alt="" width="10px"/>
+                        <span key={err} className="red">  {err}</span>
+                    </div>
+                )
+            })} */}
 
             <label htmlFor="email">email</label>
             <input type="text" name="email" />
             <label htmlFor="password" >password</label>
-            <Password/>
+            <Password name="password"/>
             <p>Forget your password?</p>
             <button className="sign--in" type="submit">Sign in</button>
             <br/><br />

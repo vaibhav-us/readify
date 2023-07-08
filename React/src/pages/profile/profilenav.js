@@ -1,5 +1,5 @@
 import React from "react";
-import { NavLink, Outlet } from "react-router-dom";
+import {  NavLink, Outlet } from "react-router-dom";
 
 export default function ProfileNav() {
     return(
@@ -9,21 +9,30 @@ export default function ProfileNav() {
                     to={"."}
                     className={({isActive}) => "profile--navlink" + (isActive ?" profile--navlink--active":"")}
                     end
-                > Profile </NavLink>
+                > Dashboard </NavLink>
+
+                <NavLink
+                    to="bookshelf"
+                    className={({isActive}) => "profile--navlink" + (isActive ?" profile--navlink--active":"")}
+                > Bookshelf </NavLink>
+
                 <NavLink
                     to="recent"
                     className={({isActive}) => "profile--navlink" + (isActive ?" profile--navlink--active":"")}
-                > Recent Activities </NavLink>
+                > Activities </NavLink>
+
                 <NavLink
                     to='preference'
                     className={({isActive}) => "profile--navlink" + (isActive ?" profile--navlink--active":"")}
                 > Preferences </NavLink>
+
                 <NavLink 
                     to="recommendations"
                     className={({isActive}) => "profile--navlink" + (isActive ?" profile--navlink--active":"")}
                 > Recommendations </NavLink>
             </nav>
-            <main >
+            
+            <main style={{marginLeft:"15%",width:"70%"}}>
                 <Outlet/>
             </main>
         </div>
