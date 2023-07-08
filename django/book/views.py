@@ -9,22 +9,27 @@ def get_book(request,book_id):
         with conn.cursor() as cur:
                 cur.execute("SELECT * FROM book WHERE book_id = %s ;",(book_id,))
                 book = cur.fetchone()
-                cur.execute("SELECT * FROM genre WHERE book_id = %s ;",(book_id,))
+                cur.execute("SELECT *  FROM genre WHERE book_id = %s ;",(book_id,))
                 genre = cur.fetchall()
-                genres=[]
+                cur.execute("SELECT COUNT(review) FROM review WHERE book_id = %s ; ",(book_id,))
+                review_count = cur.fetchone()
+                cur.execute("SELECT COUNT(rating) FROM review WHERE book_id = %s ; ",(book_id,))
+                rating_count = cur.fetchone()
+        genres=[]
         for i in genre:
             g = i[2]
             genres.append(g)
         data={
             "id":book[0],
-            
             "name":book[2],
             "author":book[3],
             "image":book[4],
             "description":book[5],
             "publication":book[6],
             "rating":book[7],
-            "genre":genres
+            "genre":genres,
+            "reviewCount": review_count[0],
+            "ratingCount":rating_count[0]
             }
         return Response({"data":data})
     else :
@@ -54,18 +59,19 @@ def search_books(request):
         results = []
         for book in page:
             result = {
-                "book_id":book[0],
-                "book_title":book[1],
+                "id":book[0],
+                "name":book[1],
                 "author":book[2],
-                "cover_pic":book[3],
+                "image":book[3],
                 "description":book[4],
-                "published_on":book[5],
-                "avg_rating":book[6],
+                "publication":book[5],
+                "rating":book[6],
                 "genre":book[7]
                 }
             results.append(result) 
         return Response({"data":results})
-    return Response({"message":"error"})
+    else:
+        return Response({"message":"error"})
 
 
 @api_view(['POST','GET'])
@@ -87,7 +93,8 @@ def add_book(request,user_id):
                     INSERT INTO genre(book_id,genre) VALUES(%s,%s)
                     ''',(book_id,genre))
          return Response({"messsage":"added successfully"})
-    return Response({"messsage":"enter details"})      
+    else:
+        return Response({"messsage":"enter details"})      
          
 
 @api_view(['GET','POST'])
@@ -113,7 +120,8 @@ def review(request,book_id):
                 }
              reviews.append(review)
         return Response({"data":reviews,"count":total_count})
-    return Response({"message":"error"})
+    else:
+        return Response({"message":"error"})
 
 
 @api_view(['GET'])
@@ -135,7 +143,8 @@ def add_comment(request,user_id,book_id,rid):
                 INSERT INTO feedback(user_id,book_id,review_id,comment) VALUES(%s,%s,%s,%s)
             ''',(user_id,book_id,rid,comment))
         return Response({"message":"addded"})
-    return Response({"message":"enter details"})
+    else:
+        return Response({"message":"enter details"})
 
 
 @api_view(['POST'])
@@ -162,8 +171,9 @@ def like_comments(request,user_id,feedback_id):
             cur.execute('''
                 UPDATE feedback SET likes = %s WHERE feedback_id = %s ;
             ''',(total_likes,feedback_id))
-            return Response({"message":"success"})    
-    return Response({"message":"error"})
+            return Response({"message":"success"})   
+    else: 
+        return Response({"message":"error"})
 
 
 @api_view(['POST'])
@@ -171,23 +181,49 @@ def add_review(request,user_id,book_id):
     if request.method == 'POST':
         review = request.data.get("review")
         rating = request.data.get("rating")
-        with conn.cursor() as cur:
-            cur.execute('''
-          INSERT INTO review(user_id,book_id,review,rating) VALUES (%s,%s,%s, %s);
-            ''',(user_id,book_id,review,rating))
-            cur.execute('''SELECT rating FROM review WHERE book_id = %s ;''',(book_id,))
-            rows = cur.fetchall()
+        if review and rating:
+            with conn.cursor() as cur:
+                cur.execute('''
+                    INSERT INTO review(user_id,book_id,review,rating) VALUES (%s,%s,%s, %s);
+                ''',(user_id,book_id,review,rating))
+                cur.execute('''SELECT rating FROM review WHERE book_id = %s ;''',(book_id,))
+                rows = cur.fetchall()
             total_count = len(rows)
             total_rating = 0
-        for row in rows:
-            total_rating = total_rating +  row[0]
-        avg_rating = total_rating/total_count
-        with conn.cursor() as cur:
-            cur.execute('''
-          UPDATE book SET avg_rating = %s WHERE book_id = %s ;
-            ''',(avg_rating,book_id))
-        return Response({"message":"added"})
-    return Response({"message":"enter details"})
+            for row in rows:
+                total_rating = total_rating +  row[0]
+            avg_rating = total_rating/total_count
+            with conn.cursor() as cur:
+                cur.execute('''
+                    UPDATE book SET avg_rating = %s WHERE book_id = %s ;
+                ''',(avg_rating,book_id))
+            return Response({"message":"added"})
+        if review and rating is None:
+            with conn.cursor() as cur:
+                cur.execute('''
+                    INSERT INTO review(user_id,book_id,review) VALUES (%s,%s, %s);
+                ''',(user_id,book_id,review))
+            return Response({"message":"added"})
+        if rating and review is None:
+            with conn.cursor() as cur:
+                cur.execute('''
+                    INSERT INTO review(user_id,book_id,rating) VALUES (%s,%s, %s);
+                ''',(user_id,book_id,rating))
+                cur.execute('''SELECT rating FROM review WHERE book_id = %s ;''',(book_id,))
+                rows = cur.fetchall()
+            total_count = len(rows)
+            total_rating = 0
+            for row in rows:
+                total_rating = total_rating +  row[0]
+            avg_rating = total_rating/total_count
+            with conn.cursor() as cur:
+                cur.execute('''
+                    UPDATE book SET avg_rating = %s WHERE book_id = %s ;
+                ''',(avg_rating,book_id))
+            return Response({"message":"added"})
+
+    else:
+        return Response({"message":"enter details"})
 
 @api_view(['POST','GET'])
 def all_books(request):
