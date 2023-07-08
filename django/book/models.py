@@ -12,20 +12,20 @@ def createTable():
         cur.execute('''
             CREATE TABLE IF NOT EXISTS review 
                 (review_id INTEGER PRIMARY KEY,user_id INTEGER, book_id INTEGER, rating INTEGER, review CLOB,
-                 date DATE DEFAULT(date('now')) ,
+                 tags TEXT,spoiler BOOLEAN ,likes INTEGER, date DATE DEFAULT(date('now')) ,
                  FOREIGN KEY(user_id) REFERENCES user(user_id), FOREIGN KEY(book_id) REFERENCES book(book_id) );
             ''')
         cur.execute('''
             CREATE TABLE IF NOT EXISTS feedback 
                 (feedback_id INTEGER PRIMARY KEY, user_id INTEGER, review_id INTEGER, book_id INTEGER,
-                 comment TEXT, likes INTEGER, date DATE DEFAULT(date('now')),
+                 comment TEXT, date DATE DEFAULT(date('now')),
                  FOREIGN KEY(user_id) REFERENCES user(user_id),FOREIGN KEY(review_id) REFERENCES review(review_id),
                  FOREIGN KEY(book_id) REFERENCES book(book_id) );
             ''')
         cur.execute('''
             CREATE TABLE IF NOT EXISTS likes
-            (id INTEGER PRIMARY KEY,user_id INTEGER, feedback_id INTEGER,
-            FOREIGN KEY(user_id) REFERENCES user(user_id),FOREIGN KEY(feedback_id) REFERENCES feedback(feedback_id)) ;  
+            (id INTEGER PRIMARY KEY,user_id INTEGER, review_id INTEGER,
+            FOREIGN KEY(user_id) REFERENCES user(user_id),FOREIGN KEY(review_id) REFERENCES review(review_id)) ;  
                     ''')
         
         cur.execute('''

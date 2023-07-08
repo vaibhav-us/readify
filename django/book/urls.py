@@ -9,6 +9,6 @@ urlpatterns = [
     path('book/<str:book_id>/review',views.review), 
     path('book/<str:book_id>/review/<str:rid>',views.comment),
     path('<str:user_id>/book/<str:book_id>/review/<str:rid>/addcomment',views.add_comment),
-    path('<str:user_id>/<str:feedback_id>/like',views.like_comments),
+    path('<str:user_id>/<str:feedback_id>/like',views.like_review),
     path('allbooks/',views.all_books),
 ]
