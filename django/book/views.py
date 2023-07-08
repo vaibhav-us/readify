@@ -186,3 +186,28 @@ def add_review(request,user_id,book_id):
         return Response({"message":"added"})
     return Response({"message":"enter details"})
 
+@api_view(['POST','GET'])
+def all_books(request):
+    if request.method=='POST':
+        page_no= request.data.get('pageno')
+        items_per_page = 10
+        query = " SELECT book.book_id,book.book_title,book.author,book.cover_pic,book.avg_rating FROM book ; "
+        with conn.cursor() as cur:
+            cur.execute(query)
+            row = cur.fetchall()
+
+        paginator=Paginator(row,items_per_page)
+        page=paginator.get_page(page_no)
+        results = []
+        for book in page:
+            result = {
+                "book_id":book[0],
+                "book_title":book[1],
+                "author":book[2],
+                "cover_pic":book[3],
+                "avg_rating":book[4]
+                
+                }
+            results.append(result) 
+        return Response({"data":results})
+    return Response({"message":"error"})
