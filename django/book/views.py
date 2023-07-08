@@ -185,14 +185,18 @@ def like_review(request,user_id,review_id):
 def add_review(request,user_id,book_id):
     if request.method == 'POST':
         review = request.data.get("review")
-        rating = request.data.get("rating")
+        rate = request.data.get("rating")
         tags=request.data.get("tags")
         spoiler=request.data.get("spoiler")
         tags_str = json.dumps(tags)
-        if review and rating:
+        if rate == 6:
+            rating =0
+        else:
+            rating = rate
+        if review and rate:
             with conn.cursor() as cur:
                 cur.execute('''
-                    INSERT INTO review(user_id,book_id,review,rating,tag,spoiler) VALUES (%s,%s,%s, %s,%s,%s);
+                    INSERT INTO review(user_id,book_id,review,rating,tags,spoiler) VALUES (%s,%s,%s, %s,%s,%s);
                 ''',(user_id,book_id,review,rating,tags_str,spoiler))
                 cur.execute('''SELECT rating FROM review WHERE book_id = %s ;''',(book_id,))
                 rows = cur.fetchall()
@@ -206,13 +210,13 @@ def add_review(request,user_id,book_id):
                     UPDATE book SET avg_rating = %s WHERE book_id = %s ;
                 ''',(avg_rating,book_id))
             return Response({"message":"added"})
-        if review and rating is None:
+        if review and rate is None:
             with conn.cursor() as cur:
                 cur.execute('''
-                    INSERT INTO review(user_id,book_id,review,tag,spoiler) VALUES (%s,%s, %s,%s,%s);
+                    INSERT INTO review(user_id,book_id,review,tags,spoiler) VALUES (%s,%s, %s,%s,%s);
                 ''',(user_id,book_id,review,tags,spoiler))
             return Response({"message":"added"})
-        if rating and review is None:
+        if rate and review is None:
             with conn.cursor() as cur:
                 cur.execute('''
                     INSERT INTO review(user_id,book_id,rating) VALUES (%s,%s, %s);

@@ -11,8 +11,9 @@ export function StarBlink({bookId,className,style}) {
     async function handleSubmit(e) {
         e.preventDefault()
         setStatus("saving")
+        console.log("submiited ",bookId)
         console.log({rating:starBlink},"submitted"); 
-        const res = await postItems({rating:starBlink},`http://127.0.0.1:8000/1/book/${bookId}/addreview/`)
+        const res = await postItems({rating:starBlink},`http://127.0.0.1:8000/1/book/1/addreview/`)
 
         setStatus(e.nativeEvent.submitter.id==="clear"?"initial":"saved")
         setUserRating(starBlink)
@@ -51,7 +52,7 @@ export function StarBlink({bookId,className,style}) {
             
             {status==="saved" || status==="hovering" 
             ?   status==="hovering"
-                ?   <button id="clear" type="submit" className="gray nobutton" ><span onClick={()=>setStarBlink(0)}>Clear Rating</span></button>    
+                ?   <button id="clear" type="submit" className="gray nobutton" ><span onClick={()=>setStarBlink(6)}>Clear Rating</span></button>    
                 :   <big className="starblink--tick--container">
                         Rated
                         <img src={process.env.PUBLIC_URL+"/images/greentick.png"} alt=""/>
