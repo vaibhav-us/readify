@@ -10,7 +10,7 @@ import {StarBlink} from "../components/ratingcomponents";
 import {nanoid} from "nanoid"
 
 export async function loader({params}) {
-    const  data = await getItems(`http://127.0.0.1:8000/book/${params.bookId}`)
+    const  data = await getItems(`http://127.0.0.1:8000/book/${params.bookId}/`)
     return data.data
 }
 
@@ -25,7 +25,8 @@ export async function action({request}) {
         tags    : formData.getAll("tag")
     }
     console.log(reviewData);
-    const res = await postItems(reviewData,`http://127.0.0.1:8000/1/book/${reviewData.id}/addreview/`)
+    const res = await postItems(reviewData,"http://127.0.0.1:8000/1/book/1/addreview/")
+
     
     return {submitted:true}
 }
