@@ -5,27 +5,30 @@ from django.db import connection as conn
 
 @api_view(['GET'])
 def get_book(request,book_id):
-    with conn.cursor() as cur:
-            cur.execute("SELECT * FROM book WHERE book_id = %s ;",(book_id,))
-            book = cur.fetchone()
-            cur.execute("SELECT * FROM genre WHERE book_id = %s ;",(book_id,))
-            genre = cur.fetchall()
-            genres=[]
-    for i in genre:
-        g = i[2]
-        genres.append(g)
-    data={
-         "book_id":book[0],
-         
-         "book_title":book[2],
-         "author":book[3],
-         "cover_pic":book[4],
-         "description":book[5],
-         "published_on":book[6],
-         "avg_rating":book[7],
-         "genre":genres
-        }
-    return Response({"data":data})
+    if request.method == 'GET' :
+        with conn.cursor() as cur:
+                cur.execute("SELECT * FROM book WHERE book_id = %s ;",(book_id,))
+                book = cur.fetchone()
+                cur.execute("SELECT * FROM genre WHERE book_id = %s ;",(book_id,))
+                genre = cur.fetchall()
+                genres=[]
+        for i in genre:
+            g = i[2]
+            genres.append(g)
+        data={
+            "id":book[0],
+            
+            "name":book[2],
+            "author":book[3],
+            "image":book[4],
+            "description":book[5],
+            "publication":book[6],
+            "rating":book[7],
+            "genre":genres
+            }
+        return Response({"data":data})
+    else :
+        return Response({"message":"error"})
 
 @api_view(['POST','GET'])
 def search_books(request):
@@ -201,13 +204,13 @@ def all_books(request):
         results = []
         for book in page:
             result = {
-                "book_id":book[0],
-                "book_title":book[1],
+                "id":book[0],
+                "name":book[1],
                 "author":book[2],
-                "cover_pic":book[3],
-                "avg_rating":book[4]
-                
-                }
+                "image":book[3],
+                "rating":book[4] 
+            }
             results.append(result) 
         return Response({"data":results})
-    return Response({"message":"error"})
+    else :
+        return Response({"message":"error"})
