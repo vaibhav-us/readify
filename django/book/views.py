@@ -2,6 +2,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from django.core.paginator import Paginator
 from django.db import connection as conn
+import json
 
 @api_view(['GET'])
 def get_book(request,book_id):
@@ -104,7 +105,7 @@ def review(request,book_id):
         items_per_page = 10
         with conn.cursor() as cur:
             cur.execute('''
-                SELECT user_name,review,rating FROM review JOIN user ON user.user_id = review.user_id
+                SELECT user_name,review_id,review,rating,tag,spoiler,likes FROM review JOIN user ON user.user_id = review.user_id
                 WHERE book_id = %s ;
             ''',(book_id,))
             row = cur.fetchall()
@@ -115,8 +116,12 @@ def review(request,book_id):
         for i in page:
              review = {
                "user_name":i[0],
-               "review":i[1],
-               "rating":i[2],
+               "review_id":i[1] ,
+               "review":i[2],
+               "rating":i[3],
+               "tag":i[4] ,
+               "spoiler":i[5] ,
+               "likes": i[6]
                 }
              reviews.append(review)
         return Response({"data":reviews,"count":total_count})
@@ -128,7 +133,7 @@ def review(request,book_id):
 def comment(request,book_id,rid):
       with conn.cursor() as cur:
             cur.execute('''
-                SELECT feedback_id,user_name,comment,likes FROM feedback JOIN user ON user.user_id = feedback.user_id  WHERE feedback.book_id = %s AND feedback.review_id = %s ;
+                SELECT feedback_id,user_name,comment FROM feedback JOIN user ON user.user_id = feedback.user_id  WHERE feedback.book_id = %s AND feedback.review_id = %s ;
             ''',(book_id,rid,))
             comment = cur.fetchall()
       return Response({"comment":comment}) 
@@ -148,29 +153,29 @@ def add_comment(request,user_id,book_id,rid):
 
 
 @api_view(['POST'])
-def like_comments(request,user_id,feedback_id):
+def like_review(request,user_id,review_id):
     isLiked = request.data.get("isliked")
     if request.method == 'POST':
         row = []
         if isLiked == "true":
             with conn.cursor() as cur:
                 cur.execute('''
-                INSERT INTO likes(user_id,feedback_id) VALUES (%s,%s)
-                ''',(user_id,feedback_id))
-                cur.execute("SELECT * FROM likes WHERE feedback_id = %s ",(feedback_id,))
+                INSERT INTO likes(user_id,review_id) VALUES (%s,%s)
+                ''',(user_id,review_id))
+                cur.execute("SELECT * FROM likes WHERE review_id = %s ",(review_id,))
                 row = cur.fetchall()  
         if isLiked == "false":     
             with conn.cursor() as cur:
                 cur.execute('''
-                    DELETE FROM likes WHERE user_id = %s AND feedback_id = %s ;
-                    ''',(user_id,feedback_id))
-                cur.execute("SELECT * FROM likes WHERE feeback_id = %s ",(feedback_id,))
+                    DELETE FROM likes WHERE user_id = %s AND review_id = %s ;
+                    ''',(user_id,review_id))
+                cur.execute("SELECT * FROM likes WHERE feeback_id = %s ",(review_id,))
                 row = cur.fetchall()
         total_likes = len(row)
         with conn.cursor() as cur:
             cur.execute('''
-                UPDATE feedback SET likes = %s WHERE feedback_id = %s ;
-            ''',(total_likes,feedback_id))
+                UPDATE review SET likes = %s WHERE review_id = %s ;
+            ''',(total_likes,review_id))
             return Response({"message":"success"})   
     else: 
         return Response({"message":"error"})
@@ -181,11 +186,14 @@ def add_review(request,user_id,book_id):
     if request.method == 'POST':
         review = request.data.get("review")
         rating = request.data.get("rating")
+        tags=request.data.get("tags")
+        spoiler=request.data.get("spoiler")
+        tags_str = json.dumps(tags)
         if review and rating:
             with conn.cursor() as cur:
                 cur.execute('''
-                    INSERT INTO review(user_id,book_id,review,rating) VALUES (%s,%s,%s, %s);
-                ''',(user_id,book_id,review,rating))
+                    INSERT INTO review(user_id,book_id,review,rating,tag,spoiler) VALUES (%s,%s,%s, %s,%s,%s);
+                ''',(user_id,book_id,review,rating,tags_str,spoiler))
                 cur.execute('''SELECT rating FROM review WHERE book_id = %s ;''',(book_id,))
                 rows = cur.fetchall()
             total_count = len(rows)
@@ -201,8 +209,8 @@ def add_review(request,user_id,book_id):
         if review and rating is None:
             with conn.cursor() as cur:
                 cur.execute('''
-                    INSERT INTO review(user_id,book_id,review) VALUES (%s,%s, %s);
-                ''',(user_id,book_id,review))
+                    INSERT INTO review(user_id,book_id,review,tag,spoiler) VALUES (%s,%s, %s,%s,%s);
+                ''',(user_id,book_id,review,tags,spoiler))
             return Response({"message":"added"})
         if rating and review is None:
             with conn.cursor() as cur:
