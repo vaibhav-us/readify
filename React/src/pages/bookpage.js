@@ -7,7 +7,7 @@ import Slider from "../components/slider"
 import Review from "../components/review"
 import Paginate from "../components/paginate";
 import SuchEmpty from "../components/suchempty";
-import { fullDate, getItems } from "../utility";
+import { fullDate, getItems, postItems } from "../utility";
 
 export async function loader({params}) {
     const reviews = [
@@ -19,6 +19,9 @@ export async function loader({params}) {
         {id:6,name:"Ron",review:"I really, really wish I could give this negative stars.",rating:"2",date:"2021/05/10",tags:["waste-of-money","fantasy","sucks"],likes:1000,comments:500}
     ]
     const  data = await getItems(`http://127.0.0.1:8000/book/${params.bookId}`)
+    console.log("yes");
+    const  reviewsdata = await postItems({pageno:1},`http://127.0.0.1:8000/book/${params.bookId}/review`)
+    console.log(reviewsdata);
     return {reviews,bookData:data.data}
 }
 

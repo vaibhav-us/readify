@@ -1,7 +1,7 @@
 import React from "react";
 import Trending from "../components/trending";
 import Slider from "../components/slider";
-import HomeSearch from "../components/HomeSearch";
+import HomeSearch from "../components/homesearch";
 import { useLoaderData } from "react-router-dom";
 import { postItems } from "../utility";
 

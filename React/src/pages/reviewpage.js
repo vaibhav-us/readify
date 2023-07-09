@@ -3,14 +3,16 @@ import {
     Link,
     Form ,
     useActionData,
-    useLoaderData
+    useLoaderData,
+    redirect,
+    useNavigate
 } from "react-router-dom";
 import { fullDate, getItems, postItems } from "../utility";
 import {StarBlink} from "../components/ratingcomponents";
 import {nanoid} from "nanoid"
 
 export async function loader({params}) {
-    const  data = await getItems(`http://127.0.0.1:8000/book/${params.bookId}/`)
+    const  data = await getItems(`http://127.0.0.1:8000/book/${params.bookId}`)
     return data.data
 }
 
@@ -22,27 +24,31 @@ export async function action({request}) {
         id      : formData.get("id"),
         review  : formData.get("review"),
         spoiler : formData.get("spoiler"),
-        tags    : formData.getAll("tag")
+        tags    : formData.getAll("tag").join(",")
     }
-    console.log(reviewData);
-    const res = await postItems(reviewData,"http://127.0.0.1:8000/1/book/1/addreview/")
+    const res = await postItems(reviewData,`http://127.0.0.1:8000/1/book/${reviewData.id}/addreview/`)
 
-    
-    return {submitted:true}
+    return res
 }
 
 export default function ReviewPage(props) {
     const data = useLoaderData()
     const actionData = useActionData()
-    const submitted = actionData?.submitted || false
+    const navigate = useNavigate()
+
+    // const submitted = actionData?.submitted || false
+    React.useEffect(()=>{
+        if(actionData?.message === "added") {
+            navigate(-1)
+        }
+    },[actionData])
 
     const Tag = ({id}) => {
         function removeTag (id ){
             setTagInput( prev => 
-                prev.length!==1 ? 
-                    prev.filter(ele => ele.props.id!==id )   
-                    :
-                    prev    
+                prev.length!==1  
+                ?   prev.filter(ele => ele.props.id!==id )      
+                :   prev    
             )
         }
         return(
@@ -79,10 +85,10 @@ export default function ReviewPage(props) {
             </div>
 
             <br/>
-            <StarBlink className="reviewpage--rating"/>
+            <StarBlink bookId={data.id} className="reviewpage--rating"/>
             <br/><br/>
 
-            {submitted ?
+            {/* {submitted ?
 
                 <div className="formsubmitted--container">
                     <h2>Your response has been submitted</h2>
@@ -91,7 +97,7 @@ export default function ReviewPage(props) {
                     </Link>
                 </div>
 
-                :
+                : */}
 
                 <Form method="post" className="reviewform--container" replace>
                     <p>What do <i>you</i> think ?</p>
@@ -113,7 +119,6 @@ export default function ReviewPage(props) {
                     <input name="id" defaultValue={data.id} hidden />
                     <button className="reviewpage--sumbit">Post Your Review</button>
                 </Form>
-            }
             
         </div>
     )

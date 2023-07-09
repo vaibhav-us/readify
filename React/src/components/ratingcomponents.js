@@ -11,9 +11,9 @@ export function StarBlink({bookId,className,style}) {
     async function handleSubmit(e) {
         e.preventDefault()
         setStatus("saving")
-        console.log("submiited ",bookId)
         console.log({rating:starBlink},"submitted"); 
-        const res = await postItems({rating:starBlink},`http://127.0.0.1:8000/1/book/1/addreview/`)
+        
+        const res = await postItems({rating:starBlink},`http://127.0.0.1:8000/1/book/${bookId}/addreview/`)
 
         setStatus(e.nativeEvent.submitter.id==="clear"?"initial":"saved")
         setUserRating(starBlink)
@@ -44,7 +44,7 @@ export function StarBlink({bookId,className,style}) {
             onMouseLeave={()=>{ if (status==="hovering") setStatus("saved")    }}
         >
             {status==="saving" 
-            ?    <p className="gray">Saving....</p>
+            ?   <p className="gray">Saving....</p>
             :   <div className="starblink--star--container">
                     {starArray}
                 </div>
@@ -63,7 +63,8 @@ export function StarBlink({bookId,className,style}) {
     )
 }
 
-export function ReviewButton({bookId,className,style}) {
+export function ReviewButton({bookId,className,style}) { 
+
     return(
         <Link 
             to={`/book/${bookId}/review`} 
