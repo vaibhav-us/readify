@@ -108,8 +108,8 @@ def review(request,book_id):
                  SELECT user_name, review.review_id, review, rating, tags, spoiler, likes,COUNT(comment), review.date
                 FROM review
                 JOIN user ON user.user_id = review.user_id
-                JOIN feedback ON feedback.review_id = review.review_id
-                WHERE review.book_id = %s;
+                 JOIN feedback ON feedback.review_id = review.review_id
+                WHERE review.book_id = %s GROUP BY review.review_id;
             ''',(book_id,))
             row = cur.fetchall()
             total_count = len(row)
