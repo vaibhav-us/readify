@@ -126,11 +126,11 @@ def review(request,book_id):
                "spoiler":i[5] ,
                "likes": i[6],
                "comments":i[7],
-               "date":i[8],
-               "totalItems":total_count
+               "date":i[8]
+               
                 }
              reviews.append(review)
-        return Response({"data":reviews})
+        return Response({"data":reviews,"totalCount":total_count})
     else:
         return Response({"message":"error"})
 
