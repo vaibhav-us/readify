@@ -105,8 +105,11 @@ def review(request,book_id):
         items_per_page = 10
         with conn.cursor() as cur:
             cur.execute('''
-                SELECT user_name,review_id,review,rating,tag,spoiler,likes FROM review JOIN user ON user.user_id = review.user_id
-                WHERE book_id = %s ;
+                 SELECT user_name, review.review_id, review, rating, tags, spoiler, likes,COUNT(comment), review.date
+                FROM review
+                JOIN user ON user.user_id = review.user_id
+                JOIN feedback ON feedback.review_id = review.review_id
+                WHERE review.book_id = %s;
             ''',(book_id,))
             row = cur.fetchall()
             total_count = len(row)
@@ -115,16 +118,19 @@ def review(request,book_id):
         reviews=[]
         for i in page:
              review = {
-               "user_name":i[0],
-               "review_id":i[1] ,
+               "name":i[0],
+               "id":i[1] ,
                "review":i[2],
                "rating":i[3],
-               "tag":i[4] ,
+               "tags":json.loads(i[4]) ,
                "spoiler":i[5] ,
-               "likes": i[6]
+               "likes": i[6],
+               "comments":i[7],
+               "date":i[8],
+               "totalItems":total_count
                 }
              reviews.append(review)
-        return Response({"data":reviews,"count":total_count})
+        return Response({"data":reviews})
     else:
         return Response({"message":"error"})
 
@@ -185,11 +191,15 @@ def like_review(request,user_id,review_id):
 def add_review(request,user_id,book_id):
     if request.method == 'POST':
         review = request.data.get("review")
-        rating = request.data.get("rating")
+        rate = request.data.get("rating")
         tags = request.data.get("tags", "").split(",") 
         spoiler=request.data.get("spoiler")
         tags_str = json.dumps(tags)
-        if review and rating:
+        if rate == 6:
+            rating = 0
+        else:
+            rating=rate
+        if review and rate:
             with conn.cursor() as cur:
                 cur.execute('''
                     INSERT INTO review(user_id,book_id,review,rating,tags,spoiler) VALUES (%s,%s,%s, %s,%s,%s);
@@ -206,13 +216,13 @@ def add_review(request,user_id,book_id):
                     UPDATE book SET avg_rating = %s WHERE book_id = %s ;
                 ''',(avg_rating,book_id))
             return Response({"message":"added"})
-        if review and rating is None:
+        if review and rate is None:
             with conn.cursor() as cur:
                 cur.execute('''
                     INSERT INTO review(user_id,book_id,review,tags,spoiler) VALUES (%s,%s, %s,%s,%s);
                 ''',(user_id,book_id,review,tags_str,spoiler))
             return Response({"message":"added"})
-        if rating and review is None:
+        if rate and review is None:
             with conn.cursor() as cur:
                 cur.execute('''
                     INSERT INTO review(user_id,book_id,rating) VALUES (%s,%s, %s);
@@ -222,7 +232,7 @@ def add_review(request,user_id,book_id):
             total_count = len(rows)
             total_rating = 0
             for row in rows:
-                total_rating = total_rating +  row[0]
+                total_rating = total_rating +  (row[0] or 0)
             avg_rating = total_rating/total_count
             with conn.cursor() as cur:
                 cur.execute('''
