@@ -40,7 +40,7 @@ def get_book(request,book_id):
 def search_books(request):
     if request.method=='POST':
         genre = request.data.get('genre')
-        key = request.data.get('keyword')
+        key = request.data.get('book')
         page_no= request.data.get('pageno')
         items_per_page = 10
         query = "SELECT book.book_id,book.book_title,book.author,book.cover_pic,book.description,book.published_on,book.avg_rating,GROUP_CONCAT(genre.genre) FROM book JOIN genre ON book.book_id = genre.book_id "
@@ -59,6 +59,7 @@ def search_books(request):
         page=paginator.get_page(page_no)
         results = []
         for book in page:
+            genres = book[7].split(",")
             result = {
                 "id":book[0],
                 "name":book[1],
@@ -67,7 +68,7 @@ def search_books(request):
                 "description":book[4],
                 "publication":book[5],
                 "rating":book[6],
-                "genre":book[7]
+                "genre":genres
                 }
             results.append(result) 
         return Response({"data":results})
