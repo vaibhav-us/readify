@@ -105,29 +105,31 @@ def review(request,book_id):
         items_per_page = 10
         with conn.cursor() as cur:
             cur.execute('''
-                 SELECT user_name, review.review_id, review, rating, tags, spoiler, likes,COUNT(comment), review.date
-                FROM review
-                JOIN user ON user.user_id = review.user_id
-                 JOIN feedback ON feedback.review_id = review.review_id
-                WHERE review.book_id = %s GROUP BY review.review_id;
-            ''',(book_id,))
+    SELECT user.user_name, review.review_id, COALESCE(review.review, '') AS review, review.rating, COALESCE(review.tags, '[]') AS tags, review.spoiler, review.likes, COUNT(comment), review.date
+    FROM review
+    JOIN user ON user.user_id = review.user_id
+    LEFT JOIN feedback ON feedback.review_id = review.review_id
+    WHERE review.book_id = %s
+    GROUP BY review.review_id;
+            ''', (book_id,))
+
             row = cur.fetchall()
             total_count = len(row)
         paginator= Paginator(row,items_per_page)
         page = paginator.get_page(page_no)
         reviews=[]
         for i in page:
+             tags = json.loads(i[4]) or ['']
              review = {
                "name":i[0],
                "id":i[1] ,
                "review":i[2],
                "rating":i[3],
-               "tags":json.loads(i[4]) ,
+               "tags":tags,
                "spoiler":i[5] ,
                "likes": i[6],
                "comments":i[7],
                "date":i[8]
-               
                 }
              reviews.append(review)
         return Response({"data":reviews,"totalCount":total_count})
