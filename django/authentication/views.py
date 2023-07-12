@@ -56,10 +56,10 @@ def signUp(request):
 
 def auth(email,password):
     with conn.cursor() as cur:
-            cur.execute("SELECT password,user_name FROM user WHERE user_email =%s ;",(email,))
+            cur.execute("SELECT user_id,password,user_name FROM user WHERE user_email =%s ;",(email,))
             data = cur.fetchone()
-            if data is not None and data[0] == password:
-                 return {"email":email,"user_name":data[1]}
+            if data is not None and data[1] == password:
+                 return {"userId":data[0],"email":email,"userName":data[2]}
 
 
 @api_view(['POST'])
@@ -69,14 +69,18 @@ def signIn(request):
         password = request.data.get('password')
         user = auth(email,password)
         if user is not None:
-            request.session['user_name']=user.get("user_name")
-            token = {'message':request.session['user_name']}
+            i = user.get("userId")
+            n = user.get("userName")
+            with conn.cursor() as cur:
+                cur.execute("INSERT INTO session(user_id,user_name) VALUES(%s,%s) ",(i,n))
+            token = {"userId":i,"userName":n}
             return Response(token)
     return Response({"message":"error"})
 
 @api_view(['GET'])
-def logout(request):
-    request.session.clear()
+def logout(request,id):
+    with conn.cursor() as cur:
+            cur.execute("DELETE FROM session WHERE user_id = %s ",(id,))
     return Response({"meassage":"logged out"})
 
 

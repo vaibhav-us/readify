@@ -6,8 +6,14 @@ def createTable():
         cur.execute('''CREATE TABLE IF NOT EXISTS user 
                     (user_id INTEGER PRIMARY KEY, user_email TEXT,user_name TEXT, password TEXT);
                     ''')
-       
         
+        cur.execute('''CREATE TABLE IF NOT EXISTS session 
+                    (session_id INTEGER PRIMARY KEY,user_id INTEGER,user_name TEXT
+                    
+                    );
+                    ''')
+       
+        #cur.execute("DROP TABLE IF EXISTS session")
        
 createTable()
 
