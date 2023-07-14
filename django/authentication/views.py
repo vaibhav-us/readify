@@ -81,7 +81,7 @@ def signIn(request):
 def logout(request,id):
     with conn.cursor() as cur:
             cur.execute("DELETE FROM session WHERE user_id = %s ",(id,))
-    return Response({"meassage":"logged out"})
+    return Response({"message":"logged out"})
 
 
 @api_view(['POST'])
