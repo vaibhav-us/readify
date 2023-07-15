@@ -1,6 +1,7 @@
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from django.contrib.auth import login 
+from django.contrib.auth.hashers import make_password
 from django.db import connection as conn
 from . import models
 import re
@@ -49,7 +50,7 @@ def signUp(request):
     
     if is_valid ==True: 
         with conn.cursor() as cur:
-            cur.execute("INSERT INTO user(user_email,user_name,password) VALUES (%s,%s,%s);",(email,name,password))
+            cur.execute("INSERT INTO user(user_email,user_name,password) VALUES (%s,%s,%s);",(email,name,make_password(password)))
         return Response ({'message':'hello there'})
     return Response({'error':error})
 
@@ -58,7 +59,7 @@ def auth(email,password):
     with conn.cursor() as cur:
             cur.execute("SELECT user_id,password,user_name FROM user WHERE user_email =%s ;",(email,))
             data = cur.fetchone()
-            if data is not None and data[1] == password:
+            if data is not None and data[1] == make_password(password):
                  return {"userId":data[0],"email":email,"userName":data[2]}
 
 
@@ -105,12 +106,12 @@ def forgotPassword(request):
     
     if is_valid ==True: 
         with conn.cursor() as cur:
-            cur.execute("UPDATE user SET password = %s WHERE user_id =%s ;",(password,user[0],))
+            cur.execute("UPDATE user SET password = %s WHERE user_id =%s ;",(make_password(password),user[0],))
             return Response ({'message':'hello there'})
     return Response({'error':error})
         
         
 @api_view(['GET'])
 def home(request):
-     sess=request.session
-     return Response(sess)
+     
+     return Response("hai ")

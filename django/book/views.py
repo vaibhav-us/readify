@@ -54,7 +54,7 @@ def search_books(request):
         with conn.cursor() as cur:
             cur.execute(query)
             row = cur.fetchall()
-
+        count = len(row)
         paginator=Paginator(row,items_per_page)
         page=paginator.get_page(page_no)
         results = []
@@ -71,7 +71,7 @@ def search_books(request):
                 "genre":genres
                 }
             results.append(result) 
-        return Response({"data":results})
+        return Response({"data":results,"totalbooks":count})
     else:
         return Response({"message":"error"})
 
@@ -79,19 +79,21 @@ def search_books(request):
 @api_view(['POST','GET'])
 def add_book(request,user_id):
     if request.method == 'POST':
-         genre = request.data.get("genre")
-         book_title = request.data.get("book_title")
+         genres = request.data.get("genre")
+         book_title = request.data.get("name")
          author = request.data.get("author")
-         cover_pic = request.data.get("cover_pic")
+         cover_pic = request.data.get("image")
          description = request.data.get("description")
+         date = request.data.get("publication")
 
          with conn.cursor() as cur:
               cur.execute('''
-                INSERT INTO book(user_id,book_title,author,cover_pic,description) VALUES (%s,%s,%s,%s,%s);
-                ''',(user_id,book_title,author,cover_pic,description))
+                INSERT INTO book(user_id,book_title,author,cover_pic,description,published_on) VALUES (%s,%s,%s,%s,%s,%s);
+                ''',(user_id,book_title,author,cover_pic,description,date))
               cur.execute("SELECT book_id FROM book WHERE book_title = %s",(book_title))
               book_id = cur.fetchone()
-              cur.execute('''
+              for genre in genres:
+                cur.execute('''
                     INSERT INTO genre(book_id,genre) VALUES(%s,%s)
                     ''',(book_id,genre))
          return Response({"messsage":"added successfully"})
@@ -106,7 +108,7 @@ def review(request,book_id):
         items_per_page = 10
         with conn.cursor() as cur:
             cur.execute('''
-    SELECT user.user_name, review.review_id, COALESCE(review.review, '') AS review, review.rating, COALESCE(review.tags, '[]') AS tags, review.spoiler, review.likes, COUNT(comment), review.date
+    SELECT user.user_name, review.review_id,review.review, review.rating,review.tags, review.spoiler, review.likes, COUNT(comment), review.date
     FROM review
     JOIN user ON user.user_id = review.user_id
     LEFT JOIN feedback ON feedback.review_id = review.review_id
@@ -120,7 +122,10 @@ def review(request,book_id):
         page = paginator.get_page(page_no)
         reviews=[]
         for i in page:
-             tags = json.loads(i[4]) or ['']
+             if i[4] is not None:
+                tags = json.loads(i[4])
+             else:
+                 tags = [""]
              review = {
                "name":i[0],
                "id":i[1] ,
@@ -189,6 +194,19 @@ def like_review(request,user_id,review_id):
     else: 
         return Response({"message":"error"})
 
+def setAvgRating(book_id):
+    with conn.cursor() as cur:
+        cur.execute('''SELECT rating FROM review WHERE book_id = %s ;''',(book_id,))
+        rows = cur.fetchall()
+    total_count = len(rows)
+    total_rating = 0
+    for row in rows:
+        total_rating = total_rating +  row[0]
+    avg_rating = total_rating/total_count
+    with conn.cursor() as cur:
+        cur.execute('''
+            UPDATE book SET avg_rating = %s WHERE book_id = %s ;
+            ''',(avg_rating,book_id))
 
 @api_view(['POST'])
 def add_review(request,user_id,book_id):
@@ -207,17 +225,7 @@ def add_review(request,user_id,book_id):
                 cur.execute('''
                     INSERT INTO review(user_id,book_id,review,rating,tags,spoiler) VALUES (%s,%s,%s, %s,%s,%s);
                 ''',(user_id,book_id,review,rating,tags_str,spoiler))
-                cur.execute('''SELECT rating FROM review WHERE book_id = %s ;''',(book_id,))
-                rows = cur.fetchall()
-            total_count = len(rows)
-            total_rating = 0
-            for row in rows:
-                total_rating = total_rating +  row[0]
-            avg_rating = total_rating/total_count
-            with conn.cursor() as cur:
-                cur.execute('''
-                    UPDATE book SET avg_rating = %s WHERE book_id = %s ;
-                ''',(avg_rating,book_id))
+            setAvgRating(book_id)
             return Response({"message":"added"})
         if review and rate is None:
             with conn.cursor() as cur:
@@ -230,17 +238,7 @@ def add_review(request,user_id,book_id):
                 cur.execute('''
                     INSERT INTO review(user_id,book_id,rating) VALUES (%s,%s, %s);
                 ''',(user_id,book_id,rating))
-                cur.execute('''SELECT rating FROM review WHERE book_id = %s ;''',(book_id,))
-                rows = cur.fetchall()
-            total_count = len(rows)
-            total_rating = 0
-            for row in rows:
-                total_rating = total_rating +  (row[0] or 0)
-            avg_rating = total_rating/total_count
-            with conn.cursor() as cur:
-                cur.execute('''
-                    UPDATE book SET avg_rating = %s WHERE book_id = %s ;
-                ''',(avg_rating,book_id))
+            setAvgRating(book_id)
             return Response({"message":"added"})
 
     else:
@@ -248,26 +246,14 @@ def add_review(request,user_id,book_id):
 
 @api_view(['POST','GET'])
 def all_books(request):
-    if request.method=='POST':
-        page_no= request.data.get('pageno')
-        items_per_page = 10
-        query = " SELECT book.book_id,book.book_title,book.author,book.cover_pic,book.avg_rating FROM book ; "
+    if request.method=='GET':
+        book_id = 1
         with conn.cursor() as cur:
-            cur.execute(query)
-            row = cur.fetchall()
+            cur.execute('''SELECT rating FROM review WHERE rating is not null and book_id = %s  ;''',(book_id,))
+            rows = cur.fetchall()
 
-        paginator=Paginator(row,items_per_page)
-        page=paginator.get_page(page_no)
-        results = []
-        for book in page:
-            result = {
-                "id":book[0],
-                "name":book[1],
-                "author":book[2],
-                "image":book[3],
-                "rating":book[4] 
-            }
-            results.append(result) 
-        return Response({"data":results})
+       
+            
+        return Response({"data":rows[0:]})
     else :
         return Response({"message":"error"})

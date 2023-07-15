@@ -8,7 +8,8 @@ def createTable():
                     ''')
         
         cur.execute('''CREATE TABLE IF NOT EXISTS session 
-                    (session_id INTEGER PRIMARY KEY,user_id INTEGER,user_name TEXT
+                    (session_id INTEGER PRIMARY KEY,user_id INTEGER,user_name TEXT,
+                    FOREIGN KEY(user_id) REFERENCES user(user_id)
                     
                     );
                     ''')
