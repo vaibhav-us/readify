@@ -1,3 +1,23 @@
+.error404{
+  position: relative;
+  display: grid;
+  place-content: center center;
+}
+.error404--home{
+  position: absolute;
+  bottom: 20%;
+  left: 50%;
+  transform: translateX(-51%);
+  padding: 10px;
+  background-color: rgb(50, 50, 165);
+  border-radius: 10px;
+  color: white;
+  font-weight: 700;
+  text-decoration: none;
+}
+.error404--home:hover{
+  background-color: rgb(8, 20, 94);
+}
 .login{
     margin-left: 35%;
     width: 30%;
@@ -55,7 +75,7 @@
     display: flex;
     align-items: center;
     white-space: pre;
-    margin-bottom: 10px;
+    margin-top: 3px;
   }
   .error--message--Link:hover{
     text-decoration: underline;
@@ -132,7 +152,7 @@
     margin-right: 40px;
   }
   .dashboard--activity--container{
-    margin: 30px 0 100px 0;
+    margin: 30px 0 60px 0;
   }
   .dashboard--activity{
     display: flex;
@@ -164,6 +184,14 @@
     font-weight: 700;
     color: black;
   }
+  .logout{
+    padding: 5px 10px;
+    border-radius: 10px;
+    color: white;
+    font-weight: 600;
+    background-color: rgb(166, 9, 9);
+    margin: 0 0 40px 0;
+  }
 
   .bookshelf--searchbar{
     height: 30px;
@@ -182,6 +210,30 @@
   }
   .bookshelf--filter{
     margin-left: 60px;
+  }
+  .activity--sort--container{
+    padding: 0 0 30px 20px;
+    display: flex;
+    align-items: center;
+  }
+  .activity--sortbutton{
+    margin: 0 0 0 25px;
+    font-size: 17px;
+  }
+  .activity--sortbutton:hover{
+    background-color: rgb(151, 163, 163);
+  }
+  .activitytile{
+    margin-bottom: 30px;
+    border: 2px solid black;
+    border-radius: 20px;
+    padding: 20px;
+  }
+  .activitytile--top{
+    display: flex;
+    white-space:pre;
+    align-items: center;
+    margin-bottom: 15px;
   }
   
   

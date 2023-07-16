@@ -10,19 +10,22 @@ export async function action({request}) {
     const formData = await request.formData()
 
     const creds = Object.fromEntries(formData)
-    let req
-    for (const key in creds)  
-        req = {...req,[key]:creds[key]===''?true:false}            
-    if (req) return {req:req,error:[]}
+    // let req
+    // for (const key in creds)  
+    //     req = {...req,[key]:creds[key]===''?true:false}            
+    // if (req) return {req:req,error:[]}
 
     const data = await postItems(creds,"http://127.0.0.1:8000/auth/signup/")
 
     if (data.message==="hello there") {
+        console.log(data);
         localStorage.setItem("user",formData.get("name"))
+        localStorage.setItem("id",data.userId)
         return redirect(url.get("redirectTo")? url.get("redirectTo"):'/profile')
     }
     console.log(data);
-    return {...data,req:req};
+    // return {...data,req:req};
+    return data;
 }
 
 export function Password({name}) {
@@ -31,7 +34,13 @@ export function Password({name}) {
     
     return(
         <div className="password--container searchbar">
-            <input type={showPass? "text":"password"} name={name} id={name} className="searchbar--input password--input"/>
+            <input 
+                type={showPass? "text":"password"} 
+                name={name} 
+                id={name} 
+                className="searchbar--input password--input"
+                required
+            />
             <img 
                 src={process.env.PUBLIC_URL+"/images/"+eyeImage} 
                 alt="eye"
@@ -39,6 +48,14 @@ export function Password({name}) {
                 width={"20px"}
                 height={"20px"}
             />
+        </div>
+    )
+}
+export  function ErrorMsg(props) {
+    return(
+        <div className="error--message">
+            <img src={process.env.PUBLIC_URL+"/images/caution.png"} alt="" width="10px"/>
+            <small className="red">  {props.msg}</small>
         </div>
     )
 }
@@ -58,29 +75,22 @@ export default function Signup (){
                 <Link to={'/login'+redirectTo} className="noLink error--message--Link">try logging in &gt;&gt;</Link>
             </div>
             :
-            responseData?.error.map(err => {
-                return(
-                    <div className="error--message">
-                        <img src={process.env.PUBLIC_URL+"/images/caution.png"} alt="" width="10px"/>
-                        <span key={err} className="red">  {err}</span>
-                    </div>
-                )
-            })}
+            responseData?.error.map(err => <ErrorMsg key={err} msg={err} />)}
 
             <label htmlFor="name">Your Name</label>
-            <input type="text" name="name" id="name" placeholder={"First and Last Name"} />
-            {responseData?.req.name && <small className="login--input--bottomlabel">This is a required field</small>
-            }<br/><br/>
+            <input required type="text" name="name" id="name" placeholder={"First and Last Name"} />
+            {}
+            <br/><br/>
 
             <label htmlFor="email">Email</label>
-            <input type="text" name="email" id="email" placeholder="something@xyz.com"/>
-            {responseData?.req.email && <small className="login--input--bottomlabel">This is a required field</small>
-            }<br/><br/>
+            <input required type="text" name="email" id="email" placeholder="something@xyz.com"/>
+            {}
+            <br/><br/>
 
             <label htmlFor="password" >password</label>
             <Password name="password"/>
-            {responseData?.req.password && <small className="login--input--bottomlabel">This is a required field</small>
-            }<br/><br/>
+            {}
+            <br/><br/>
             
             <label htmlFor="confirmPassword" >Confirm password</label>
             <Password name="confirmPassword"/>

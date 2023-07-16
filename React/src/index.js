@@ -5,6 +5,7 @@ import './css/bookpage.css'
 import "./css/searchpage.css"
 import './css/profile.css'
 import './css/reviewpage.css'
+import './css/contribute.css'
 import App from './app'
 
 

@@ -1,9 +1,9 @@
 import React from "react";
 import Trending from "../components/trending";
 import Slider from "../components/slider";
-import HomeSearch from "../components/HomeSearch";
-import { useLoaderData } from "react-router-dom";
-import { postItems } from "../utility";
+import HomeSearch from "../components/homesearch";
+// import { useLoaderData } from "react-router-dom";
+// import { postItems } from "../utility";
 
 export async function loader() {
     // let dubdata = [
@@ -16,12 +16,13 @@ export async function loader() {
     //     {id:7,name:"The Lord of the Rings: Weapons and Warfare",image:"https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1388290346i/36.jpg",rating:5,author:"christopher lee"}
     // ]
 
-    const  data = await postItems({pageno:1},"http://127.0.0.1:8000/allbooks/")
-    return data.data;
+    // const  data = await postItems({pageno:1},"http://127.0.0.1:8000/allbooks/")
+    // return data.data;
+    return null
 }
 
 export default function Homepage () { 
-    const newRelease = useLoaderData()
+    // const newRelease = useLoaderData()
     const trendingData =[
         {id:11,name:"Lord Of The Rings: The Return Of The King",author:"J R R Tolkien",landscapeImage:"https://images2.alphacoders.com/122/1229385.png"},
         {id:12,name:"Harry Potter And The Deadly Hallows",author:"J K Rowling",landscapeImage:"https://i.pinimg.com/originals/28/08/48/28084856145bd08d247a640f6eed8906.jpg"},
@@ -41,7 +42,7 @@ export default function Homepage () {
                 <h1>New Releases</h1>
                 <hr className="home--hr"/>
                 <div style={{position: 'relative'}} >
-                    <Slider data={newRelease} />
+                    <Slider api="http://127.0.0.1:8000/allbooks/" />
                 </div>
             </div>
             <br /><br /><br />
@@ -49,7 +50,7 @@ export default function Homepage () {
                 <h1>Upcoming Releases</h1>
                 <hr className="home--hr"/>
                 <div style={{position: 'relative'}} >
-                    <Slider data={newRelease} />
+                    <Slider api="http://127.0.0.1:8000/allbooks/" />
                 </div>
             </div>
             <br /><br /><br /><br />

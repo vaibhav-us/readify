@@ -1,10 +1,18 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import RatingRatio from "../../components/ratingratio";
-import { fullDate } from "../../utility";
+import { fullDate, getItems } from "../../utility";
 import { CropImage } from "../../components/searchcomponents";
 
 export default function PofileIndex() {
+    const navigate = useNavigate()
+    async function logout() {
+        const res = await getItems(`http://127.0.0.1:8000/auth/logout/${localStorage.getItem("id")}/`)
+        if (res.message && res.message==='logged out' ) {
+            localStorage.clear()
+            navigate("/",{replace:true})
+        }
+    }
     const user = localStorage.getItem("user")
     const bookshelfData = [
         {id:1,name:"The Name of the Wind",image:"https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1270352123i/186074.jpg",rating:5,author:"Patrick Rothfuss"},
@@ -27,10 +35,7 @@ export default function PofileIndex() {
         <div>
             <div className="personal--details">
                 <div className="personal--stats">
-                    <div className="profile--img">
-                        <img  src={process.env.PUBLIC_URL+"/images/defaultprofilepic.png"} alt=""/>
-                    </div>
-                    {/* <CropImage src="/images/defaultprofilepic.png" /> */}
+                    <CropImage src="/images/defaultprofilepic.png" />
                     <Link className="noLink">0 ratings </Link>
                     <Link className="noLink">0 review</Link>
                 </div>
@@ -39,6 +44,7 @@ export default function PofileIndex() {
                     <b><big>Name</big></b>
                     <hr/>
                     <table className="vertical--table">
+                    <tbody>
                         <tr>
                             <th>Details</th>
                             <td>data</td>
@@ -46,12 +52,14 @@ export default function PofileIndex() {
                         <tr>
                             <th>Activity</th>
                             <td>data</td>
-                        </tr>
+                        </tr>    
+                    </tbody>
                     </table>
                 </div>
             </div>
 
             <div>
+                
                 <h3>Your Bookshelf</h3> <hr/>
                 <div className="dashboard--bookshelf">
                     {bookshelfData.map(ele => <img 
@@ -80,6 +88,12 @@ export default function PofileIndex() {
                 })}   
                 </div>
             </div>
+
+            <button 
+                className="logout"
+                onClick={logout}
+            >  Log Out  </button>
+
         </div>
     )
 }

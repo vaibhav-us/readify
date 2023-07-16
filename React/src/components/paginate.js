@@ -94,9 +94,17 @@ export default function Paginate(props) {
 
             <div className="paginate--pageno--container">
     
-                <button className="nobutton paginate--more" disabled={parseInt(searchParam.get("pageno")|| 1) === 1} onClick={()=>handleSearchParamByOneUnit("prev")}>&lt;</button> 
+                <button 
+                    className="nobutton paginate--more" 
+                    disabled={parseInt(searchParam.get("pageno")|| 1) === 1} 
+                    onClick={()=>handleSearchParamByOneUnit("prev")}
+                >  &lt;  </button> 
                 {pageNo}
-                <button className="nobutton paginate--more" disabled={parseInt(searchParam.get("pageno") || 1)=== lastPageNo} onClick={()=>handleSearchParamByOneUnit("next")}>&gt;</button>
+                <button 
+                    className="nobutton paginate--more" 
+                    disabled={parseInt(searchParam.get("pageno") || 1)=== lastPageNo} 
+                    onClick={()=>handleSearchParamByOneUnit("next")}
+                >  &gt;  </button>
                 
             </div>
         </div>

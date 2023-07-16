@@ -10,12 +10,12 @@
 }
 .showmore:hover{
   border-bottom: 0.2em solid rgb(155, 142, 142);
-  
 }
 .wanttoread{
   height: 100%;
   width: 100%;
   font-size: initial;
+  border-radius: 13px;
   background-color: rgb(81, 161, 81);
   font-weight: 600;
   color: white;
@@ -177,6 +177,9 @@
 }
 .review--likeNcomment button:active{
   background-color: rgb(229, 207, 200);
+}
+.likeNcommentcount{
+  margin-left: 8px;
 }
 .comment--container{
   display: grid;

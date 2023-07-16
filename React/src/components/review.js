@@ -7,7 +7,7 @@ import CommentSection from "./commentsection";
 const Review = (props) => {
     const [like,setLike] = React.useState(false)
     const [showMore,setShowMore] = React.useState(false)
-    const [displaySpoiler,setDisplaySpoiler]=React.useState(props.spoiler || false)
+    const [displaySpoiler,setDisplaySpoiler]=React.useState(props.spoiler==="on" ?true : false)
     const [displayComment,setDisplayComment]=React.useState(false)
 
     const SpoilerTag = () => {
@@ -35,7 +35,6 @@ const Review = (props) => {
         :
             null
     )
-
     const toggleLike = () => setLike(!like)
     const likeImage = like? '/images/liked.png' : "/images/like.png"
 
@@ -51,15 +50,12 @@ const Review = (props) => {
                     <RatingRatio rating={props.rating} />
                 </div>
 
-                {displaySpoiler?
-                    <SpoilerTag/>
-                    :
-                    <CollapseContainer data={props.review} height={100}/>
-                }
+                { displaySpoiler
+                ?   <SpoilerTag/>
+                :   <CollapseContainer data={props.review} height={100}/>  }
 
                 {displayTags[0] && 
-                <div>{displayTags}<br/><br/></div>
-                }
+                <div>{displayTags}<br/><br/></div> }
 
                 <div className="review--likeNcomment">
                     <div>
@@ -67,7 +63,7 @@ const Review = (props) => {
                             <img  src={process.env.PUBLIC_URL+likeImage} alt="" width={"20px"} />
                             <b>  {like? "Liked":"Like"} </b>
                         </button>
-                        <small> {approximate(props.likes) }</small>    
+                        <small className="likeNcommentcount">{approximate(props.likes) }</small>    
                     </div>
 
                     <div>
@@ -75,7 +71,7 @@ const Review = (props) => {
                             <img src={process.env.PUBLIC_URL+"/images/comment.png"} alt="" width={"20px"} />
                             <b>  Comment</b>
                         </button>
-                        <small>  {approximate(props.comments)}</small>    
+                        <small className="likeNcommentcount">  {approximate(props.comments)}</small>    
                     </div>  
                 </div>
                 

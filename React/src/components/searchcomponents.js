@@ -93,51 +93,50 @@ export function Filter(props) {
                 <img src={process.env.PUBLIC_URL+"/images/filter.png"} alt="" height= {"100%"}/>
             </button>
 
-            {true && 
-                <div className="filter--section" style={{display:display?"block":"none"}}>
-                    <button onClick={(()=>setDisplay(false))} className="filter--close nobutton">X</button>
 
-                    <fieldset className="filter--section--rating">
-                        <legend>Rating</legend>
-                        {[1,2,3,4,5].map(ele => {
-                            return(
-                                <div key={ele}>
-                                    <input 
-                                        type="checkbox" 
-                                        onChange={(e)=>props.onChange(e,ele,1)} 
-                                        id={ele} 
-                                        checked={props.stateVar[ele]}
-                                        name="rating" 
-                                    />
-                                    <label htmlFor={ele} >
-                                        <RatingRatio rating={ele} style={{width:"20px",height:"20px",marginBottom:"0"}}/>
-                                    </label>
-                                </div>
-                            )
-                        })}
-                    </fieldset>
+            <div className="filter--section" style={{display:display?"":"none"}}>
+            <button onClick={(()=>setDisplay(false))} className="filter--close nobutton">X</button>
 
-                    <fieldset className="filter--section--publication">
-                        <legend>Publication</legend>
-                            {["After",'Before'].map(ele => {
-                                return(
-                                    <div key={ele}>
-                                        <label htmlFor={ele} >{ele==="After"? `${ele}   ` : ele}   </label>
-                                        <input 
-                                            type="date" 
-                                            onChange={(e)=>props.onChange(e,ele)} id={ele}  
-                                            name="publication" 
-                                        />
-                                    </div>
-                                )
-                            })}
-                    </fieldset>
+            <fieldset className="filter--section--rating">
+                <legend>Rating</legend>
+                {[1,2,3,4,5].map(ele => {
+                    return(
+                        <div key={ele}>
+                            <input 
+                                type="checkbox" 
+                                onChange={(e)=>props.onChange(e,ele,1)} 
+                                id={ele} 
+                                checked={props.stateVar[ele]}
+                                name="rating" 
+                            />
+                            <label htmlFor={ele} >
+                                <RatingRatio rating={ele} style={{width:"20px",height:"20px",marginBottom:"0"}}/>
+                            </label>
+                        </div>
+                    )
+                })}
+            </fieldset>
+    
+            <fieldset className="filter--section--publication">
+                <legend>Publication</legend>
+                {["After",'Before'].map(ele => {
+                    return(
+                        <div key={ele}>
+                            <label htmlFor={ele} >{ele==="After"? `${ele}   ` : ele}   </label>
+                                <input 
+                                    type="date" 
+                                    onChange={(e)=>props.onChange(e,ele)} id={ele}  
+                                    name="publication" 
+                                />
+                            </div>
+                        )
+                    })}
+            </fieldset>
 
-                    <div className="filter--button--container">
-                        <button className="sort--tag" type="button">Clear Filter</button>
-                    </div>
-                </div>
-            }   
+            <div className="filter--button--container">
+                <button className="sort--tag" type="button">Clear Filter</button>
+            </div>
+        </div>   
         </div>
     )
 }

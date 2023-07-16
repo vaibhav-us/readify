@@ -4,12 +4,11 @@ import {
     Form ,
     useActionData,
     useLoaderData,
-    redirect,
     useNavigate
 } from "react-router-dom";
 import { fullDate, getItems, postItems } from "../utility";
 import {StarBlink} from "../components/ratingcomponents";
-import {nanoid} from "nanoid"
+import InputMany from "../components/inputmany";
 
 export async function loader({params}) {
     const  data = await getItems(`http://127.0.0.1:8000/book/${params.bookId}`)
@@ -26,7 +25,8 @@ export async function action({request}) {
         spoiler : formData.get("spoiler"),
         tags    : formData.getAll("tag").join(",")
     }
-    const res = await postItems(reviewData,`http://127.0.0.1:8000/1/book/${reviewData.id}/addreview/`)
+    console.log(reviewData);
+    const res = await postItems(reviewData,`http://127.0.0.1:8000/${localStorage.getItem("id")}/book/${reviewData.id}/addreview/`)
 
     return res
 }
@@ -36,34 +36,11 @@ export default function ReviewPage(props) {
     const actionData = useActionData()
     const navigate = useNavigate()
 
-    // const submitted = actionData?.submitted || false
     React.useEffect(()=>{
         if(actionData?.message === "added") {
             navigate(-1)
         }
-    },[actionData])
-
-    const Tag = ({id}) => {
-        function removeTag (id ){
-            setTagInput( prev => 
-                prev.length!==1  
-                ?   prev.filter(ele => ele.props.id!==id )      
-                :   prev    
-            )
-        }
-        return(
-            <span className="reviewpage--inputtags reviewpage--tag">
-                <input className="searchbar--input" name="tag" placeholder="Enter a tag" />
-                <span className="nobutton"  onClick={()=>removeTag(id)} ><b>X</b></span>
-            </span>    
-        )
-    }
-
-    const [tagInput,setTagInput] = React.useState([<Tag key={nanoid()} id={nanoid()} />])
-    const addNewTag = () => {
-        setTagInput(prev=>prev.concat(<Tag key={nanoid()} id={nanoid()} />))
-    }
-    
+    },[actionData,navigate])
 
     return(
         <div className="reviewpage--container">
@@ -88,17 +65,6 @@ export default function ReviewPage(props) {
             <StarBlink bookId={data.id} className="reviewpage--rating"/>
             <br/><br/>
 
-            {/* {submitted ?
-
-                <div className="formsubmitted--container">
-                    <h2>Your response has been submitted</h2>
-                    <Link to={data.redirectTo}>
-                        <button className="reviewpage--sumbit">Go Back &larr;</button>
-                    </Link>
-                </div>
-
-                : */}
-
                 <Form method="post" className="reviewform--container" replace>
                     <p>What do <i>you</i> think ?</p>
                     {actionData?.emptyReview && <i className="red">Write A Review Before Submitting It ! </i>}
@@ -107,14 +73,7 @@ export default function ReviewPage(props) {
                     <input name="spoiler" id="spoiler"  type="checkbox"/>
                     <label className="red" htmlFor="spoiler">Hide this review if it contains heavy spoilers!!</label><br/>
                     
-                    <fieldset className="reviewpage--tag--container">
-                        <legend className="reviewpage--tag">Tags</legend> 
-                        {tagInput}
-                        <span key={-1} onClick={addNewTag} className="reviewpage--moretag">
-                            <big><b>+</b></big>
-                        </span>
-                    </fieldset>
-                    <small className="gray">Add tags to summarize your review into words</small>
+                    <InputMany name="tag" desc="Add tags to summarize your review into words"/>
 
                     <input name="id" defaultValue={data.id} hidden />
                     <button className="reviewpage--sumbit">Post Your Review</button>

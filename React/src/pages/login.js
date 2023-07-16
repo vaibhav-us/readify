@@ -13,7 +13,8 @@ export async function action({request}) {
     const data = await postItems(creds,"http://127.0.0.1:8000/auth/signin/")
 
     if (data.message!=="error"){
-        localStorage.setItem("user",data.message)
+        localStorage.setItem("id",data.userId)
+        localStorage.setItem("user",data.userName)
         return redirect(urlsp.get("redirectTo")? urlsp.get("redirectTo"):'/profile')
     }
     
@@ -38,14 +39,16 @@ export default function Login (){
                 )
             })} */}
 
-            <label htmlFor="email">email</label>
+            <label htmlFor="email">Email</label>
             <input type="text" name="email" />
-            <label htmlFor="password" >password</label>
+            <br/><br/>
+
+            <label htmlFor="password" >Password</label>
             <Password name="password"/>
+            
             <p>Forget your password?</p>
             <button className="sign--in" type="submit">Sign in</button>
             <br/><br />
-
 
             <div className="line--dec">
                 <hr className="login--hr"/>

@@ -17,7 +17,7 @@ export default function ProfileNav() {
                 > Bookshelf </NavLink>
 
                 <NavLink
-                    to="recent"
+                    to="activity"
                     className={({isActive}) => "profile--navlink" + (isActive ?" profile--navlink--active":"")}
                 > Activities </NavLink>
 

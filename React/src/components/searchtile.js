@@ -4,6 +4,46 @@ import { Link } from "react-router-dom";
 import { fullDate } from "../utility";
 import {ReviewButton, StarBlink, WantToRead} from "./ratingcomponents";
 
+export function MiniSearchTile(props) {
+    const resultingName = props.name.length>=100 
+        ?   props.name.slice(0,100)
+        :   props.name 
+    return(
+        <div className="minisearchtile">
+            <Link to={'/book/'+props.id} className="minisearchtile--1sthalf">
+                <img src={props.image} alt='' className="searchtile--img"/>
+            </Link>
+
+            <div className="minisearchtile--2ndhalf">
+                <Link to={'/book/'+props.id} className="noLink searchtile--head"><b>{resultingName}</b></Link>
+                <br/>
+                <small>{props.author}</small>
+                <br/>
+                <RatingRatio rating={props.rating} className="searchtile--rate"/>
+                <br/>
+                {props.genre?.map(ele => 
+                    <Link 
+                        key={ele} 
+                        className="noLink review--point review--point--more"
+                        to={"/search?genre="+ele.trim()}    
+                    > {ele} </Link>
+                )}
+            </div>
+        </div>
+    )
+}
+export function MediumSearchTile(props){
+    return(
+        <div className="mediumsearchtile--container">
+            <MiniSearchTile {...props}/>
+            <div className="mediumsearchtile--rhs">
+                <WantToRead/>
+                <StarBlink/>
+            </div>
+        </div>
+    )
+}
+
 export default function SearchTile(props) {
     return(
         <div className="searchtile">
@@ -22,14 +62,19 @@ export default function SearchTile(props) {
                 </Link>
                 <br/>
                 <small><i className="gray">{props.author}</i></small>
-                <div className="searchtile--rate">
-                    <RatingRatio rating={props.rating}/> 
-                </div>
+                <RatingRatio className="searchtile--rate" rating={props.rating}/> 
+        
                 {props.publication &&<p className="gray">Published on {fullDate(props.publication)}</p>}
 
-                {props.genre?.map(ele=><span className="review--point">{ele}</span>)}
+                {props.genre?.map(ele => 
+                    <Link 
+                        key={ele} 
+                        className="noLink review--point review--point--more"
+                        to={"/search?genre="+ele.trim()}    
+                    > {ele} </Link>
+                )}
 
-                <ReviewButton state={props} className={"searchtile--review"} />
+                <ReviewButton bookId={props.id} className="searchtile--review" />
                 <hr />
             </div>
             

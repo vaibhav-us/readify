@@ -29,7 +29,6 @@ export default function Bookshelf() {
             ? 1 
             : ele.name.toLowerCase().includes(search.replace(/\s+/g, ' ').toLowerCase())
     )
-console.log(new Date(bookshelfBooks[0].publication) <= new Date(filter.Before));
     filteredSearch = filteredSearch.filter(ele => 
         filter[ele.rating] &&
         new Date(ele.publication) >= new Date(filter.After) &&
