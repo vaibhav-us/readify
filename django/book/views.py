@@ -79,19 +79,19 @@ def search_books(request):
 @api_view(['POST','GET'])
 def add_book(request,user_id):
     if request.method == 'POST':
-         genres = request.data.get("genre")
+         genres = request.data.get("genres", "").split(",")
          book_title = request.data.get("name")
          author = request.data.get("author")
          cover_pic = request.data.get("image")
-         description = request.data.get("description")
+         description = request.data.get("desc")
          date = request.data.get("publication")
 
          with conn.cursor() as cur:
               cur.execute('''
                 INSERT INTO book(user_id,book_title,author,cover_pic,description,published_on) VALUES (%s,%s,%s,%s,%s,%s);
                 ''',(user_id,book_title,author,cover_pic,description,date))
-              cur.execute("SELECT book_id FROM book WHERE book_title = %s",(book_title))
-              book_id = cur.fetchone()
+              cur.execute("SELECT book_id FROM book WHERE book_title = %s",(book_title,))
+              book_id = cur.fetchone()[0]
               for genre in genres:
                 cur.execute('''
                     INSERT INTO genre(book_id,genre) VALUES(%s,%s)
