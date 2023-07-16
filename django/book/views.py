@@ -96,9 +96,9 @@ def add_book(request,user_id):
                 cur.execute('''
                     INSERT INTO genre(book_id,genre) VALUES(%s,%s)
                     ''',(book_id,genre))
-         return Response({"messsage":"added successfully"})
+         return Response({"message":"added successfully"})
     else:
-        return Response({"messsage":"enter details"})      
+        return Response({"message":"enter details"})      
          
 
 @api_view(['GET','POST'])
