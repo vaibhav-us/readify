@@ -1,7 +1,7 @@
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from django.contrib.auth import login 
-from django.contrib.auth.hashers import make_password
+from django.contrib.auth.hashers import make_password,check_password
 from django.db import connection as conn
 from . import models
 import re
@@ -59,7 +59,7 @@ def auth(email,password):
     with conn.cursor() as cur:
             cur.execute("SELECT user_id,password,user_name FROM user WHERE user_email =%s ;",(email,))
             data = cur.fetchone()
-            if data is not None and data[1] == make_password(password):
+            if data is not None and check_password(password,data[1]):
                  return {"userId":data[0],"email":email,"userName":data[2]}
 
 
@@ -68,6 +68,7 @@ def signIn(request):
     if request.method == 'POST':
         email = request.data.get('email')
         password = request.data.get('password')
+        
         user = auth(email,password)
         if user is not None:
             i = user.get("userId")
