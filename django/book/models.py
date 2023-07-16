@@ -32,8 +32,19 @@ def createTable():
                 CREATE TABLE IF NOT EXISTS genre  (genre_id INTEGER PRIMARY KEY,book_id INTEGER,genre TEXT,
                 FOREIGN KEY(book_id) REFERENCES book(book_id) ON DELETE CASCADE)
             ''')
+        cur.execute('''
+    CREATE TABLE IF NOT EXISTS shelf (
+        shelf_id INTEGER PRIMARY KEY,
+        user_id INTEGER,
+        book_id INTEGER,
+        FOREIGN KEY(user_id) REFERENCES user(user_id),
+        FOREIGN KEY(book_id) REFERENCES book(book_id),
+        UNIQUE(user_id, book_id) ON CONFLICT IGNORE
+    );
+        ''')
+
         
-        # cur.execute('DROP TABLE IF EXISTS likes')
+        #cur.execute('DROP TABLE IF EXISTS shelf')
         # cur.execute('DROP TABLE IF EXISTS feedback')
         # cur.execute('DROP TABLE IF EXISTS review')
         # cur.execute('DROP TABLE IF EXISTS genre')
