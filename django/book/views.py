@@ -148,6 +148,14 @@ def comment(request,book_id,rid):
     if request.method =="POST":
         pageno = request.data.get("pageno")
         with conn.cursor() as cur:
+            cur.execute("SELECT review,rating,date FROM review WHERE review_id = %s",(rid,))
+            data = cur.fetchone()
+        review = {
+            "review":data[0],
+            "rating":data[1],
+            "date":data[2]
+        }
+        with conn.cursor() as cur:    
             cur.execute('''
                 SELECT feedback_id,user_name,comment FROM feedback JOIN user ON user.user_id = feedback.user_id  WHERE feedback.book_id = %s AND feedback.review_id = %s ;
             ''',(book_id,rid,))
@@ -163,7 +171,7 @@ def comment(request,book_id,rid):
                 "comment":i[2]
                 }
             results.append(result)
-        return Response({"comment":results,"totalCount":count})
+        return Response({"comment":results,"review":review,"totalCount":count})
     else:
         return Response({"message":"enter pageno"})
 
@@ -182,8 +190,9 @@ def add_comment(request,user_id,book_id,rid):
 
 @api_view(['POST'])
 def like_review(request,user_id,review_id):
-    isLiked = request.data.get("isliked")
+    
     if request.method == 'POST':
+        isLiked = request.data.get("isliked")
         row = []
         if isLiked == "true":
             with conn.cursor() as cur:
