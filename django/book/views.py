@@ -194,19 +194,19 @@ def like_review(request,user_id,review_id):
     if request.method == 'POST':
         isLiked = request.data.get("isliked")
         row = []
-        if isLiked == "true":
+        if isLiked == True:
             with conn.cursor() as cur:
                 cur.execute('''
                 INSERT INTO likes(user_id,review_id) VALUES (%s,%s)
                 ''',(user_id,review_id))
                 cur.execute("SELECT * FROM likes WHERE review_id = %s ",(review_id,))
                 row = cur.fetchall()  
-        if isLiked == "false":     
+        if isLiked == False:     
             with conn.cursor() as cur:
                 cur.execute('''
                     DELETE FROM likes WHERE user_id = %s AND review_id = %s ;
                     ''',(user_id,review_id))
-                cur.execute("SELECT * FROM likes WHERE feeback_id = %s ",(review_id,))
+                cur.execute("SELECT * FROM likes WHERE review_id = %s ",(review_id,))
                 row = cur.fetchall()
         total_likes = len(row)
         with conn.cursor() as cur:
