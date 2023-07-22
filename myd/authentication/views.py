@@ -5,7 +5,8 @@ from django.contrib.auth.hashers import make_password,check_password
 from django.db import connection as conn
 from . import models
 import re
-
+#{error:1, password:error,user:error,common: }
+#{id: name:}
 def validate_reg(cp,password,email):
     error = {
          "error":0,
