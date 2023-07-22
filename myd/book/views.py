@@ -3,7 +3,7 @@ from rest_framework.decorators import api_view
 from django.core.paginator import Paginator
 from django.db import connection as conn
 import json
-#hdjdhjd
+#vsgd
 @api_view(['POST'])
 def get_book(request,book_id):
     if request.method == 'POST' :
@@ -13,10 +13,8 @@ def get_book(request,book_id):
                 book = cur.fetchone()
                 cur.execute("SELECT *  FROM genre WHERE book_id = %s ;",(book_id,))
                 genre = cur.fetchall()
-                cur.execute("SELECT COUNT(review) FROM review WHERE book_id = %s AND review IS NOT NULL; ",(book_id,))
-                review_count = cur.fetchone()
-                cur.execute("SELECT COUNT(rating) FROM review WHERE book_id = %s AND rating!=0 AND rating IS NOT NULL ; ",(book_id,))
-                rating_count = cur.fetchone()
+                cur.execute("SELECT COUNT(review),COUNT(rating) FROM review WHERE book_id = %s ; ",(book_id,))
+                count = cur.fetchone()
                 if user_id is not 0:
                     cur.execute("SELECT rating FROM review WHERE user_id = %s AND book_id = %s",(user_id,book_id))
                     userrating = cur.fetchone() or [0]
@@ -33,8 +31,8 @@ def get_book(request,book_id):
             "publication":book[6],
             "rating":book[7],
             "genre":genres,
-            "reviewCount": review_count[0],
-            "ratingCount":rating_count[0],
+            "reviewCount": count[0],
+            "ratingCount":count[1],
             "userrating" : userrating[0] ,
             }
         return Response({"data":data})
@@ -105,6 +103,7 @@ def add_book(request,user_id):
     else:
         return Response({"messsage":"enter details"})      
          
+
 @api_view(['GET','POST'])
 def review(request,book_id):
     if request.method=='POST':
@@ -208,19 +207,19 @@ def like_review(request,user_id,review_id):
     if request.method == 'POST':
         isLiked = request.data.get("isliked")
         row = []
-        if isLiked == True:
+        if isLiked == "true":
             with conn.cursor() as cur:
                 cur.execute('''
                 INSERT INTO likes(user_id,review_id) VALUES (%s,%s)
                 ''',(user_id,review_id))
                 cur.execute("SELECT * FROM likes WHERE review_id = %s ",(review_id,))
                 row = cur.fetchall()  
-        if isLiked == False:     
+        if isLiked == "false":     
             with conn.cursor() as cur:
                 cur.execute('''
                     DELETE FROM likes WHERE user_id = %s AND review_id = %s ;
                     ''',(user_id,review_id))
-                cur.execute("SELECT * FROM likes WHERE review_id = %s ",(review_id,))
+                cur.execute("SELECT * FROM likes WHERE feeback_id = %s ",(review_id,))
                 row = cur.fetchall()
         total_likes = len(row)
         with conn.cursor() as cur:
@@ -238,13 +237,11 @@ def setAvgRating(book_id):
     rating=[]
     total_rating = 0
     for row in rows:
-        if row[0]:
+        if row[0] != 0:
             total_rating += row[0]
             rating.append(row[0])
     count = len(rating)
-
-    avg_rating =total_rating/count if count else 0 
-
+    avg_rating = total_rating/count
     with conn.cursor() as cur:
         cur.execute('''
             UPDATE book SET avg_rating = %s WHERE book_id = %s ;
@@ -269,9 +266,8 @@ def add_review(request,user_id,book_id):
             if existingReview:
                 with conn.cursor() as cur:
                     cur.execute('''
-                        UPDATE review SET user_id = %s,book_id = %s,review = %s,rating =%s,tags=%s,spoiler=%s
-                        WHERE user_id = %s AND book_id = %s;
-                    ''',(user_id,book_id,review,rating,tags_str,spoiler,user_id,book_id))
+                        UPDATE review SET user_id = %s,book_id = %s,review = %s,rating =%s,tags=%s,spoiler=%s;
+                    ''',(user_id,book_id,review,rating,tags_str,spoiler))
                 setAvgRating(book_id)
                 return Response({"message":"updated"})
             else:
@@ -285,9 +281,8 @@ def add_review(request,user_id,book_id):
             if existingReview:
                 with conn.cursor() as cur:
                     cur.execute('''
-                        UPDATE review SET user_id = %s,book_id = %s,review = %s,tags=%s,spoiler=%s
-                        WHERE user_id = %s AND book_id = %s;
-                    ''',(user_id,book_id,review,tags_str,spoiler,user_id,book_id))
+                        UPDATE review SET user_id = %s,book_id = %s,review = %s,tags=%s,spoiler=%s;
+                    ''',(user_id,book_id,review,tags_str,spoiler))
                 return Response({"message":"updated"})
             else:
                 with conn.cursor() as cur:
@@ -299,9 +294,8 @@ def add_review(request,user_id,book_id):
             if existingReview:
                 with conn.cursor() as cur:
                     cur.execute('''
-                        UPDATE review SET user_id = %s,book_id = %s,rating=%s
-                        WHERE user_id = %s AND book_id = %s;
-                    ''',(user_id,book_id,rating,user_id,book_id))
+                        UPDATE review SET user_id = %s,book_id = %s,rating=%s;
+                    ''',(user_id,book_id,rating))
                 setAvgRating(book_id)
                 return Response({"message":"updated"})
             else:
@@ -324,7 +318,6 @@ def add_shelf(request,user_id,book_id):
 
     return Response({"message":"book added to shelf"})
 
-
 @api_view(["GET"])
 def rem_shelf(request,user_id,book_id):
     with conn.cursor() as cur:
@@ -333,7 +326,6 @@ def rem_shelf(request,user_id,book_id):
             ''',(user_id,book_id))
 
     return Response({"message":"book added to shelf"})
-
 
 
 
