@@ -8,6 +8,7 @@ import json
 def get_book(request,book_id):
     if request.method == 'POST' :
         user_id = request.data.get("userid")
+        userrating = [0]
         with conn.cursor() as cur:
                 cur.execute("SELECT * FROM book WHERE book_id = %s ;",(book_id,))
                 book = cur.fetchone()
@@ -118,7 +119,7 @@ def review(request,book_id):
     FROM review
     JOIN user ON user.user_id = review.user_id
     LEFT JOIN feedback ON feedback.review_id = review.review_id
-    WHERE review.book_id = %s
+    WHERE review.book_id = %s AND review.review IS NOT NULL
     GROUP BY review.review_id;
             ''', (book_id,))
 
@@ -254,7 +255,7 @@ def setAvgRating(book_id):
 def add_review(request,user_id,book_id):
     if request.method == 'POST':
         with conn.cursor() as cur:
-            cur.execute("SELECT review_id FROM review WHERE user_id = %s AND book_id = %s ;",(user_id,book_id))
+            cur.execute("SELECT review_id FROM review WHERE user_id = %s AND book_id = %s  ;",(user_id,book_id))
             existingReview = cur.fetchone()
         review = request.data.get("review")
         rate = request.data.get("rating")

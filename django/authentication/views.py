@@ -61,7 +61,7 @@ def signUp(request):
             cur.execute("SELECT user_id FROM user WHERE user_email = %s",(email,))
             id = cur.fetchone()
         return Response ({"id":id[0],"name":name})
-    return Response({'error':error})
+    return Response(error)
 
 
 def auth(email,password):
@@ -86,7 +86,7 @@ def signIn(request):
                 cur.execute("INSERT INTO session(user_id,user_name) VALUES(%s,%s) ",(i,n))
             token = {"id":i,"name":n}
             return Response(token)
-    return Response({"message":"error"})
+    return Response({"error":1,"common":["User credentials are not valid"]})
 
 @api_view(['GET'])
 def logout(request,id):
