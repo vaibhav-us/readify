@@ -11,23 +11,23 @@ def userReview(request,user_id,book_id):
         cur.execute("SELECT * FROM review WHERE user_id = %s AND book_id = %s",(user_id,book_id))
         row =cur.fetchone()
     reviews=[]
-    for i in row:
-             if i[5] is not None:
-                tags = json.loads(i[5])
-             else:
-                 tags = [""]
-             review = {
-               "userid":i[1],
-               "reviewid":i[0] ,
-               "review":i[4],
-               "rating":i[3],
-               "tags":tags,
-               "spoiler":i[6] ,
-               "likes": i[7],
+    # for i in row:
+            #  if i[5] is not None:
+            #     tags = json.loads(i[5])
+            #  else:
+            #      tags = [""]
+    review = {
+               "userid":row[1],
+               "reviewid":row[0] ,
+               "review":row[4],
+               "rating":row[3],
+               "tags":row[5],
+               "spoiler":row[6] ,
+               "likes": row[7],
                
-               "date":i[8]
+               "date":row[8]
                 }
-             reviews.append(review)
+            #  reviews.append(review)
     return Response({"userRating":review})
 
 
@@ -140,18 +140,19 @@ def add_book(request,user_id):
 def review(request,book_id):
     if request.method=='POST':
         page_no = request.data.get('pageno')
-        user_id = request.data.get('userid')
+        user_id = request.data.get('userid') 
+        getOneReview = request.data.get('getOneReview') 
 
         items_per_page = 10
         with conn.cursor() as cur:
-            cur.execute('''
+            cur.execute(f"""
     SELECT user.user_name, review.review_id,review.review, review.rating,review.tags, review.spoiler, review.likes, COUNT(comment), review.date
     FROM review
     JOIN user ON user.user_id = review.user_id
     LEFT JOIN feedback ON feedback.review_id = review.review_id
-    WHERE review.book_id = %s AND review.review IS NOT NULL
+    WHERE review.book_id = {book_id} {'AND review.user_id ='+ user_id if getOneReview else ''} AND review.review IS NOT NULL 
     GROUP BY review.review_id;
-            ''', (book_id,))
+            """)
 
             row = cur.fetchall()
             total_count = len(row)
@@ -183,7 +184,7 @@ def review(request,book_id):
                "date":i[8]
                 }
              reviews.append(review)
-        return Response({"data":reviews,"totalCount":total_count,"is_liked": liked_review_ids})
+        return Response({"data":reviews,"totalCount":total_count,"isLiked": liked_review_ids})
     else:
         return Response({"message":"error"})
 
@@ -192,14 +193,14 @@ def review(request,book_id):
 def comment(request,book_id,rid):
     if request.method =="POST":
         pageno = request.data.get("pageno")
-        with conn.cursor() as cur:
-            cur.execute("SELECT review,rating,date FROM review WHERE review_id = %s",(rid,))
-            data = cur.fetchone()
-        review = {
-            "review":data[0],
-            "rating":data[1],
-            "date":data[2]
-        }
+        # with conn.cursor() as cur:
+        #     cur.execute("SELECT review,rating,date FROM review WHERE review_id = %s",(rid,))
+        #     data = cur.fetchone()
+        # review = {
+        #     "review":data[0],
+        #     "rating":data[1],
+        #     "date":data[2]
+        # }
         with conn.cursor() as cur:    
             cur.execute('''
                 SELECT feedback_id,user_name,comment FROM feedback JOIN user ON user.user_id = feedback.user_id  WHERE feedback.book_id = %s AND feedback.review_id = %s ;
@@ -216,7 +217,8 @@ def comment(request,book_id,rid):
                 "comment":i[2]
                 }
             results.append(result)
-        return Response({"comment":results,"review":review,"totalCount":count})
+        return Response({"comment":results,"totalCount":count})
+        # return Response({"comment":results,"review":review,"totalCount":count})
     else:
         return Response({"message":"enter pageno"})
 
