@@ -4,11 +4,38 @@ from django.core.paginator import Paginator
 from django.db import connection as conn
 import json
 #hdjdhjd
+@api_view(['GET'])
+def userReview(request,user_id,book_id):
+    
+    with conn.cursor() as cur:
+        cur.execute("SELECT * FROM review WHERE user_id = %s AND book_id = %s",(user_id,book_id))
+        row =cur.fetchone()
+    reviews=[]
+    for i in row:
+             if i[5] is not None:
+                tags = json.loads(i[5])
+             else:
+                 tags = [""]
+             review = {
+               "userid":i[1],
+               "reviewid":i[0] ,
+               "review":i[4],
+               "rating":i[3],
+               "tags":tags,
+               "spoiler":i[6] ,
+               "likes": i[7],
+               
+               "date":i[8]
+                }
+             reviews.append(review)
+    return Response({"userRating":review})
+
+
 @api_view(['POST'])
 def get_book(request,book_id):
     if request.method == 'POST' :
         user_id = request.data.get("userid")
-        userrating = [0]
+        
         with conn.cursor() as cur:
                 cur.execute("SELECT * FROM book WHERE book_id = %s ;",(book_id,))
                 book = cur.fetchone()
@@ -18,9 +45,12 @@ def get_book(request,book_id):
                 review_count = cur.fetchone()
                 cur.execute("SELECT COUNT(rating) FROM review WHERE book_id = %s AND rating!=0 AND rating IS NOT NULL ; ",(book_id,))
                 rating_count = cur.fetchone()
-                if user_id is not 0:
-                    cur.execute("SELECT rating FROM review WHERE user_id = %s AND book_id = %s",(user_id,book_id))
-                    userrating = cur.fetchone() or [0]
+                cur.execute("SELECT * FROM shelf WHERE user_id = %s and book_id = %s",(user_id,book_id))
+                shelfItem = cur.fetchone()
+        if (shelfItem):
+            isShelf = 1
+        else:
+            isShelf= 0
         genres=[]
         for i in genre:
             g = i[2]
@@ -36,7 +66,7 @@ def get_book(request,book_id):
             "genre":genres,
             "reviewCount": review_count[0],
             "ratingCount":rating_count[0],
-            "userrating" : userrating[0] ,
+            "isShelf" :isShelf ,
             }
         return Response({"data":data})
     else :
