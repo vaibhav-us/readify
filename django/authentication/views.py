@@ -59,8 +59,11 @@ def signUp(request):
         with conn.cursor() as cur:
             cur.execute("INSERT INTO user(user_email,user_name,password) VALUES (%s,%s,%s);",(email,name,make_password(password)))
             cur.execute("SELECT user_id FROM user WHERE user_email = %s",(email,))
-            id = cur.fetchone()
-        return Response ({"id":id[0],"name":name})
+            id = cur.fetchone()[0]
+            
+            cur.execute("INSERT INTO session(user_id,user_name) VALUES(%s,%s) ",(id,name))
+            token = {"id":id,"name":name}
+        return Response (token)
     return Response(error)
 
 
@@ -119,8 +122,18 @@ def forgotPassword(request):
             cur.execute("UPDATE user SET password = %s WHERE user_id =%s ;",(make_password(password),user[0],))
             return Response ({'message':'hello there'})
     return Response({'error':error})
-        
-        
+
+@api_view(['GET'])
+def isLogged(request,id):
+     
+     with conn.cursor() as cur:
+          cur.execute("SELECT * FROM session WHERE user_id = %s",(id,))
+          row = cur.fetchone()
+     if row is not None:
+          token ={"userid":row[1],"username":row[2]}
+          return Response(token)
+     return Response({"error":"user not found"})
+
 @api_view(['GET'])
 def home(request):
      
