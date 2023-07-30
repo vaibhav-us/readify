@@ -359,10 +359,10 @@ def rem_shelf(request,user_id,book_id):
 
 @api_view(['POST'])
 def isBook(request):
-    title = request.data.get("title")
+    title = request.data.get("name")
     author = request.data.get("author")
     with conn.cursor() as cur:
-        cur.execute(f"SELECT book_title,author FROM book WHERE book_tile LIKE ' %{title}% ' AND author LIKE ' %{author}% ' ;")
+        cur.execute("SELECT book_title,author FROM book WHERE book_title LIKE %s AND author LIKE %s COLLATE NOCASE;",(title,author))
         book = cur.fetchone()
     if book:
         return Response({"exist":1})
@@ -392,4 +392,4 @@ def activity(request,user_id):
         }
         reviews.append(activity)
         
-    return Response({"activity":reviews})
+    return Response(reviews)
