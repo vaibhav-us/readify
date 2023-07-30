@@ -269,9 +269,9 @@ def add_review(request,user_id,book_id):
         with conn.cursor() as cur:
             cur.execute("SELECT review_id,book_id FROM review WHERE user_id = %s AND book_id = %s  ;",(user_id,book_id))
             existingReview = cur.fetchone()
-            if existingReview:
-                cur.execute("SELECT book_title FROM book WHERE book_id = %s",(existingReview[1],))
-                book_title = cur.fetchone()[0]
+            
+            cur.execute("SELECT book_title FROM book WHERE book_id = %s",(book_id,))
+            book_title = cur.fetchone()[0]
         review = request.data.get("review")
         rate = request.data.get("rating")
         tags = request.data.get("tags", "").split(",") 
@@ -357,8 +357,16 @@ def rem_shelf(request,user_id,book_id):
     return Response({"message":"book added to shelf"})
 
 
-
-def isBook
+@api_view(['POST'])
+def isBook(request):
+    title = request.data.get("title")
+    author = request.data.get("author")
+    with conn.cursor() as cur:
+        cur.execute(f"SELECT book_title,author FROM book WHERE book_tile LIKE ' %{title}% ' AND author LIKE ' %{author}% ' ;")
+        book = cur.fetchone()
+    if book:
+        return Response({"exist":1})
+    return Response({"exist":0})
 
 
 
@@ -371,6 +379,17 @@ def activity(request,user_id):
                 SELECT * FROM activity WHERE user_id = %s ORDER BY date ;
             ''',(user_id,)
         )
-        reviews = cur.fetchall()
+        rows = cur.fetchall()
+    reviews = []
+    for row in rows:
+        activity = {
+            "id":row[0],
+            "activity":row[2],
+            "bookId":row[3],
+            "book":row[4],
+            "date":row[5],
+            "rating":row[6]
+        }
+        reviews.append(activity)
         
     return Response({"activity":reviews})
