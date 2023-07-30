@@ -360,25 +360,7 @@ def rem_shelf(request,user_id,book_id):
 
 
 
-@api_view(['POST','GET'])
-def all_books(request):
-    if request.method=='GET':
-        book_id = 1
-        with conn.cursor() as cur:
-            cur.execute('''SELECT rating FROM review WHERE rating is not null and book_id = %s  ;''',(book_id,))
-            rows = cur.fetchall()
-        rating=[]
-        total_rating = 0
-        for row in rows:
-            if row[0] != 0:
-                total_rating += row[0]
-                rating.append(row[0])
-        count = len(rating)
-        avg_rating = total_rating/count
-            
-        return Response({"data":rating,"count":count,"avgrating":avg_rating})
-    else :
-        return Response({"message":"error"})
+
 
 @api_view(['GET'])
 def activity(request,user_id):
