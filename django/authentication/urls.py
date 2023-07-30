@@ -6,6 +6,7 @@ urlpatterns = [
     path('signin/',views.signIn),
     path('home/',views.home),
     path("logout/<str:id>/",views.logout),
-    path('fp/',views.forgotPassword)
+    path('fp/',views.forgotPassword),
+    path('<str:userid>/islogged/',views.isLogged),
       
 ]

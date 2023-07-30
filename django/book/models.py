@@ -33,15 +33,22 @@ def createTable():
                 FOREIGN KEY(book_id) REFERENCES book(book_id) ON DELETE CASCADE)
             ''')
         cur.execute('''
-    CREATE TABLE IF NOT EXISTS shelf (
-        shelf_id INTEGER PRIMARY KEY,
-        user_id INTEGER,
-        book_id INTEGER,
-        FOREIGN KEY(user_id) REFERENCES user(user_id),
-        FOREIGN KEY(book_id) REFERENCES book(book_id),
-        UNIQUE(user_id, book_id) ON CONFLICT IGNORE
-    );
-        ''')
+        CREATE TABLE IF NOT EXISTS shelf (
+            shelf_id INTEGER PRIMARY KEY,
+            user_id INTEGER,
+            book_id INTEGER,
+            FOREIGN KEY(user_id) REFERENCES user(user_id),
+            FOREIGN KEY(book_id) REFERENCES book(book_id),
+            UNIQUE(user_id, book_id) ON CONFLICT IGNORE
+            );
+                ''')
+        cur.execute(
+            '''
+                CREATE TABLE IF NOT EXISTS activity(a_id PRIMARY KEY, act TEXT,book_id INTEGER, book_title TEXT, date DATE, rating INTEGER,
+                FOREIGN KEY(book_id) REFERENCES book(book_id) ON DELETE CASCADE, FOREIGN KEY(book_title) REFERENCES book(book_title) ON DELETE CASCADE) ;
+            
+            '''
+        )
 
         
         #cur.execute('DROP TABLE IF EXISTS shelf')
