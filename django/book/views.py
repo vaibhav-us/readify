@@ -265,6 +265,7 @@ def updateActivity(user_id,rate,review,rating,book_id,book_title,):
 @api_view(['POST'])
 def add_review(request,user_id,book_id):
     if request.method == 'POST':
+        book_title = ""
         with conn.cursor() as cur:
             cur.execute("SELECT review_id,book_id FROM review WHERE user_id = %s AND book_id = %s  ;",(user_id,book_id))
             existingReview = cur.fetchone()
