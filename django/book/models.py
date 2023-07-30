@@ -44,14 +44,13 @@ def createTable():
                 ''')
         cur.execute(
             '''
-                CREATE TABLE IF NOT EXISTS activity(a_id PRIMARY KEY, act TEXT,book_id INTEGER, book_title TEXT, date DATE, rating INTEGER,
-                FOREIGN KEY(book_id) REFERENCES book(book_id) ON DELETE CASCADE, FOREIGN KEY(book_title) REFERENCES book(book_title) ON DELETE CASCADE) ;
+                CREATE TABLE IF NOT EXISTS activity(a_id INTEGER PRIMARY KEY, act TEXT,book_id INTEGER, book_title TEXT, date DATE, rating INTEGER) ;
             
             '''
         )
 
         
-        #cur.execute('DROP TABLE IF EXISTS shelf')
+        #cur.execute('DROP TABLE IF EXISTS activity')
         # cur.execute('DROP TABLE IF EXISTS feedback')
         # cur.execute('DROP TABLE IF EXISTS review')
         # cur.execute('DROP TABLE IF EXISTS genre')
