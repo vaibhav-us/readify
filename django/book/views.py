@@ -268,8 +268,9 @@ def add_review(request,user_id,book_id):
         with conn.cursor() as cur:
             cur.execute("SELECT review_id,book_id FROM review WHERE user_id = %s AND book_id = %s  ;",(user_id,book_id))
             existingReview = cur.fetchone()
-            cur.execute("SELECT book_title FROM book WHERE book_id = %s",(existingReview[1]))
-            book_title = cur.fetchone()[0]
+            if existingReview:
+                cur.execute("SELECT book_title FROM book WHERE book_id = %s",(existingReview[1],))
+                book_title = cur.fetchone()[0]
         review = request.data.get("review")
         rate = request.data.get("rating")
         tags = request.data.get("tags", "").split(",") 
