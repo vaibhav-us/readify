@@ -51,11 +51,14 @@ def get_book(request,book_id):
 @api_view(['POST','GET'])
 def search_books(request):
     if request.method=='POST':
+        user_id = request.data.get("userid")
         genre = request.data.get('genre')
         key = request.data.get('book')
         page_no= request.data.get('pageno')
         items_per_page = 10
         query = "SELECT book.book_id,book.book_title,book.author,book.cover_pic,book.description,book.published_on,book.avg_rating,GROUP_CONCAT(genre.genre) FROM book JOIN genre ON book.book_id = genre.book_id "
+        if user_id:
+            query += f" JOIN shelf ON shelf.book_id = book.book_id WHERE shelf.user_id = '{user_id}'"
         if genre and key is None:
             pass
         if  key:
@@ -346,6 +349,15 @@ def add_shelf(request,user_id,book_id):
 
     return Response({"message":"book added to shelf"})
 
+# @api_view(['GET'])
+# def getShelf(request,user_id):
+#     with conn.cursor() as cur:
+#         cur.execute('''
+#                 SELECT * FROM book JOIN shelf ON book.book_id = shelf.book_id WHERE user_id = %s
+#             ''',(user_id,))
+#         data = cur.fetchall()[2]
+#     return Response({"shelfItems":data})
+
 
 @api_view(["GET"])
 def rem_shelf(request,user_id,book_id):
@@ -359,7 +371,7 @@ def rem_shelf(request,user_id,book_id):
 
 @api_view(['POST'])
 def isBook(request):
-    title = request.data.get("title")
+    title = request.data.get("name")
     author = request.data.get("author")
     with conn.cursor() as cur:
         cur.execute(f"SELECT book_title,author FROM book WHERE book_tile LIKE ' %{title}% ' AND author LIKE ' %{author}% ' ;")
@@ -392,4 +404,4 @@ def activity(request,user_id):
         }
         reviews.append(activity)
         
-    return Response({"activity":reviews})
+    return Response(reviews)
