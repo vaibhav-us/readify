@@ -130,9 +130,9 @@ def isLogged(request,id):
           cur.execute("SELECT * FROM session WHERE user_id = %s",(id,))
           row = cur.fetchone()
      if row is not None:
-          token ={"userid":row[1],"username":row[2]}
-          return Response(token)
-     return Response({"error":"user not found"})
+          
+          return Response({"isLogged":1})
+     return Response({"isLogged":0})
 
 @api_view(['GET'])
 def home(request):

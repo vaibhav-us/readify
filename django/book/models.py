@@ -50,7 +50,7 @@ def createTable():
         )
 
         
-        cur.execute('DROP TABLE IF EXISTS activity')
+        #cur.execute('DROP TABLE IF EXISTS activity')
         # cur.execute('DROP TABLE IF EXISTS feedback')
         # cur.execute('DROP TABLE IF EXISTS review')
         # cur.execute('DROP TABLE IF EXISTS genre')

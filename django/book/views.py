@@ -358,7 +358,7 @@ def rem_shelf(request,user_id,book_id):
 
 
 
-
+def isBook
 
 
 
