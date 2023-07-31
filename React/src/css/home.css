@@ -5,7 +5,7 @@
 }
 button{
   cursor: pointer;
-  border-radius: 20px;
+  border-radius: 13px;
 }
 input {
   padding: 0 10px 0 10px ;
@@ -19,6 +19,9 @@ textarea {
   border: 2px solid black;
   transition: none;
 }
+.pre{
+  white-space: pre;
+}
 .noLink{
   text-decoration: none;
   color: inherit;
@@ -28,6 +31,9 @@ textarea {
 }
 .red{
   color: red;
+}
+.green{
+  color: rgb(0, 165, 0);
 }
 .gray{
   color: rgb(121, 111, 111);
@@ -58,12 +64,11 @@ textarea {
   text-decoration: none;
   display: flex;
   height: 33px;
-  width: 80px;
   align-items: center;
-  padding-left:10px;
+  padding:0px 15px 0 5px;
   color: antiquewhite;
-  background-color: rgb(11, 83, 138);
-  border-radius: 20%;
+  background-color: rgb(78, 103, 178);
+  border-radius: 10px;
   font-size: 25px;
 }
 .homenav--login{
@@ -134,22 +139,19 @@ textarea {
 .homepage--heading>h1 {
   margin-bottom: 70px;
 }
-
 .booktile{
   margin-right: 40px;
-  display: flex;
-  flex-wrap: wrap;
   width:190px;
   height: 460px;
-  text-decoration: none;
-  color: black;
-  transition: transform 0.5s ease;
+  display: grid;
+  grid-template-rows: 300px 40px 50px 1fr;
+  align-items: center;
+  border-radius: 30px 30px  0 0;
 }
 .booktile:hover{
   border: 1px solid rgb(221, 201, 201);
   box-shadow: 0 0 4px 0px;
   transform: scale(1.05);
-  border-radius: 10% 10%  0 0;
 }
 .booktile--ratelink:hover{
   border: 2px solid black;
@@ -158,18 +160,15 @@ textarea {
 }
 .booktile--wanttoread{
   max-height: 30px;
-  margin: 20px 0 0px 0;
 }
 .booktile--img{
   height:300px;
   width:190px;
-  border-radius: 10% 10%  0 0;
+  border-radius: 30px 30px  0 0;
 }
 .booktile--img:hover{
   filter: brightness(70%);
-  cursor: pointer;
 }
-
 .booktile--rate--img{
   width:25px;
   cursor: pointer;

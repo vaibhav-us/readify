@@ -1,21 +1,16 @@
 import React from "react";
 import { useLoaderData } from "react-router-dom";
 import  { MediumSearchTile } from "../../components/searchtile";
-import { fullDate, getItems } from "../../utility";
+import { fullDate, getItems, postItems, redirectIfNotLogged } from "../../utility";
+import SuchEmpty from "../../components/suchempty";
 
 export async function loader() {
-    const activities = [
-        {id:1,activity:"reviewed",bookId:1,book:"The Name of the Wind",date:"2022/05/03"},
-        {id:2,activity:"rated",rating:3,bookId:2,book:"The Way of Kings",date:"2022/06/09"},
-        {id:3,activity:"rated",rating:4,bookId:3,book:"A Game of Thrones",date:"2012/02/03"},
-        {id:4,activity:"reviewed",bookId:4,book:"The Art of The Fellowship of the Ring",date:"2023/01/01"},
-        {id:5,activity:"rated",rating:5,bookId:5,book:"Weapons and Warfare",date:"2001/01/01"},
-        {id:6,activity:"reviewed",bookId:6,book:"The Making of the Movie Trilogy",date:"2002/05/30"}
-    ]
-    
-    const promiseData= activities.map( ele => {
+    await redirectIfNotLogged('/profile/activity')
+    const activities = await getItems(`http://127.0.0.1:8000/${localStorage.getItem("id")}/activity`)
+
+    const promiseData= activities?.map( ele => {
         async function getPromiseValue() {
-            const res = await getItems(`http://127.0.0.1:8000/book/${ele.id}`)
+            const res = await postItems({userid:localStorage.getItem("id")},`http://127.0.0.1:8000/book/${ele.bookId}/`)
             return res.data
         }
         return getPromiseValue()
@@ -33,6 +28,7 @@ export default function Activity() {
     const filtered = activities.filter(ele => sort!==''? ele.activity===sort.toLowerCase() : 1)
 
     return(
+        activities && activities.length!==0 ?
         <div>
 
             <div className="activity--sort--container">
@@ -51,21 +47,25 @@ export default function Activity() {
             
 
             {filtered.map(ele => {
-                const correspondingDetail = details.filter(element=>element.id===ele.id)
+                console.log(ele,details);
+                const correspondingDetail = details.filter(element=>element.id===ele.bookId)
+                console.log("cor",correspondingDetail);
                 return(
                     <div key={ele.id} className="activitytile">
                         <div  className="activitytile--top">
                             <span>{user} has {ele.activity} </span>   
                             <div className="dashboard--activity--rhs">
                                 <small className="gray">{fullDate(ele.date)}    </small>
-                                <button className="gray nobutton">X</button>
+                                {/* <button className="gray nobutton">X</button> */}
                             </div>
                         </div>
-                        <MediumSearchTile  {...correspondingDetail[0]}/>
+                        <MediumSearchTile  {...correspondingDetail[0]} logged={true}/>
                     </div>
                 )
             })}
 
         </div>
+        :
+        <SuchEmpty msg="Your recent activities will appear here"/>
     )
 }

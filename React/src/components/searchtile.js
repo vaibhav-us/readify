@@ -1,7 +1,7 @@
 import React from "react";
 import RatingRatio from "./ratingratio";
 import { Link } from "react-router-dom";
-import { fullDate } from "../utility";
+import { fullDate, isLogged } from "../utility";
 import {ReviewButton, StarBlink, WantToRead} from "./ratingcomponents";
 
 export function MiniSearchTile(props) {
@@ -37,8 +37,8 @@ export function MediumSearchTile(props){
         <div className="mediumsearchtile--container">
             <MiniSearchTile {...props}/>
             <div className="mediumsearchtile--rhs">
-                <WantToRead/>
-                <StarBlink/>
+                <WantToRead bookId={props.id} logged={props.logged}/>
+                <StarBlink bookId={props.id} logged={props.logged}/>
             </div>
         </div>
     )
@@ -51,7 +51,7 @@ export default function SearchTile(props) {
                 <Link to={"/book/"+props.id} className="searchtile--imgcontainer">
                     <img className="searchtile--img" src={props.image} alt=''/>
                 </Link>  
-                <WantToRead bookId={props.id} className={"searchtile--want"} /> 
+                <WantToRead bookId={props.id} className={"searchtile--want"} logged={props.logged} /> 
                 <StarBlink bookId={props.id}/>
             </div>
             
@@ -74,7 +74,7 @@ export default function SearchTile(props) {
                     > {ele} </Link>
                 )}
 
-                <ReviewButton bookId={props.id} className="searchtile--review" />
+                <ReviewButton bookId={props.id} className="searchtile--review" logged={props.logged}/>
                 <hr />
             </div>
             

@@ -26,6 +26,7 @@ export function SearchBar(props) {
                 placeholder={props.placeholder} 
                 name={ props.name }
                 onChange={props.onChange}
+                autoComplete="off"
             />
             <button className="nobutton">
                 <img src={process.env.PUBLIC_URL+"/images/search.png"} alt="" height={"15px"}/>

@@ -1,14 +1,45 @@
 import React from "react";
 import CollapseContainer from "./collapsecontainer";
-import { approximate, fullDate } from "../utility";
+import { approximate, expand, fullDate, isLogged, postItems } from "../utility";
 import RatingRatio from "./ratingratio";
 import CommentSection from "./commentsection";
+import { Form, useLocation, useNavigate } from "react-router-dom";
 
 const Review = (props) => {
-    const [like,setLike] = React.useState(false)
+    const navigate = useNavigate()
+    const location = useLocation()
+    const [like,setLike] = React.useState(props.likedReview.includes(props.id))
+    const [displayLikeCount,setDisplayLikeCount] = React.useState(approximate(props.likes))
     const [showMore,setShowMore] = React.useState(false)
     const [displaySpoiler,setDisplaySpoiler]=React.useState(props.spoiler==="on" ?true : false)
     const [displayComment,setDisplayComment]=React.useState(false)
+
+    async function handleLikeSubmit (){
+        if (! await isLogged()){
+            navigate(`/auth?redirectTo=${location.pathname}&msg=You Must Be Logged In First`)
+            return
+        }
+
+        const res = await postItems(
+            {isliked:like},
+            `http://127.0.0.1:8000/${localStorage.getItem("id")}/${props.id}/like`
+        )
+        console.log(res,props.id);
+    }
+
+    function handleLikeClick() {
+        setLike(!like)
+  
+        setDisplayLikeCount(prev =>{
+            if (like) return approximate(expand(prev)-1)
+            else return approximate(expand(prev)+1)
+        })
+    }
+    async function handleCommentClick () {
+        if (!await isLogged())
+            navigate(`/auth?redirectTo=${location.pathname}&msg=You Must Be Logged In First`)
+        setDisplayComment(true)
+    }
 
     const SpoilerTag = () => {
         return(
@@ -25,6 +56,7 @@ const Review = (props) => {
     function toggleShowMore() {
         setShowMore(!showMore)
     }
+
     const displayTags = props.tags?.slice(0,3).map(tag => <b key={tag} className="review--point">{tag}</b>) || []
     displayTags.push(
         props.tags && props.tags[3] ? 
@@ -35,7 +67,6 @@ const Review = (props) => {
         :
             null
     )
-    const toggleLike = () => setLike(!like)
     const likeImage = like? '/images/liked.png' : "/images/like.png"
 
     return(
@@ -46,28 +77,30 @@ const Review = (props) => {
             </div>
 
             <div>
-                <div className="review--starrate">
-                    <RatingRatio rating={props.rating} />
-                </div>
+                {props.rating 
+                ?   <div className="review--starrate">
+                        <RatingRatio rating={props.rating} />
+                    </div>
+                :   <></>}
 
                 { displaySpoiler
                 ?   <SpoilerTag/>
                 :   <CollapseContainer data={props.review} height={100}/>  }
 
-                {displayTags[0] && 
+                {(props.tags[0] || props.tags.length!==1) &&
                 <div>{displayTags}<br/><br/></div> }
 
                 <div className="review--likeNcomment">
-                    <div>
-                        <button type="submit" className="nobutton" onClick={toggleLike} name="like">
+                    <Form onSubmit={handleLikeSubmit}>
+                        <button  className="nobutton" onClick={handleLikeClick} >
                             <img  src={process.env.PUBLIC_URL+likeImage} alt="" width={"20px"} />
                             <b>  {like? "Liked":"Like"} </b>
                         </button>
-                        <small className="likeNcommentcount">{approximate(props.likes) }</small>    
-                    </div>
+                        <small className="likeNcommentcount">{displayLikeCount}</small>    
+                    </Form>
 
                     <div>
-                        <button className="nobutton" onClick={()=>setDisplayComment(true)}>
+                        <button className="nobutton" onClick={handleCommentClick}>
                             <img src={process.env.PUBLIC_URL+"/images/comment.png"} alt="" width={"20px"} />
                             <b>  Comment</b>
                         </button>
@@ -75,8 +108,17 @@ const Review = (props) => {
                     </div>  
                 </div>
                 
-                {displayComment && <CommentSection id={props.id} />}
-                <br/><hr/>
+                {displayComment && <CommentSection reviewId={props.id} bookId={props.bookId} />}
+                
+                <div className="line--dec review--viewcomment" hidden={displayComment}>
+                    <hr className="login--hr"/>
+                    <small 
+                        hidden={!props.comments}
+                        className="login--newto gray comment--link"
+                        onClick={()=>setDisplayComment(true)}
+                    > view comments </small>    
+                </div>
+                
             </div>
         </div>
     )

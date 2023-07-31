@@ -1,23 +1,33 @@
 import React from "react";
 import { 
-    Link,
     Form ,
     useActionData,
     useLoaderData,
     useNavigate
 } from "react-router-dom";
-import { fullDate, getItems, postItems } from "../utility";
-import {StarBlink} from "../components/ratingcomponents";
+import {  isLogged, postItems, redirectIfNotLogged } from "../utility";
 import InputMany from "../components/inputmany";
+import { MediumSearchTile } from "../components/searchtile";
 
-export async function loader({params}) {
-    const  data = await getItems(`http://127.0.0.1:8000/book/${params.bookId}`)
-    return data.data
+export async function loader({params,request}) {
+    await redirectIfNotLogged(`/book/${params.bookId}/review`)
+
+    const userid =(await isLogged())? localStorage.getItem("id") : 0
+    const  data = await postItems({userid},`http://127.0.0.1:8000/book/${params.bookId}/`)
+    
+    var userReview ={data:[]}
+    if (request.url.includes('edit')) {
+        userReview =await postItems(
+            {pageno:1,userid:localStorage.getItem('id'),getOneReview:1},
+            `http://127.0.0.1:8000/book/${params.bookId}/review`
+        )
+    }
+    
+    return {data : data.data,userReview : userReview.data[0]}
 }
 
 export async function action({request}) {
     const formData = await request.formData()
-    if (!formData.get("review")) return {emptyReview:"true"}
 
     const reviewData = {
         id      : formData.get("id"),
@@ -27,57 +37,50 @@ export async function action({request}) {
     }
     console.log(reviewData);
     const res = await postItems(reviewData,`http://127.0.0.1:8000/${localStorage.getItem("id")}/book/${reviewData.id}/addreview/`)
+    console.log(`http://127.0.0.1:8000/${localStorage.getItem("id")}/book/${reviewData.id}/addreview/`);
 
     return res
 }
 
-export default function ReviewPage(props) {
-    const data = useLoaderData()
+export default function ReviewPage() {
+    const {data,userReview} = useLoaderData()
     const actionData = useActionData()
     const navigate = useNavigate()
 
     React.useEffect(()=>{
-        if(actionData?.message === "added") {
+        if(actionData?.message === "added" || actionData?.message === "updated") {
             navigate(-1)
         }
     },[actionData,navigate])
 
     return(
         <div className="reviewpage--container">
-            <h1 className="reviewpage--container--heading">{data.name} &gt; Review</h1>
+            <h1 className="reviewpage--container--heading">
+                {data.name} &gt; Review {userReview && <>&gt; Edit</>}
+            </h1>
 
-            <div className="searchtile">
-                <Link to={"/book/"+data.id} className="reviewpage--img">
-                    <img className="searchtile--img" src={data.image} alt=''/>
-                </Link>
-            
-                <div className="searchtile--content">
-                    <Link className="noLink searchtile--head" to={"/book/"+data.id}>
-                        <big><b>{data.name} </b></big>
-                    </Link>
-                    <br/>
-                    <i className="gray">{data.author}</i>
-                    {data.publication &&<p className="gray">Published on {fullDate(data.publication)}</p>}
-                </div>
-            </div>
+            <div className="reviewpage--tile">
+                <MediumSearchTile {...data} logged={true}/>    
+            </div> <br/><br/>
 
-            <br/>
-            <StarBlink bookId={data.id} className="reviewpage--rating"/>
-            <br/><br/>
+            <Form method="post" className="reviewform--container" replace>
+                <p>What do <i>you</i> think ?</p>
 
-                <Form method="post" className="reviewform--container" replace>
-                    <p>What do <i>you</i> think ?</p>
-                    {actionData?.emptyReview && <i className="red">Write A Review Before Submitting It ! </i>}
-
-                    <textarea className="review--area" name="review" placeholder="Write your Review (optional)"/>
-                    <input name="spoiler" id="spoiler"  type="checkbox"/>
-                    <label className="red" htmlFor="spoiler">Hide this review if it contains heavy spoilers!!</label><br/>
+                <textarea 
+                    className="review--area" 
+                    name="review" 
+                    placeholder="Write your Review (optional)" 
+                    defaultValue={userReview?.review}    
+                    required
+                />
+                <input name="spoiler" id="spoiler"  type="checkbox"/>
+                <label className="red" htmlFor="spoiler">Hide this review if it contains heavy spoilers!!</label><br/>
                     
-                    <InputMany name="tag" desc="Add tags to summarize your review into words"/>
+                <InputMany name="tag" desc="Add tags to summarize your review into words" initial={userReview} />
 
-                    <input name="id" defaultValue={data.id} hidden />
-                    <button className="reviewpage--sumbit">Post Your Review</button>
-                </Form>
+                <input name="id" defaultValue={data.id} hidden />
+                <button className="reviewpage--sumbit">Post Your Review</button>
+            </Form>
             
         </div>
     )

@@ -12,6 +12,9 @@
   border-bottom: 0.2em solid rgb(155, 142, 142);
 }
 .wanttoread{
+  display: flex;
+  align-items: center;
+  justify-content: center;
   height: 100%;
   width: 100%;
   font-size: initial;
@@ -20,8 +23,17 @@
   font-weight: 600;
   color: white;
 }
-.wanttoread:hover{
+.wtrnotsubmitted:hover{
   background-color: rgb(104, 189, 104);
+}
+.wtrsubmitted{
+  background-color: rgb(229, 82, 38);
+}
+.wtrsubmitted--hover{
+  background-color: rgb(248, 227, 218);
+  border: 5px inset red;
+  color: red;
+  transition:background-color 0.3s linear ;
 }
 .bookpage--sticky{
   position: fixed;
@@ -62,7 +74,7 @@
   align-items: center;
 }
 .starblink--tick--container img{
-  width: 5%;
+  width: 12%;
   margin-left: 8px;
 }
 .bookpage--content{
@@ -97,7 +109,7 @@
   margin-right: 8px;
 }
 .bookdesc--container{
-  margin: 20px 0 20px 0;
+  margin: 8px 0 13px 0;
   white-space: break-spaces;
 }
 .rnr--container{
@@ -124,6 +136,15 @@
   height: 70%;
   border-radius: 20px;
   font-size: 105%;
+}
+.rnr--links--review:hover{
+  transform: scale(1.1);
+  filter: brightness(90%);
+}
+.your--review{
+  white-space: pre;
+  display: flex;
+  align-items: center;
 }
 .review--container{
   display: grid;
@@ -181,6 +202,13 @@
 .likeNcommentcount{
   margin-left: 8px;
 }
+.review--viewcomment hr{
+  margin-top: 20px;
+}
+.review--viewcomment small{
+  padding: 3px 8px;
+}
+
 .comment--container{
   display: grid;
   grid-template-columns: 15% 90%;
@@ -208,10 +236,11 @@
   width: 100%;
 }
 .comment--post{
+  position: absolute;
   background-color: black;
   color: white;
   padding: 5px 10px;
-  margin-top: 10px;
+  left: -20px;
 }
 .navigators{
   position:fixed;

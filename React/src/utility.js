@@ -1,3 +1,5 @@
+import { redirect } from "react-router-dom"
+
 export async function postItems(object,api) {
     const res = await fetch(api, 
         {method : "POST", body: JSON.stringify(object),
@@ -18,7 +20,7 @@ export async function postItems(object,api) {
 
 export async function getItems(api) {
     const res = await fetch(api)
-
+ 
     const data = await res.json()
     if (!res.ok) {
         throw {
@@ -28,6 +30,16 @@ export async function getItems(api) {
         }
     }
     return data
+}
+export async function isLogged(){
+    const res =await getItems(`http://127.0.0.1:8000/auth/islogged/${localStorage.getItem("id") || 0}/`)
+    console.log(res);
+    return res.isLogged?true:false
+}
+export async function redirectIfNotLogged(pathname){
+    if (!await isLogged()){
+        throw redirect(`/auth?redirectTo=${pathname}&msg=You Must Be Logged In First`)   
+    }
 }
 
 export function fullDate(date) {
@@ -77,6 +89,23 @@ export function approximate(value) {
     } while (value>=1)
     const approximation = Math.round(value*1000) + range[i]
     return approximation
+}
+export function expand(value) {
+    if (typeof value === "number") {
+        console.log(value); 
+        return value
+    }
+
+    const modifiedValue = value.trim().toUpperCase()
+    if (parseInt(modifiedValue)==modifiedValue){
+        console.log(modifiedValue);
+        return parseInt(modifiedValue)
+    }
+    const range = {'':1,'K':10**3,'M':10**6,'B':10**9,'T':10**12}
+    
+    const valueRange = modifiedValue[modifiedValue.length-1]
+    console.log(parseInt(modifiedValue) * range[valueRange]);
+    return (parseInt(modifiedValue) * range[valueRange])
 }
 
 export function smallest(...args) {

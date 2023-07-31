@@ -1,15 +1,29 @@
 import React from "react";
 import {Link} from 'react-router-dom'
+import { largest } from "../utility";
 
 export default function Trending(props) {
     const containerRef = React.useRef(null)
-    const [dotHighlight,setDotHighlight] = React.useState([{id:0,truth:0,scroll:0},{id:1,truth:1},{id:2,truth:0},{id:3,truth:0},{id:4,truth:0},{id:5,truth:0},{id:6,truth:0},{id:7,truth:0},{id:8,truth:0}])  
+    const [dotHighlight,setDotHighlight] = React.useState([{id:0,truth:1,scroll:0},{id:1,truth:1},{id:2,truth:0},{id:3,truth:0},{id:4,truth:0},{id:5,truth:0},{id:6,truth:0},{id:7,truth:0},{id:8,truth:0}])  
 
+    React.useEffect(()=>{
+
+        const timer = setInterval(()=>{
+            dotHighlight.forEach(ele => {
+                if (ele.truth) {
+                    handleclickdots( largest((ele.id + 1)%9 , 1 ))
+                }
+            })
+        },3000)
+
+        return ()=> clearInterval(timer)
+    },[dotHighlight[0].scroll])
+    
     function Dots(props) {
         return(
             <p 
                 className="dots"
-                style={props.truth ?{backgroundColor: "rgb(209, 149, 224)"} : {}}
+                style={props.truth ?{backgroundColor: "rgb(47, 6, 193)"} : {}}
                 onClick={()=>props.handleclickdots(props.id)}
             ></p>
         )

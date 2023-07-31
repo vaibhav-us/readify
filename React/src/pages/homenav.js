@@ -1,31 +1,37 @@
 import React from "react";
-import { Outlet,Link, redirect, useLocation } from "react-router-dom";
+import { Outlet,Link, redirect, useLocation, useLoaderData } from "react-router-dom";
 import ScrollToTop from "../components/scrolltotop";
 import { CropImage, SearchBar } from "../components/searchcomponents";
-import { postItems } from "../utility";
+import { isLogged, postItems } from "../utility";
 import { MiniSearchTile } from "../components/searchtile";
 import SuchEmpty from "../components/suchempty";
 
+export async function loader(){
+    const res=await isLogged()
+    console.log("loader",res);
+    return {logged:res}
+}
 export async function action({request}) {
     const formData = await request.formData()
     return redirect(`/search?book=${formData.get("search")}`)
 }
 
 export default function Homenav () {
+    const {logged} = useLoaderData()
     const [search,setSearch] = React.useState('')
     const searchResultsRef = React.useRef()
     const [searchResults,setSearchResults] = React.useState({visible:false,data:[]})
     const location = useLocation()
-    const msgForSuchEmpty = { __html: `Couldn't find the book you are looking for? <a href="/contribute">Contribute to us</a>`}
+    
+    React.useEffect(()=>{ 
+        async function call() {
+            const res = await postItems({book:search},`http://127.0.0.1:8000/searchbooks/`)
+            res.data.forEach(ele => delete ele.genre);
 
-    React.useEffect(()=>{ async function call() {
-        const res = await postItems({book:search},`http://127.0.0.1:8000/searchbooks/`)
-        res.data.forEach(ele => delete ele.genre);
-
-        setSearchResults(prev =>( 
-            {visible:true , data:res.data} 
-        ))
-      }  
+            setSearchResults(prev =>( 
+                {visible:true , data:res.data} 
+            ))
+        }  
         call()   
 
         const handleSearchResultVisibility = (e) => {
@@ -53,7 +59,8 @@ export default function Homenav () {
         <div className="app">
             <div className="homenav--container">
                 <Link to='/' className="homenav--logo">
-                    <h4>BRR</h4>
+                    <img alt="" src={process.env.PUBLIC_URL+"/images/logo.png"} height={"90%"}/>
+                    <h4>Readify</h4>
                 </Link>
 
                 <div className="homenav--search--container">
@@ -70,14 +77,14 @@ export default function Homenav () {
                         {DisplaySearchResults}
                         
                         {searchResults.data.length===0 && 
-                        <SuchEmpty style={{color:"white"}} msg={msgForSuchEmpty}/>}   
+                        <SuchEmpty style={{color:"white"}} msg={`Couldn't find the book you are looking for? <a href="/contribute">Contribute to us</a>`}/>}   
                          
                     </div>}
 
                 </div>
                 
-                <Link to={localStorage.getItem("id")?"/profile":'/login'} className="homenav--login noLink">
-                    {localStorage.getItem("id")
+                <Link to={localStorage.getItem("id")?"/profile":'/auth'} className="homenav--login noLink">
+                    {logged
                         ?   <CropImage 
                                 src='/images/defaultprofilepic.png'
                                 className="homenav--profile" 
@@ -86,6 +93,7 @@ export default function Homenav () {
                     }
                 </Link>
             </div>
+
             <ScrollToTop/>
             <Outlet />
         </div>

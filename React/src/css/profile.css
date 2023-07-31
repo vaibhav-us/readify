@@ -4,10 +4,6 @@
   place-content: center center;
 }
 .error404--home{
-  position: absolute;
-  bottom: 20%;
-  left: 50%;
-  transform: translateX(-51%);
   padding: 10px;
   background-color: rgb(50, 50, 165);
   border-radius: 10px;
@@ -15,14 +11,68 @@
   font-weight: 700;
   text-decoration: none;
 }
+.error404--pos{
+  position: absolute;
+  bottom: 20%;
+  left: 50%;
+  transform: translateX(-51%);
+}
 .error404--home:hover{
   background-color: rgb(8, 20, 94);
+}
+.errorlinks--container{
+  margin-top: 30px;
+}
+.error--links{
+  margin-right: 30px;
+}
+
+.edit--hover{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 25px;
+  height:25px ;
+  border: 2px solid transparent;
+  border-radius: 50%;
+}
+.edit--hover:hover{
+  border: 2px solid black;
+  padding: 19px 17px 15px 17px;
+}
+.auth--navbar{
+  align-items: center;
+  display: flex;
+  justify-content: center;
+}
+.auth--switches{
+  padding:10px 10px;
+  border-radius: 15px;
+  cursor: pointer;
+  border: 5px groove transparent;
+}
+.auth--switches--clicked{
+  border: 5px groove rgb(184, 229, 255);
+}
+.auth--switches:hover{
+  background-color: rgb(174, 182, 255);
+}
+.auth--switches:active{
+  box-shadow:0 0 5px 2px ;
+}
+.tryLogin{
+  white-space: pre;
+  color: rgb(225, 105, 14);
+}
+.tryLogin:hover{
+  font-size: medium;
+  text-decoration: underline;
 }
 .login{
     margin-left: 35%;
     width: 30%;
   }  
-  .login h1{
+  .login h3{
     margin-left: 50%;
     transform: translateX(-50%);
     white-space: pre;
