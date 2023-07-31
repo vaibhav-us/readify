@@ -124,10 +124,10 @@ def forgotPassword(request):
     return Response({'error':error})
 
 @api_view(['GET'])
-def isLogged(request,id):
+def isLogged(request,userid):
      
      with conn.cursor() as cur:
-          cur.execute("SELECT * FROM session WHERE user_id = %s",(id,))
+          cur.execute("SELECT * FROM session WHERE user_id = %s",(userid,))
           row = cur.fetchone()
      if row is not None:
           
