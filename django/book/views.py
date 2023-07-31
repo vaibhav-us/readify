@@ -374,7 +374,7 @@ def isBook(request):
     title = request.data.get("name")
     author = request.data.get("author")
     with conn.cursor() as cur:
-        cur.execute(f"SELECT book_title,author FROM book WHERE book_tile LIKE ' %{title}% ' AND author LIKE ' %{author}% ' ;")
+        cur.execute(f"SELECT book_title,author FROM book WHERE book_title LIKE '%{title}%' AND author LIKE '%{author}%' ;")
         book = cur.fetchone()
     if book:
         return Response({"exist":1})
