@@ -13,5 +13,6 @@ urlpatterns = [
     path('<str:user_id>/<str:book_id>/addshelf',views.add_shelf),
     path('<str:user_id>/<str:book_id>/remshelf',views.rem_shelf),
     path('<str:user_id>/activity/',views.activity),
-    path('isbook/',views.isBook)
+    path('isbook/',views.isBook),
+    # path('<str:user_id>/shelfitems/',views.getShelf),
 ]
